@@ -1,0 +1,26 @@
+!include "1.file_tools/file_tools.mak"
+!include "0.test/file_tools_test.mak"
+#!include "2.str_tools/str_tools.mak"
+#!include "3.date_tools/date_tools.mak"
+
+#all: clean
+clean:
+  @if exist "0.test\*.*~" del "0.test\*.*~"
+  @if exist "0.test\*~" del "0.test\*~"
+  @if exist "0.test\*.bak" del "0.test\*.bak"
+
+  @if exist "1.file_tools\*.*~" del "1.file_tools\*.*~"
+  @if exist "1.file_tools\*~" del "1.file_tools\*~"
+  @if exist "1.file_tools\*.bak" del 1.file_tools\*.bak"
+
+  @if exist "2.str_tools\*.*~" del "2.str_tools\*.*~"
+  @if exist "2.str_tools\*~" del "2.str_tools\*~"
+  @if exist "2.str_tools\*.bak" del "2.str_tools\*.bak"
+
+  @if exist "3.date_tools\*.*~" del "3.date_tools\*.*~"
+  @if exist "3.date_tools\*~" del "3.date_tools\*~"
+  @if exist "3.date_tools\*.bak" del "3.date_tools\*.bak"
+
+  @if exist "inc\*~" del "inc\*~"
+  @if exist *~ del *~
+  @if exist *.bak del *.bak

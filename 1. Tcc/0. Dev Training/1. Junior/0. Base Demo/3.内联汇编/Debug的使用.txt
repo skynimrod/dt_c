@@ -1,0 +1,30 @@
+参见:
+
+     http://blog.csdn.net/jiajiayouba/article/details/8537986
+
+. Debug 的使用
+
+  先记住以下两个命令：D命令和Q命令。前者是显示内存内容，后者是退出DEBUG命令。
+
+. 32位的Win7同志就不用看了 直接搜索C盘 debug就找到了 XP也一样
+
+主要说一下64位Win7使用debug程序的方法
+
+1，首先你要下载一个DOSBOX程序 这个程序是一个dos模拟器 这个程序的制作目的是运行经典的DOS游戏 -。-
+下载地址：http://www.dosbox.com/download.php?main=1 
+
+安装的过程我就不写了，我想大家都会。
+
+2，其次下载一个Win732位的debug程序
+下载地址：http://u.115.com/file/b3mmegwu
+
+
+(以上两个资源，我打了个包，放在csdn上了：http://download.csdn.net/detail/jiajiayouba/5025299 )
+
+
+举例：将debug放到D盘的根目录 双击运行DOSBox 0.74
+在这个窗口输入：
+mount c d:/
+c:
+debug
+好啦 教程结束 Win7 64位运行debug调试程序

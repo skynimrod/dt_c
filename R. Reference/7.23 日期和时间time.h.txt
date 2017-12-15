@@ -1,0 +1,57 @@
+7.23  日期和时间   <time.h>    P349   页码是337
+
+. 7.23.1   时间的组成
+
+   CLOCKS_PER_SEC   宏
+
+   clock_t, time_t    类型
+
+. 7.23.2  时间函数
+
+  1. clock() 函数
+
+     #include <time.h>
+     clock_t clock(void);
+
+  2. difftime() 函数
+
+     #include <time.h>
+     double difftime(time_t time1, time_t time0);
+
+  3. mktime() 函数
+
+     #include <time.h>
+     time_t mktime(struct tm *timeptr);
+
+  4. time() 函数
+
+     #include <time.h>
+     time_t time(time_t *timer);
+
+. 7.23.3  时间转换函数
+
+  1. asctime() 函数
+
+     #include <time.h>
+     char *asctime(const struct tm *timeptr); 
+
+  2. ctime() 函数
+
+     #include <time.h>
+     char *ctime(const time_t *timer);
+
+  3. gmtime() 函数
+
+     #include <time.h>
+     struct tm *gmtime(const time_t *timer);
+
+  4. localtime() 函数
+
+     #include <time.h>
+     struct tm *localtime(const time_t *timer);
+
+  5. strftime() 函数
+
+     #include <time.h>
+     size_t strftime(char * restrict s,size_t maxsize,const char * restrict format, const struct tm * restrict timeptr);
+

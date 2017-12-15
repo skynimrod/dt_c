@@ -1,0 +1,103 @@
+参见:
+
+     http://blog.sina.com.cn/s/blog_6d57505401015v1t.html    非常好的指令介绍
+
+. 1. movsb     移动一个字节.  把 DS:SI所指地址的字节 搬移到  ES:DI 所指的地址上。SI和DI 会自动的指向下一个要搬移的地址.  一般而言, 不会只搬移个字节, 通常会重复多次。 如果要重复的话, 把重复次数(例如字符床长度)先记录在CX寄存器, 并且在movsb之前加上REP指令,  REP  是重复的意思.
+
+     这种写法很奇怪, 一般而言汇编语言源文件的每一行都只有一个指令, 但是 REP movsb 却可以在同一行写两个指令, 当然分开写也一样.  通过标志位DF 控制移动的方向, CLD( CLear  Direction flag) 则是清方向标志, 也就是使DF的值为0, 在执行串操作的时候, 使地址递增的方式变化, 这样便于调整相关段的当前指针. 这条指令与STD (SeT Direction flag) 的执行结果相反, 即置 DF的值为1.
+
+MOV CX ,100
+LEA SI,FIRST
+LEA DI,SECOND
+REP MOVSB
+以上程序段的功能是从缓冲区FIRST传送100个字节到SECOND缓冲区.
+
+movs指令格式
+
+把字符串从一个位内存位置传送到另一个内存内置，其指令隐含了源操作数与目的操作数。ATT有3条传字符串的指令的，分别是MOVSB,MOVSW,MOVSL。
+
+   MOVSB  传一个字节的字符
+
+   MOVSW  (%ESI) (%EDI) 传一个字的字符
+
+   MOVSL  (%ESI) (%EDI)  传4个字节的字符
+
+   (%ESI)  是源 (%EDI) 是目的 
+
+说明，在指令源址与目址隐含，不需要给出。ESI与EDI是保存字符串的地址，那怎样把字符串地址传给ESI与EDI呢？有两种方式。一种是 movl $ 标签名 ,%ESI方式，一种是使用LEA指令。
+
+leal srcStr,%esi #标签前不需要加$符号。
+
+leal destStr,%edi
+
+movsb
+
+movsw
+
+movsl
+
+movl $1,%eax
+
+.2.  LEA 指令
+
+     将有效地址传送到指定的寄存器
+
+      
+    LEA OPRD1,OPRD2 
+
+     OPRD1 为目的操作数,可为任意一个16位的通用寄存器.
+     OPRD2 为源操作数,可为变量名、标号或地址表达式.   
+
+.3. "="是标示输出寄存器，必须这样用．
+
+     例如:
+
+    __asm__("addl %1, %0"
+        : "=r" (y)
+        : "r" (x), "0" (y));
+    
+    printf("x + y = %d\n", y);
+
+. 4. 使用q指示编译器从eax,ebx,ecx,edx分配寄存器．使用r指示编译器从eax,ebx,ecx,edx,esi,edi分配寄存器．
+
+. 5.  leal       装入有效地址指令
+
+     leal  8(%ebp), %eax           即把内存单元8(%ebp)的地址送入寄存器%eax
+
+     不过传送地址还有其他方式：
+
+     传送v值到eax： movl  v,    %eax
+
+     传送v地址到edi:  movl  $v,   %edi
+
+ 
+
+     区别是：
+
+     leal   S, D    结果是&S -> D
+
+     movl  S,D   结果是S -> D
+
+    例子:
+
+    leal 6(%eax), %edx //把eax的值+6放入edx中。
+
+    leal (%eax, %ecx), %edx //把eax+ecx的值装入edx中。
+
+    leal (%eax, %ecx, 4), %edx //把eax + 4*ecx的值装入edx中。
+
+    leal 7(%eax, %eax, 8), %edx //把9*eax +7的值装入edx中。
+
+    leal 0xA(,%eax,4), %edx //把4*eax + 10的值装入edx中。
+
+    leal 9(%eax, %ecx, 2), %edx //把eax + 2*ecx+ 9的值装入edx中。
+
+. 6. REP 指令
+
+    当 CX/ECX  不为0的时候重复
+
+. 7. TEST 指令
+
+     test指令是测试指令，用于测试某些位是否为0，执行的是与运算，并且会将CF和OF置0，并且影响SF，ZF。若测试的位均为0，则SF=0，ZF=1。
+
+ 

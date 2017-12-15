@@ -1,0 +1,22 @@
+编译的时候出现下面的错误:
+
+3.date_tools/date_tools.c:18: error: ';' expected (got "ValidShortDateStr")
+NMAKE : fatal error U1077: 'tcc' : return code '0x1'
+Stop.
+
+
+
+-----------------------------
+
+1.file_tools/file_tools.c:41: error: 'try' undeclared
+NMAKE : fatal error U1077: 'tcc' : return code '0x1'
+Stop.
+
+=------------------------------------
+
+        tcc -shared "1.file_tools\file_tools.cpp" -llibtcc
+1.file_tools/file_tools.cpp:1: error: unrecognized file type
+NMAKE : fatal error U1077: 'tcc' : return code '0x1'
+Stop.
+
+不认识cpp文件后缀

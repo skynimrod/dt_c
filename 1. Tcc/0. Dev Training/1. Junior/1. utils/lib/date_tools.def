@@ -1,0 +1,6 @@
+LIBRARY date_tools.dll
+
+EXPORTS
+IsLeapYear
+IsMaxMonth
+ValidShortDateStr

@@ -1,0 +1,4 @@
+LIBRARY str_tools.dll
+
+EXPORTS
+IsNumberStr

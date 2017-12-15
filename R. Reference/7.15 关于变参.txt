@@ -1,0 +1,45 @@
+. 7.15 变参  <stdarg.h>    P260  页码是248， 实际对应的页是260
+
+.7.15.1 变参列表访问宏
+
+    va_start,  va_arg, va_copy,  va_end
+
+  1. va_arg 宏
+
+     #include <stdarg.h>
+     type va_arg(va_list ap, type);
+
+  2. va_copy 宏
+
+     #include <stdarg.h>
+     void va_copy(va_list dest, va_list src);
+
+  3. va_end 宏
+
+     #include <stdarg.h>
+     void va_end(va_list ap);
+
+  4. va_start 宏
+  
+     #include <stdarg.h>
+     void va_start(va_list ap, parmN);
+
+     # 注意, parmN  一定要是变参之前的最后一个参数名称.
+
+. 例子:
+
+#include <stdarg.h>
+#define MAXARGS 31
+void f1(int n_ptrs, ...)
+{
+    va_list ap;
+    char *array[MAXARGS];
+    int ptr_no = 0;
+    if (n_ptrs > MAXARGS)
+         n_ptrs = MAXARGS;
+    va_start(ap, n_ptrs);
+    while (ptr_no < n_ptrs)
+        array[ptr_no++] = va_arg(ap, char *);
+    va_end(ap);
+    f2(n_ptrs, array);
+}

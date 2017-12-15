@@ -1,0 +1,124 @@
+. 7.21 字符串处理  <string.h>    P336
+
+. 7.21.2  复制函数
+
+  1. memcpy()
+
+      #include <string.h>
+      void *memcpy(void * restrict s1,const void * restrict s2,size_t n);
+
+  2. memmove()
+
+      #include <string.h>
+      void *memmove(void *s1, const void *s2, size_t n);
+
+  3. strcpy()
+
+      #include <string.h>
+      char *strcpy(char * restrict s1,const char * restrict s2);
+
+  4. strncpy()
+
+     #include <string.h>
+     char *strncpy(char * restrict s1,const char * restrict s2,size_t n);
+
+. 7.21.3 拼接函数
+
+  1. strcat() 函数
+
+     #include <string.h>
+     char *strcat(char * restrict s1,const char * restrict s2);
+
+  2. strncat() 函数
+
+     #include <string.h>
+     char *strncat(char * restrict s1,const char * restrict s2,size_t n);
+
+. 7.21.4 比较函数
+  
+  1. memcmp() 函数
+
+     #include <string.h>
+     int memcmp(const void *s1, const void *s2, size_t n);
+
+  2. strcmp() 函数
+
+     #include <string.h>
+     int strcmp(const char *s1, const char *s2);
+
+  3. strcoll() 函数
+
+     #include <string.h>
+     int strcoll(const char *s1, const char *s2);
+
+  4. strncmp() 函数
+
+     #include <string.h>
+     int strncmp(const char *s1, const char *s2, size_t n);
+
+  5. strxfrm() 函数
+
+     #include <string.h>
+     size_t strxfrm(char * restrict s1, const char * restrict s2, size_t n);
+
+. 7.21.5 搜索函数
+
+  1. memchr() 函数
+
+     #include <string.h>
+     void *memchr(const void *s, int c, size_t n);
+
+  2. strchr() 函数
+
+     #include <string.h>
+     char *strchr(const char *s, int c);
+
+  3. strcspn() 函数
+
+     #include <string.h>
+     size_t strcspn(const char *s1, const char *s2);
+
+  4. strpbrk() 函数
+
+     #include <string.h>
+     char *strpbrk(const char *s1, const char *s2);
+
+  5. strrchr() 函数
+
+     #include <string.h>
+     char *strrchr(const char *s, int c);
+
+  6. strspn() 函数
+
+     #include <string.h>
+     size_t strspn(const char *s1, const char *s2);
+
+  7. strstr() 函数
+
+     #include <string.h>
+     char *strstr(const char *s1, const char *s2);
+
+      找出str2字符串在str1字符串中第一次出现的位置（不包括str2的串结束符）。返回该位置的指针，如找不到，返回空指针。
+
+  8. strtok() 函数
+
+     #include <string.h>
+     char *strtok(char * restrict s1, const char * restrict s2);
+
+. 7.21.6 其他(Miscellaneous) 函数
+
+  1. memset() 函数
+
+     #include <string.h>
+     void *memset(void *s, int c, size_t n);
+
+  2. strerror() 函数
+
+     #include <string.h>
+     char *strerror(int errnum);
+
+  3. strlen() 函数
+
+     #include <string.h>
+     size_t strlen(const char *s);
+

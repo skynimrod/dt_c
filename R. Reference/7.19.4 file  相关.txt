@@ -1,0 +1,305 @@
+. 7.19.4  文件操作
+
+
+. 1. remove() 函数
+
+     #include <stdio.h>
+     int remove(const char *filename);
+
+     删除函数
+
+. 2. rename() 函数
+
+     #include <stdio.h>
+     int rename(const char *old, const char *new);
+
+     修改文件名
+
+. 3. tmpfile() 函数
+
+     #include <stdio.h>
+     FILE *tmpfile(void);
+
+     创建一个临时的二进制文件, 当关闭文件或程序结束的时候自动被删除.
+
+. 4. tmpnam() 函数
+   
+     #include <stdio.h>
+     char *tmpnam(char *s);
+
+     创建一个合法的文件名的字符串. 不与现存的文件名冲突.
+
+=================================================================================
+
+. 7.19.5  访问文件
+
+. 1. fclose() 函数
+
+     #include <stdio.h>
+     int fclose(FILE *stream);
+
+     关闭文件
+
+. 2. fflush() 函数
+
+     #include <stdio.h>
+     int fflush(FILE *stream);
+
+     将修改的数据刷新到文件中.
+
+. 3. fopen() 函数
+
+     #include <stdio.h>
+     FILE *fopen(const char * restrict filename,const char * restrict mode);
+
+     打开文件
+
+. 4. fropen() 函数
+
+     #include <stdio.h>
+     FILE *freopen(const char * restrict filename,const char * restrict mode,FILE * restrict stream);
+
+     限定型打开文件
+
+. 5. setbuf() 函数
+
+     #include <stdio.h>
+     void setbuf(FILE * restrict stream,char * restrict buf);
+
+. 6. setvbuf() 函数
+
+     #include <stdio.h>
+     int setvbuf(FILE * restrict stream,char * restrict buf,int mode, size_t size);
+
+=============================================
+
+. 7.19.6  格式化输入输出
+
+. 1. fprintf() 函数
+
+     #include <stdio.h>
+     int fprintf(FILE * restrict stream,const char * restrict format, ...);
+
+. 2. fscanf() 函数
+
+     #include <stdio.h>
+     int fscanf(FILE * restrict stream,const char * restrict format, ...);
+
+. 3. printf() 函数
+
+     #include <stdio.h>
+     int printf(const char * restrict format, ...);
+
+. 4. scanf() 函数
+
+     #include <stdio.h>
+     int scanf(const char * restrict format, ...);
+
+. 5. snprintf() 函数
+
+     #include <stdio.h>
+     int snprintf(char * restrict s, size_t n,const char * restrict format, ...);
+
+     类似fprintf， 不同的是输出结果到数组中.
+
+. 6. sprintf() 函数
+
+     #include <stdio.h>
+     int sprintf(char * restrict s,const char * restrict format, ...);
+
+     类似于fprintf, 不同的是输出内容到字符串中
+
+. 7. sscanf() 函数
+    
+     #include <stdio.h>
+     int sscanf(const char * restrict s,const char * restrict format, ...);
+
+     类似于fscanf(), 不同的是获取的内容是从字符串而来
+
+. 8. vfprintf() 函数
+  
+     #include <stdarg.h>
+     #include <stdio.h>
+     int vfprintf(FILE * restrict stream, const char * restrict format,va_list arg);
+
+     类似于fprintf()， 不同的就是变参.
+
+     #include <stdarg.h>
+     #include <stdio.h>
+     void error(char *function_name, char *format, ...)
+     {
+         va_list args;
+         va_start(args, format);
+         // print out name of function causing error
+         fprintf(stderr, "ERROR in %s: ", function_name);
+         // print out remainder of message
+         vfprintf(stderr, format, args);
+         va_end(args);
+     }
+
+. 9. vfscanf() 函数
+
+     #include <stdarg.h>
+     #include <stdio.h>
+     int vfscanf(FILE * restrict stream,const char * restrict format,va_list arg);
+
+     
+. 10. vprintf() 函数
+
+     #include <stdarg.h>
+     #include <stdio.h>
+     int vprintf(const char * restrict format,va_list arg);
+
+. 11. vscanf() 函数
+
+     #include <stdarg.h>
+     #include <stdio.h>
+     int vscanf(const char * restrict format,va_list arg);
+
+. 12. vsnprintf() 函数
+ 
+     #include <stdarg.h>
+     #include <stdio.h>
+     int vsprintf(char * restrict s, size_t n,const char * restrict format,va_list arg);
+
+. 13. vsprintf() 函数
+
+     #include <stdarg.h>
+     #include <stdio.h>
+     int vsprintf(char * restrict s,const char * restrict format,va_list arg);
+
+. 14. vsscanf() 函数
+
+     #include <stdarg.h>
+     #include <stdio.h>
+     int vsscanf(const char * restrict s,const char * restrict format,va_list arg);
+
+=====================================================
+
+. 7.19.7  自负输入输出函数
+
+.1. fgetc() 函数
+  
+    #include <stdio.h>
+    int fgetc(FILE *stream);
+
+.2. fgets() 函数
+
+    #include <stdio.h>
+    char *fgets(char * restrict s, int n,FILE * restrict stream);
+
+    获取一行数据. 
+
+.3. fputc() 函数
+
+    #include <stdio.h>
+    int fputc(int c, FILE *stream);
+
+.4. fputs() 函数
+
+    #include <stdio.h>
+    int fputs(const char * restrict s,FILE * restrict stream);
+
+.5. getc() 函数
+
+    #include <stdio.h>
+    int getc(FILE *stream);
+
+.6. getchar() 函数
+
+    #include <stdio.h>
+    int getchar(void);
+
+.7. gets() 函数
+
+    #include <stdio.h>
+    char *gets(char *s);
+
+.8. putc() 函数
+
+    #include <stdio.h>
+    int putc(int c, FILE *stream);
+
+.9. putchar() 函数
+
+    #include <stdio.h>
+    int putchar(int c);
+
+.10. puts() 函数
+
+    #include <stdio.h>
+    int puts(const char *s);
+
+.11. ungetc() 函数
+
+    #include <stdio.h>
+    int ungetc(int c, FILE *stream);
+
+.----------------------------------------------------
+
+.7.19.8   直接输入输出函数
+
+. 1. fread() 函数
+
+     #include <stdio.h>
+     size_t fread(void * restrict ptr,size_t size, size_t nmemb,FILE * restrict stream);
+
+. 2. fwrite() 函数
+
+     #include <stdio.h>
+     size_t fwrite(const void * restrict ptr,size_t size, size_t nmemb,FILE * restrict stream);
+
+.==========================================
+
+. 7.19.9  文件位置函数
+
+.1. fgetpos() 函数
+
+    #include <stdio.h>
+    int fgetpos(FILE * restrict stream,fpos_t * restrict pos);
+
+.2. fseek() 函数
+
+    #include <stdio.h>
+    int fseek(FILE *stream, long int offset, int whence);
+
+.3. fsetpos() 函数
+
+    #include <stdio.h>
+    int fsetpos(FILE *stream, const fpos_t *pos);
+
+.4. ftell() 函数
+
+    #include <stdio.h>
+    long int ftell(FILE *stream);
+
+.5. rewind() 函数
+
+    #include <stdio.h>
+    void rewind(FILE *stream);
+
+.===============================================
+
+. 7.19.10  错误处理函数
+
+.1. clearerr() 函数
+
+    #include <stdio.h>
+    void clearerr(FILE *stream);
+
+.2. feof() 函数
+
+    #include <stdio.h>
+    int feof(FILE *stream);
+
+.3. ferror() 函数
+
+    #include <stdio.h>
+    int ferror(FILE *stream);
+
+.4. perror() 函数
+
+    #include <stdio.h>
+    void perror(const char *s);
+
+.5. 

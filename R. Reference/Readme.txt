@@ -4,4 +4,6 @@
 
   https://netbeans.org/community/releases/80/cpp-setup-instructions.html
 
-. 
+. 关于指针的应用
+
+  http://blog.csdn.net/u011662320/article/details/52319750

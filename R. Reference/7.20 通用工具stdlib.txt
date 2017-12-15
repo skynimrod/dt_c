@@ -1,0 +1,178 @@
+. 7.20 General utilities <stdlib.h>
+
+. 7.20.1 数字转换函数
+
+  1. atof() 函数
+
+     #include <stdlib.h>
+     double atof(const char *nptr);
+
+  2. atoi(), atol(), atoll() 函数
+
+     #include <stdlib.h>
+     int atoi(const char *nptr);
+     long int atol(const char *nptr);
+     long long int atoll(const char *nptr);
+
+  3. strtod(), strtof(), strtold() 函数
+
+     #include <stdlib.h>
+     double strtod(const char * restrict nptr,char ** restrict endptr);
+     float strtof(const char * restrict nptr,char ** restrict endptr);
+     long double strtold(const char * restrict nptr,char ** restrict endptr);
+
+  4. strtol(), strtoll(), strtoul(), strtoull() 函数
+
+     #include <stdlib.h>
+     long int strtol(const char * restrict nptr, char ** restrict endptr, int base);
+     long long int strtoll(const char * restrict nptr,char ** restrict endptr,int base);
+     unsigned long int strtoul(const char * restrict nptr,char ** restrict endptr,int base);
+     unsigned long long int strtoull(const char * restrict nptr,char ** restrict endptr,int base);
+
+. 7.20.2  随机数序列产生函数
+
+  1. rand() 函数
+
+     产生0-RANDMAX 之间的一个随机数
+
+     #include <stdlib.h>
+     int rand(void);
+
+  2. srand() 函数
+
+     #include <stdlib.h>
+     void srand(unsigned int seed);
+
+  实现方式:
+
+static unsigned long int next = 1;
+int rand(void) // RAND_MAX assumed to be 32767
+{
+    next = next * 1103515245 + 12345;
+    return (unsigned int)(next/65536) % 32768;
+}
+
+void srand(unsigned int seed)
+{
+    next = seed;
+}
+
+参见：
+
+    https://www.cnblogs.com/Camilo/archive/2013/09/21/3332279.html
+
+下面是0~32767之间的随机数程序：
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>//使用当前时钟做种子
+
+void main( void )
+{
+
+　　int i;
+　　srand( (unsigned)time( NULL ) ); //初始化随机数
+　　for( i = 0; i < 10;i++ )  //打印出10个随机数
+　　　　printf( " %d\n", rand() );
+}
+
+根据上面的程序可以很容易得到0~1之间的随机数：
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h> 
+main( )
+{
+
+　　int i;
+　　srand( (unsigned)time( NULL ) ); 
+　　for( i = 0; i < 10;i++ )
+　　printf( "%5.2f\n", rand()/32767.0);
+}
+
+而产生1~100之间的随机数可以这样写：
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h> 
+main( )
+{
+
+　　int i;
+　　srand( (unsigned)time( NULL ) ); 
+　　for( i = 0; i < 10;i++ )
+　　printf( "%d\n", rand()%100+1);
+}
+
+
+何产生设定范围内的随机数 
+
+由于rand产生的随机数从0到rand_max，而rand_max是一个很大的数，那么如何产生从X~Y的数呢？
+
+ 从X到Y，有Y－X＋1个数，所以要产生从X到Y的数，只需要这样写： 
+
+ k=rand()%(Y-X+1)+X; 
+
+ 这样，就可以产生你想要的任何范围内的随机数了。
+. 7.20.3 内存管理函数
+
+  1. calloc() 函数
+   
+     #include <stdlib.h>
+     void *calloc(size_t nmemb, size_t size);
+
+  2. free() 函数
+
+     #include <stdlib.h>
+     void free(void *ptr);
+
+  3. malloc() 函数
+
+     #include <stdlib.h>
+     void *malloc(size_t size);
+
+  4. realloc() 函数
+
+     #include <stdlib.h>
+     void *realloc(void *ptr, size_t size);
+
+. 7.20.4 与环境通讯函数  Communication with the environment
+
+  1. abort() 函数
+
+     #include <stdlib.h>
+     void abort(void);
+
+  2. atexit() 函数
+
+     #include <stdlib.h>
+     int atexit(void (*func)(void));
+
+  3. exit() 函数
+
+     #include <stdlib.h>
+     int atexit(void (*func)(void));
+
+  4. _Exit() 函数  _Exit
+
+     #include <stdlib.h>
+     void _Exit(int status);
+
+  5. getenv() 函数
+
+     #include <stdlib.h>
+     char *getenv(const char *name);
+
+  6. system() 函数
+
+     #include <stdlib.h>
+     int system(const char *string);
+
+. 7.20.5 搜索和排序工具   Searching and sorting utilities
+
+  1. bsearch() 函数
+
+     #include <stdlib.h>
+     void *bsearch(const void *key, const void *base,size_t nmemb, size_t size,int (*compar)(const void *, const void *));
+
+  2. 

@@ -1,0 +1,5 @@
+. 7.22 数学相关的  (tgmath.h)  
+
+   tgmath.h 包含  math.h  和 complex.h， 以及各种宏定义.
+
+   

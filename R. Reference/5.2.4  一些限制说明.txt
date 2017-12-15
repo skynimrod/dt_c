@@ -1,0 +1,55 @@
+包括传的参数数量，等等.    
+
+. 5.2.4  环境限制  P32   页码是20
+
+. 5.2.4.1  传统限制
+
+   -- 127 个 块嵌套    block
+
+   -- 63 个 条件嵌套   conditional inclusion
+
+   -- 12 个指针，数组，或函数声明.  结构, 联合体等.
+
+   -- 63 个 括弧嵌套.   parenthesized, 声明中.
+
+   -- 63 个 括弧嵌套..  表达式中
+
+   -- 31 个 significant initial characters in an external identifier (...)  ??? 这个没搞懂
+   
+   -- 4095 external identifiers in one translation unit
+
+   -- 511  个identifiers  在 一个block 范围内
+
+   -- 4095 宏定义     在一个 预处理  translation unit 中
+
+   -- 127 个parameters 在一个函数定义中
+
+   -- 127 个arguments  在一个函数调用中
+
+   -- 127 个parameters  在一个宏定义中
+
+   -- 127 个 arguments  在宏调用中
+
+   -- 4095 个字符 在一行源代码中
+
+   -- 4095 个字符  在一个字符串定义中
+
+   -- 65535 字节 在一个对象中
+
+   -- 15 层嵌套  #include 文件
+
+   -- 1023 个case 标签   在 switch 语句中
+
+   -- 1023 个 成员  在一个 结构或联合体 中
+
+   -- 1023 个枚举常量(enumeration constans ) 在一个枚举中(in a single enumeration)
+
+   -- 63 层结构或联合体嵌套.  在一个结构定义中
+
+5.2.4.2  数字限制  
+
+   <limits.h>  sizes of integer types
+
+
+
+   

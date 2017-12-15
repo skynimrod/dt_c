@@ -1,0 +1,4 @@
+.7.16  Boolean 类型和值  <stdbool.h>    P264    页码是262
+
+
+      bool, true, false 等定义
