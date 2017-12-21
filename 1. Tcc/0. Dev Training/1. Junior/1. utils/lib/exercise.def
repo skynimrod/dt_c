@@ -1,0 +1,5 @@
+LIBRARY exercise.dll
+
+EXPORTS
+freeSZ
+init_SZ

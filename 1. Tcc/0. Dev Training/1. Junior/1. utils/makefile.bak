@@ -2,8 +2,9 @@
 !include "0.test/file_tools_test.mak"
 #!include "2.str_tools/str_tools.mak"
 #!include "3.date_tools/date_tools.mak"
+!include "6.exercise/exercise.mak"
 
-all: clean
+#all: clean
 clean:
   @if exist "0.test\*.*~" del "0.test\*.*~"
   @if exist "0.test\*~" del "0.test\*~"

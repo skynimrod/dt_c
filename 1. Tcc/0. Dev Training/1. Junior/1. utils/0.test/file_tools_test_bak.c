@@ -4,7 +4,6 @@
 #include <time.h>       // 产生随机数的时候用时间做种子
 
 #include "file_tools.h"
-#include "exercise.h"
 
            // 拼音表   # āáǎà ōóǒò  ēéěè īíǐì ūúǔù üǖǘǚǜ
 	    
@@ -60,6 +59,105 @@
 			     "bái de yòu hé", "白的又和", "zhú yá mǎ yòng jǐ", "竹牙马用几", "zhī shí duō chū jiàn", "只石多出见", 
 			     "duì mā quán huí", "对妈全回" };
               
+
+    // 写字表
+    typedef struct __sz {    // 生字
+	    int     No;           // 编号, 有可能是识字中的生字，也可能是课文中的生字
+	    int     num;     // 汉字数量
+	    char    **hz;   // 汉字      "一二三上"
+	    char    ** py;  // 拼音      {"yīèrsānshàng"
+    }SZ;
+    typedef struct __xzTbl {
+	   SZ  *shizi;        //  识字中的生字
+	   SZ  *kewen;        //  课文中的生字
+	   SZ  *ywyd;         //  语文园地中的生字
+
+    }XZTBL;
+
+
+    /*
+     * start  是起始编号,  total 是指总共有多少课
+     */
+    SZ * init_SZ ( char **sztotal, int start, int total )       // 初始化生字表
+    { 
+	   SZ  * sztbl;
+
+	   // 识字中的生字
+	   int		hznum  = 0, len = 0;   // 用来临时记录字符串长度, len 用来计二维数组需要的内存空间
+	   char		* result = NULL;    // 用来拆分拼音
+	   int          NoNum = total;        //  sizeof(sztotal)/sizeof(char *) 就是有多少个字符串, 除以2,  就得到有多少编号
+	   //int		rec = 0, lastrec = 0;   // 用来记录一条记录的长度
+
+	   sztbl = (SZ *) malloc( NoNum * sizeof(SZ) );
+	   //printf("处理前: NoNum=%d\n", NoNum);
+	   
+	   for ( int i = 0; i < NoNum; i ++ ) {     // 
+		memset( &sztbl[i], 0, sizeof(SZ) );        // 初始化
+
+		sztbl[i].No = i+start;                         // 识字中的编号
+
+		
+		hznum  = strlen( sztotal[ i*2 + 1 ] )/2;  // 每个汉字2个字节, 除以2后就是汉字的个数
+
+		sztbl[i].num  = hznum;                         // 汉字数量
+		//printf( "hznum=%d       ??\n", hznum );
+
+		//汉字部分,  每个汉字申请一个指针
+		sztbl[i].hz = (char **)malloc(  hznum * sizeof(char * ) );
+		for ( int j = 0; j < hznum; j ++ ) {
+			sztbl[i].hz[j] = (char *)malloc( 2 + 1);    // 1个汉字占用2个字节
+			memset(sztbl[i].hz[j], 0, 2+1);
+			memcpy(sztbl[i].hz[j], sztotal[i*2+1]+j*2, 2 );
+			//printf( "i = %d,j =%d, 汉字:%s;\n", i,j,sztbl[i].hz[j] );
+		}
+
+		// 拼音部分
+		sztbl[i].py = (char **)malloc( hznum * sizeof(char *) );
+		
+		result = strtok( sztotal[i*2], " " );
+
+		for ( int j = 0; j < hznum && result != NULL; j ++ ) {
+                        //printf( "拼音为:%s\n", result );
+			len = strlen( result )  ;
+			sztbl[i].py[j] = (char *)malloc( len + 1 );    // 1个汉字占用2个字节
+			
+			memset(sztbl[i].py[j], 0, len + 1);
+			memcpy(sztbl[i].py[j], result, len );  // 获取拼音
+			
+			//printf( "i = %d,j =%d, 拼音:%s;\n", i,j,sztbl[i].py[j] );
+			result = strtok( NULL, " " );
+		}
+		
+	   }
+	   
+           printf("Init End: sz[0].num=%d, sz[0].No=%d\n", sztbl[0].num, sztbl[0].No ); 
+
+	   return sztbl;
+    }
+
+    void freeSZ( SZ * sz, int NoNum ) 
+    {
+	    int  hznum = 0 ;
+	    if ( sz != NULL ) {
+       	          //printf("--NoNum=%d-------\n", NoNum );
+                  for ( int i = 0; i < NoNum; i ++ ) {
+                        hznum = sz[i].num;
+			//printf( "            hznum =%d,  sz[i].num=%d, sz[i].No=%d\n", hznum,  sz[i].num, sz[i].No ); 
+			for ( int j = 0; j < hznum; j ++ ) {
+				//printf( "    汉字:%s, 拼音:%s\n", sz[i].hz[j], sz[i].py[j] );
+				if ( sz[i].hz[j] != NULL )
+					free(sz[i].hz[j] );
+				
+				if ( sz[i].py[j] != NULL )
+					free(sz[i].py[j] );
+			}
+			if ( sz[i].hz != NULL ) free( sz[i].hz );
+			if ( sz[i].py != NULL ) free( sz[i].py );
+			
+		}
+		free( sz );
+	    }
+    }
 
         // 判断一个数字序列中是否包含某个数字
     int ifContain( int len, int *queue, int n ) 
