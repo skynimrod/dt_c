@@ -1,3 +1,5 @@
+#include <windows.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
@@ -5,6 +7,9 @@
 
 #include "file_tools.h"
 #include "exercise.h"
+#include "exercise_math.h"
+#include "time_tools.h"
+
 
            // 拼音表   # āáǎà ōóǒò  ēéěè īíǐì ūúǔù üǖǘǚǜ
 	    
@@ -260,6 +265,10 @@
     }
 
 
+
+
+        
+
     
     void main(void)
 {
@@ -316,9 +325,17 @@
     kw = init_SZ ( kewen, 1, 14  );       // 初始化1年级上学期 写字表-> 课文
     printf("??kw[0].num=%d, kw[0].No=%d\n", kw[0].num, kw[0].No ); 
 
-    time_t start = clock(); 
-    getMatchProblem( 8, 3, start, sz, yw, kw, 9,8,12, 9, 3, 14 );
-    printf("\n");
+    time_t start = clock(), end; 
+    //getMatchProblem( 8, 3, start, sz, yw, kw, 9,8,12, 9, 3, 14 );
+
+    
+    char *title ="姓名:             日期:            时间:                做对:        (50道)";
+    char * filename = "练习.txt";
+
+    int maxLines = 56, limit = 30, rows = 10, cols = 5, days = 30;
+    
+    getDaysExercise( maxLines, limit, title, rows, cols, filename, days );
+    
 /*
     getMatchProblem( 8, 3, start, sz, yw, kw, 3,1,5 );
     printf("\n");
@@ -350,7 +367,7 @@
     getMatchProblem( 8, 3, start, sz, yw, kw, 3,1,5 );
     printf("\n");
 */
-    test(1, sz);
+    //test(1, sz);
 
 
     freeSZ( sz, 9 );

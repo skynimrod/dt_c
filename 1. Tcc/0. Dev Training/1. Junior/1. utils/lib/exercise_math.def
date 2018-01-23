@@ -1,0 +1,7 @@
+LIBRARY exercise_math.dll
+
+EXPORTS
+addlimited
+genEquation
+getDaysExercise
+minuslimited

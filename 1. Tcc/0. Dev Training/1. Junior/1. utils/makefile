@@ -1,4 +1,5 @@
 !include "1.file_tools/file_tools.mak"
+!include "8.time_tools/time_tools.mak"
 !include "6.exercise/exercise.mak"
 !include "0.test/file_tools_test.mak"
 #!include "2.str_tools/str_tools.mak"

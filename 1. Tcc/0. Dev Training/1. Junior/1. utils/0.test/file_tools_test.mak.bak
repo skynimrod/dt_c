@@ -16,9 +16,12 @@ lib   = lib
 all: file_tools_test.exe 
 
 file_tools_test.exe:
-	 tcc -L$(lib) -lfile_tools -lexercise-I$(inc) "$(source)\file_tools_test.c"
+	 tcc -L$(lib) -lfile_tools -lexercise -lexercise_math -I$(inc) "$(source)\file_tools_test.c"
 	 move file_tools_test.exe $(bin)\file_tools_test.exe
 	 copy $(lib)\file_tools.dll $(bin)\file_tools.dll
+	 copy $(lib)\exercise.dll $(bin)\exercise.dll
+	 copy $(lib)\exercise_math.dll $(bin)\exercise_math.dll
+	 copy $(lib)\time_tools.dll $(bin)\time_tools.dll
 		
 
 	 
