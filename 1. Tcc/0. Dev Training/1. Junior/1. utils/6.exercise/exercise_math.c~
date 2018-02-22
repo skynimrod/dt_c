@@ -31,9 +31,7 @@
     //  功    能 :
     //		限制条件加法, 比如20以内加法等.
     //  入口参数 :
-    //      char **    sztotal : 二维字符串数组, 包括生字拼音
-    //      int        start   : 起始课号, 有些生字表示从第二课开始的, 这儿是为了记录课文编号
-    //      int        total   : 课文总数.
+    //      .
     //
     //  出口参数 :
     //            无
@@ -68,7 +66,10 @@
 
         Sleep(1);        // 确保连续调用的时候初始化随机数不会相同.
 	    end = clock();
-	    srand( limit + GetCurMilSecond() );
+       
+	    //srand( limit - GetCurMilSecond()%limit );
+        srand(  GetCurMilSecond() );
+        srand( limit - rand() % limit );
 
         while( 1 ) {
             n1 =  rand() % limit;           // 产生不超过限制范围的加数
@@ -79,7 +80,9 @@
         while( 1 ) {
             Sleep(1);        // 确保连续调用的时候初始化随机数不会相同.
 	        end = clock();
-	        srand( limit + GetCurMilSecond() );
+	        //srand(  limit - GetCurMilSecond()%limit  );
+            srand(  GetCurMilSecond() );
+            srand( limit - rand() % limit );
 
             while( 1 ) {
                 n2 =  rand() % limit;           // 产生不超过限制范围的加数
@@ -106,7 +109,9 @@
 
         Sleep(1);        // 确保连续调用的时候初始化随机数不会相同.
 	    end = clock();
-	    srand( limit + GetCurMilSecond() );
+	    //srand(  limit - GetCurMilSecond()%limit  );
+        srand(  GetCurMilSecond() );
+        srand( limit - rand() % limit );
 
         while( 1 ) {
             n1 =  rand() % limit;           // 产生不超过限制范围的加数
@@ -117,7 +122,9 @@
         while( 1 ) {
             Sleep(1);        // 确保连续调用的时候初始化随机数不会相同.
 	        end = clock();
-	        srand( limit + GetCurMilSecond() );
+	        //srand(  limit - GetCurMilSecond()%limit  );
+            srand(  GetCurMilSecond() );
+            srand( limit - rand() % limit );
             
             while( 1 ) {
                 n2 =  rand() % limit;           // 产生不超过限制范围的加数
@@ -140,7 +147,7 @@
     }
 
     // 创建指定限制条件的算式
-    int DLL_EXPORT genEquation( int limit, int row, int col, char * title, char * filename ) 
+    int DLL_EXPORT genEquation( int limit, int row, int col, char * title, char * filename, int No ) 
     {
         FILE * fp;
         char   buffs[1024], lbuf[16];
@@ -150,7 +157,7 @@
         if ( fp == NULL ) 
             return;
         
-        fprintf( fp, "\n%s\n", title );
+        fprintf( fp, "\n%d.%s\n", No, title );
         lines += 2;    // 第1,2行
         
         for ( int i =0; i < 80; i ++) 
@@ -161,21 +168,30 @@
         
         memset( buffs, 0, 1024 );
         memset( lbuf, 0, 16 );
-        srand( limit + GetCurMilSecond() );
+        srand( limit );
+
+        int count = 0;
         for (int i = 0; i < row; i ++ ) {
             for ( int j = 0; j < col ; j ++ ) {
                 while( 1 )  {
 
                     // 创建随机数, 如果是单数则用加法, 双数用减法        
                     if ( rand() % 2 == 1 ) { // 单数, 用加法
-                        sprintf( lbuf, "%s", addlimited( 20 ) );
+
+                       // printf("--加法--\n");
+                        sprintf( lbuf, "%s", addlimited( limit ) );
                     } else {
-                        sprintf( lbuf, "%s", minuslimited( 20 ) );
+                        //printf("--减法---\n");
+                        sprintf( lbuf, "%s", minuslimited( limit ) );
                     }
+
+                    //printf("lbuf=%s,\n buffs=%s\nstrstr()=%s\n", lbuf, buffs, strstr(buffs, lbuf) );
                     if ( ! strstr( buffs, lbuf )  ) {   // 如果 lbuf 不在bufs 中出现, 则表示该算式是新的, 否则表示已经有该算式了, 需要重新找.
                         fprintf( fp, "%s", lbuf );
                         strcat(buffs, lbuf);      // 把新算式拼接到缓冲中.
                         memset( lbuf, 0, 16 );
+                        count ++;
+                        //printf("%d,-----------找到了一个算式====!\n", count);
                         break;
                     }
                 }
@@ -201,13 +217,14 @@
         FILE  * fp;
  
         for ( int i = 0; i < days; i ++ ) {
-            lines = genEquation( limit, rows, cols, title, filename ); 
+            lines = genEquation( limit, rows, cols, title, filename, i ); 
             l = lines;
             printf("%d..", i);
 
             while ( (lines + l) < maxLines && i < days ) {   // 如果当前行数没有超过一页的内容, 则判断增加一倍后能否超过
-                lines += genEquation( limit, rows, cols, title, filename ); 
                 i ++;
+                lines += genEquation( limit, rows, cols, title, filename, i ); 
+                printf("%d..", i);
             }
 
             if ( lines < maxLines ) {  // 如果没有满一页, 补充空行

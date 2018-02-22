@@ -322,8 +322,8 @@
     printf("??yw[0].num=%d, yw[0].No=%d\n", yw[0].num, yw[0].No ); 
     yw[0].No = 1; yw[1].No = 4; yw[2].No = 8;              // 手工修改语文园地编号, 不是顺序的
 
-    kw = init_SZ ( kewen, 1, 14  );       // 初始化1年级上学期 写字表-> 课文
-    printf("??kw[0].num=%d, kw[0].No=%d\n", kw[0].num, kw[0].No ); 
+  //  kw = init_SZ ( kewen, 1, 14  );       // 初始化1年级上学期 写字表-> 课文
+  //  printf("??kw[0].num=%d, kw[0].No=%d\n", kw[0].num, kw[0].No ); 
 
     time_t start = clock(), end; 
     //getMatchProblem( 8, 3, start, sz, yw, kw, 9,8,12, 9, 3, 14 );
@@ -332,8 +332,9 @@
     char *title ="姓名:             日期:            时间:                做对:        (50道)";
     char * filename = "练习.txt";
 
-    int maxLines = 56, limit = 30, rows = 10, cols = 5, days = 30;
+    int maxLines = 56, limit = 50, rows = 10, cols = 5, days = 30;
     
+    printf("-------------------now begin math exercise!------------\n");
     getDaysExercise( maxLines, limit, title, rows, cols, filename, days );
     
 /*
@@ -370,10 +371,10 @@
     //test(1, sz);
 
 
-    freeSZ( sz, 9 );
-    freeSZ(yw,3);
-    freeSZ(kw, 14);
-    free(buf);
+  //  freeSZ( sz, 9 );
+  //  freeSZ(yw,3);
+  //  freeSZ(kw, 14);
+  //  free(buf);
 
     int r1 = rand();
     int r2 = rand();
