@@ -25,6 +25,48 @@
 
     #define DLL_EXPORT __declspec(dllexport)
 
+    //**************************************************************************
+    //  函数名称 : initRand()
+    //  功    能 :
+    //		通过算法来初始化随机数, 防止连续调用 随机函数 的时候 产生的随机数相同.
+    //  入口参数 :
+    //      .
+    //
+    //  出口参数 :
+    //            无
+    //  返 回 值 :
+    //         void
+    //  Author :
+    //            Adams
+    //  Create Date :
+    //            2018.04.28
+    //  Modify history (modifier and date) :
+    //
+    //	使用说明 :
+    //		通过算法来初始化随机数, 确保后面连续调用rand()的时候, 产生的随机数不相同.         
+    //	Standard .h  :
+    //	        stdlib.h  ---- malloc(),
+    //	        stdio.h   ---- printf();
+    //          string.h  ---- strlen(), memset(),  memcpy(), strtok()
+    //	Develope Tools:
+    //			  SCO UNIX Development CC   
+    //			  Visual C++ 6.0            
+    //	Environment:
+    //			1. SCO UNIX 5.0.4          
+    //			2. Windows NT WorkStation SimpleChinese 4.0 
+    //				Can be used in console、MFC Application for Windows
+    //***************************************************************************
+    //
+    void initRand()
+    {
+        Sleep(1);        // 确保连续调用的时候初始化随机数不会相同.
+	    end = clock();
+       
+	    //srand( limit - GetCurMilSecond()%limit );
+        srand(  GetCurMilSecond() );
+        srand( limit - rand() % limit );
+
+    }
 
     //**************************************************************************
     //  函数名称 : addlimited()
@@ -101,7 +143,7 @@
     }
 
     // 减法算式
-    char * DLL_EXPORT minuslimited ( int limit )       // 限制范围内的减法法题, 例如: 20以内的加法, start 是外部传入的时间参数, 用来做随机数的初始化的
+    char * DLL_EXPORT sublimited ( int limit )       // 限制范围内的减法法题, 例如: 20以内的加法, start 是外部传入的时间参数, 用来做随机数的初始化的
     { 
 	    int     n1, n2, n3;       // n1 放被减数,  n2 放 减数,  n3 用来根据n1,n2 大小来调整.
         char    buf[512];                   // 用来存放算式
@@ -114,7 +156,7 @@
         srand( limit - rand() % limit );
 
         while( 1 ) {
-            n1 =  rand() % limit;           // 产生不超过限制范围的加数
+            n1 =  rand() % limit;           // 产生不超过限制范围的被减数
             if ( n1 != 0 && n1 != 1 )
                 break;
         }
@@ -127,8 +169,8 @@
             srand( limit - rand() % limit );
             
             while( 1 ) {
-                n2 =  rand() % limit;           // 产生不超过限制范围的加数
-                if ( n2 != 0 && n2 != 1 )
+                n2 =  rand() % limit;           // 产生不超过限制范围的减数
+                if ( n2 != 0 && n2 != 1 && n2 != n1 )
                     break;
             }
 
@@ -182,7 +224,7 @@
                         sprintf( lbuf, "%s", addlimited( limit ) );
                     } else {
                         //printf("--减法---\n");
-                        sprintf( lbuf, "%s", minuslimited( limit ) );
+                        sprintf( lbuf, "%s", sublimited( limit ) );
                     }
 
                     //printf("lbuf=%s,\n buffs=%s\nstrstr()=%s\n", lbuf, buffs, strstr(buffs, lbuf) );
@@ -240,5 +282,14 @@
             lines = 0;
 
         }
+   }
+
+   /*
+    * 加减混合运算: AddSubMixedOperation()
+    * 参数说明:
+    *     
+    */
+   void AddSubMixedOperation( int limit, char *opers,  int flag )
+   {
    }
 
