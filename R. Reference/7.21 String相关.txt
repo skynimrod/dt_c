@@ -29,6 +29,8 @@
      #include <string.h>
      char *strcat(char * restrict s1,const char * restrict s2);
 
+     将s2的内容，拷贝到s1的尾部, 返回新的字符串
+
   2. strncat() 函数
 
      #include <string.h>
@@ -78,10 +80,15 @@
      #include <string.h>
      size_t strcspn(const char *s1, const char *s2);
 
+     函数说明：strcspn()从参数s 字符串的开头计算连续的字符，而这些字符都完全不在参数reject 所指的字符串中。简单地说， 若strcspn()返回的数值为n，则代表字符串s 开头连续有n 个字符都不含字符串reject 内的字符。
+返回值：返回字符串s 开头连续不含字符串reject 内的字符数目。
+
   4. strpbrk() 函数
 
      #include <string.h>
      char *strpbrk(const char *s1, const char *s2);
+
+     依次检验字符串s1中的字符，当被检验字符在字符串s2中也包含时，则停止检验，并返回该字符位置，空字符null不包括在内。
 
   5. strrchr() 函数
 
@@ -92,6 +99,9 @@
 
      #include <string.h>
      size_t strspn(const char *s1, const char *s2);
+
+     函数说明 strspn()从参数s 字符串的开头计算连续的字符，而这些字符都完全是accept 所指字符串中的字符。简单的说，若strspn()返回的数值为n，则代表字符串s 开头连续有n 个字符都是属于字符串accept内的字符。
+返回值 返回字符串s开头连续包含字符串accept内的字符数目。
 
   7. strstr() 函数
 

@@ -1,0 +1,9 @@
+LIBRARY cJSON.dll
+
+EXPORTS
+cJSON_Delete
+cJSON_Parse
+cJSON_Print
+cJSON_strcasecmp
+cJSON_strdup
+pow2gt

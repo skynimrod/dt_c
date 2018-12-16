@@ -170,7 +170,7 @@
             
             while( 1 ) {
                 n2 =  rand() % limit;           // 产生不超过限制范围的减数
-                if ( n2 != 0 && n2 != 1 && n2 != n1 )
+                if ( n2 != 0 && n2 != 1 && n2 != n1 )    // 丢弃 减数是0，1 或者与被减数相同的
                     break;
             }
 
@@ -293,3 +293,53 @@
    {
    }
 
+
+   /*
+    * 2018.08.29
+    * 生成操作数
+    * char  * operands   返回的操作数存放在一个字符串中, 不同的操作数用空格分隔！！
+    * int     num        需要返回的操作数个数
+    * int     limit      操作数的大小限制
+    *
+    * 返回值:
+    *
+    *     int    实际返回的操作数个数
+    *  
+    *  说明:
+    *   
+    *       0,1  剔除. 0，1操作的运算比较简单, 没有训练的必要
+    *
+    *       单词获取操作数, 不要超过5个, 也就是num 最好小于6, 可以多次调用该函数来获取更多的操作数.
+    */
+   int getOperands( char * operands, int num, int limit ) 
+   {
+	    int     n;                          // n1 放被加数1,  n2 放 加数2
+        char    buf[36];                   // 用来存放操作数, 按3位数加1个空格, 大概能放9个操作数
+        time_t  end;
+        int     i = 0;
+        char    tmpbuf[12];
+
+        Sleep(1);        // 确保连续调用的时候初始化随机数不会相同.
+	    end = clock();
+       
+	    //srand( limit - GetCurMilSecond()%limit );
+        srand(  GetCurMilSecond() );
+        srand( limit - rand() % limit );
+
+        memset( buf, 0, 36 );
+        while( i < num ) {
+            n =  rand() % limit;           // 产生不超过限制范围的加数
+            if ( n == 0 || n == 1 )
+                continue;
+            memset( tmpbuf, 0, 12 );
+            sprintf( tmpbuf, "%d", n );
+            if ( !strstr( buf, tmpbuf ) ) { // 新生成的操作数不在之前的操作数里面
+                i ++;   // 说明找到操作数了
+
+                sprintf( buf, "%s %s", buf, tmpbuf );
+                continue;
+            }
+        }
+
+	    return buf;
+   }

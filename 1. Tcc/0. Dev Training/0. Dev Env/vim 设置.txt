@@ -30,3 +30,109 @@ TAB替换为空格：
 2 	set expandtab
 3 	set autoindent
 推荐使用第二种，按tab键时产生的是4个空格，这种方式具有最好的兼容性。
+
+
+
+工作中嫌vim 中一个tab的宽度太大，debian系统，没改之前是宽度是8个字符，想改成4，如下：
+cd ~
+vim  .vimrc
+添加如下几行：(括号中的不是，是我添加的)
+set shiftwidth=4          (表示每一级缩进的长度)
+set softtabstop=4      （表示在编辑模式的时候按退格键的时候退回缩进的长度）
+set nu              （显示行号）
+set autoindent        （自动缩进）
+
+：wq
+保存退出。
+source .vimrc              （使配置文件生效）
+
+打完收工。
+=============
+今日securecrt vim编辑行时,发现一行到72个字符时就自动换行了,很不爽.
+
+:set textwidth=200  或者:
+:set tw=200
+
+继续编辑即可.
+
+
+如何更改vim默认的 “换行缩进值”
+找到/etc/vimrc文件在文件，用vim将其打开，在此文件开头加上如下
+1）设置（软）制表符宽度为4：
+set tabstop=4
+set softtabstop=4
+2）设置缩进的空格数为4
+set shiftwidth=4
+3）设置自动缩进：即每行的缩进值与上一行相等；使用 noautoindent 取消设置：
+set autoindent
+4）设置使用 C/C++ 语言的自动缩进方式：
+set cindent
+5）设置C/C++语言的具体缩进方式（以我的windows风格为例）：
+set cinoptions={0,1s,t0,n-2,p2s,(03s,=.5s,>1s,=1s,:1s
+6）如果想在左侧显示文本的行号，可以用以下语句：
+set nu
+在此文件尾部加入如下信息：
+最后，如果没有下列语句，就加上吧：
+if &term=="xterm"
+set t_Co=8
+set t_Sb=^[[4%dm
+set t_Sf=^[[3%dm
+endif
+还有中文显示问题,
+可以添加：
+let &termencoding=&encoding
+set fileencodings=utf-8,gbk,ucs-bom,cp936
+上面这两行命令即可
+
+
+
+
+工作中嫌vim 中一个tab的宽度太大，debian系统，没改之前是宽度是8个字符，想改成4，如下：
+cd ~
+vim  .vimrc
+添加如下几行：(括号中的不是，是我添加的)
+set shiftwidth=4          (表示每一级缩进的长度)
+set softtabstop=4      （表示在编辑模式的时候按退格键的时候退回缩进的长度）
+set nu              （显示行号）
+set autoindent        （自动缩进）
+
+：wq
+保存退出。
+source .vimrc              （使配置文件生效）
+
+打完收工。
+=============
+今日securecrt vim编辑行时,发现一行到72个字符时就自动换行了,很不爽.
+
+:set textwidth=200  或者:
+:set tw=200
+
+继续编辑即可.
+
+在编辑模式下输入
+ngg 或者 nG
+
+
+n为指定的行数(如25)
+
+
+25gg或者25G 跳转到第25行.
+
+
+在命令模式下输入行号n
+
+
+: n
+
+
+如果想打开文件即跳转
+
+
+vim +n FileName
+
+
+查看当然光标所在的行
+
+
+Ctrl+g 
+

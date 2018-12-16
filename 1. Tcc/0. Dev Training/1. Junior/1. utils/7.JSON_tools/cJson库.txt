@@ -1,0 +1,13 @@
+参见：
+     
+    https://sourceforge.net/projects/cjson/
+
+    cJson 库下载后的压缩包为: cJSONFiles.zip
+
+. 1. 使用说明
+
+     参见 CJSONFiles.zip 中的test.c 文件, 是个使用CJson的例子.
+
+. 2. 编译  cJson 库
+
+   

@@ -1,0 +1,26 @@
+##################################################################################
+#
+#                   Copyright (C) 2017-2018 AQUGEN TECH CO.£¬LTD                
+#                                All Rights Reserved                            
+#
+##################################################################################
+#
+#
+
+source	= 7.JSON_tools\cJSON
+obj		= obj
+lib		= lib
+inc		= inc
+
+
+all: cJSONtest.exe
+
+cJSONtest.exe: "$(source)\cJsontest.c"
+	tcc -shared "$(source)\cJsontest.c"
+
+	IF not Exist "$(lib)" md "$(lib)"
+	echo "$(lib)\cJSON.dll"
+	move cJSON.dll "$(lib)\cJSON.dll"	 
+	move cJSON.def "$(lib)\cJSON.def"	 
+
+

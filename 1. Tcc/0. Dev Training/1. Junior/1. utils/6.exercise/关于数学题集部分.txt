@@ -7,3 +7,35 @@
   3. 减法题 函数名称由 minuslimited() 改为  sublimited()
 
   4. 100以内加减法,  3个操作数，比如: 45-17+16=
+
+  2018.08.29:
+
+    修改  实现算法,  先生成操作数, 然后按照要求再添加 操作符。 这样的话， 效率更高点.  代码页更加简练。
+
+  2018.10.07 :
+
+    增加乘法口诀 试题部分.  二年级上
+
+    void multiTable( limit, qt)
+
+    unsigned int : limit,  参考下面的宏, 各个数的乘法口诀
+
+               0 1 2 3 4 5 6 7 8 9 A B C D E F
+               |
+
+    int    : qt题型    A * B = ?       A * ? = B    ? * A = B
+ 
+
+    #define MULTI_LIMIT_ALL      0x00    所有的乘法口诀
+    #define MULTI_LIMIT_1        0x01    1的乘法口诀
+    #define MULTI_LIMIT_2        0x02    2的乘法口诀
+    #define MULTI_LIMIT_3        0x03    3的乘法口诀
+    #define MULTI_LIMIT_4        0x04    4的乘法口诀
+    #define MULTI_LIMIT_5        0x05    5的乘法口诀
+    #define MULTI_LIMIT_6        0x06    6的乘法口诀
+    #define MULTI_LIMIT_7        0x07    7的乘法口诀
+    #define MULTI_LIMIT_8        0x08    8的乘法口诀
+    #define MULTI_LIMIT_9        0x09    9的乘法口诀
+
+    #define QUESTION_TYPE_1      0x01    A * B = ? 
+                 

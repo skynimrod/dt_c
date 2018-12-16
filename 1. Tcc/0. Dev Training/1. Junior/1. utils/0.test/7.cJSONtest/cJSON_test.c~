@@ -1,0 +1,13 @@
+
+    #include <stdio.h>
+    #include "cJSON.h"
+
+    void main(void)
+    {
+        int    a;
+
+        printf("\n请输入数字:");
+        scanf("请输入数字%d", &a);
+        printf("\na=%d(%d)\n",a, pow2gt(a));
+        printf("\n21=%d\n", pow2gt(21 ));
+    }
