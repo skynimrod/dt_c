@@ -56,6 +56,14 @@
     // 1. 外部接口1, 初始化hooks
     int     pow2gt ( int x );
     char    *cJSON_Print( cJSON *item );
+    char    *cJSON_GetErrorPtr( void );
+    void    cJSON_Delete( cJSON * c );
+    cJSON   *cJSON_Parse( const char *value );
+
+    char    *cJSON_GetErrorPtr( void );
+    
+    void    print_CJSON( cJSON *item );
+    cJSON   *cJSON_getItem( cJSON *item, char *key );
 
 
     // 2. 公用函数
