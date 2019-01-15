@@ -5,3 +5,11 @@
 . 在makefile文件中, 如果命令前面用@, 就会不会显示该命令的执行(实际已经执行了)
 
 . 编译makefile 用 nmake
+
+. 2019.01.10
+
+ 1. Astring.dll  归并到str_tools.dll 中.
+
+ 2. FileApi.dll  合并到 file_tools.dll中
+
+ 3. 

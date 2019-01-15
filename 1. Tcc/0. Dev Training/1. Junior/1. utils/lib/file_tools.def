@@ -2,8 +2,7 @@ LIBRARY file_tools.dll
 
 EXPORTS
 freeFileMap
-getLine
+getFileSize
 ifOpened
-initFileMap
-printfm
-readLine
+initReadFileMap
+print_fm

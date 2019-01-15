@@ -1,35 +1,51 @@
 #!include "1.file_tools/file_tools.mak"
-#!include "2.str_tools/str_tools.mak"
+!include "2.str_tools/str_tools.mak"
 #!include "3.date_tools/date_tools.mak"
 #!include "6.exercise/exercise.mak"
-!include "7.JSON_tools/cJSON2/cJSON_tools.mak"
+#!include "7.JSON_tools/cJSON2/cJSON_tools.mak"
 #!include "7.JSON_tools/cJSON2/cJSONtest.mak"
 #!include "8.time_tools/time_tools.mak"
+#!include "9.deflate/deflate.mak"
+#!include "0.test/7.cJSONtest/cJSON_test.mak"
+#!include "15.zlib/zlib1.mak"
+
 #!include "0.test/file_tools_test.mak"
-!include "0.test/7.cJSONtest/cJSON_test.mak"
+!include "0.test/str_tools_test.mak"
+#!include "0.test/zlib_test.mak"
 
 #all: clean
 clean:
-  @if exist "0.test\*.*~" del "0.test\*.*~"
-  @if exist "0.test\*~" del "0.test\*~"
-  @if exist "0.test\*.bak" del "0.test\*.bak"
+	@if exist "0.test\*.*~" del "0.test\*.*~"
+	@if exist "0.test\*~" del "0.test\*~"
+	@if exist "0.test\*.bak" del "0.test\*.bak"
 
-  @if exist "1.file_tools\*.*~" del "1.file_tools\*.*~"
-  @if exist "1.file_tools\*~" del "1.file_tools\*~"
-  @if exist "1.file_tools\*.bak" del 1.file_tools\*.bak"
+	@if exist "1.file_tools\*.*~" del "1.file_tools\*.*~"
+	@if exist "1.file_tools\*~" del "1.file_tools\*~"
+	@if exist "1.file_tools\*.bak" del 1.file_tools\*.bak"
 
-  @if exist "2.str_tools\*.*~" del "2.str_tools\*.*~"
-  @if exist "2.str_tools\*~" del "2.str_tools\*~"
-  @if exist "2.str_tools\*.bak" del "2.str_tools\*.bak"
+	@if exist "2.str_tools\*.*~" del "2.str_tools\*.*~"
+	@if exist "2.str_tools\*~" del "2.str_tools\*~"
+	@if exist "2.str_tools\*.bak" del "2.str_tools\*.bak"
 
-  @if exist "3.date_tools\*.*~" del "3.date_tools\*.*~"
-  @if exist "3.date_tools\*~" del "3.date_tools\*~"
-  @if exist "3.date_tools\*.bak" del "3.date_tools\*.bak"
+	@if exist "3.date_tools\*.*~" del "3.date_tools\*.*~"
+	@if exist "3.date_tools\*~" del "3.date_tools\*~"
+	@if exist "3.date_tools\*.bak" del "3.date_tools\*.bak"
 
-  @if exist "7.JSON_tools\cJSON2\*.*~" del "7.JSON_tools\cJSON2\*.*~"
-  @if exist "7.JSON_tools\cJSON2\*~" del "7.JSON_tools\cJSON2\*~"
-  @if exist "7.JSON_tools\cJSON2\*.bak" del "7.JSON_tools\cJSON2\*.bak"
+	@if exist "7.JSON_tools\cJSON2\*.*~" del "7.JSON_tools\cJSON2\*.*~"
+	@if exist "7.JSON_tools\cJSON2\*~" del "7.JSON_tools\cJSON2\*~"
+	@if exist "7.JSON_tools\cJSON2\*.bak" del "7.JSON_tools\cJSON2\*.bak"
 
-  @if exist "inc\*~" del "inc\*~"
-  @if exist *~ del *~
-  @if exist *.bak del *.bak
+	@if exist "9.deflate\*.*~" del "9.deflate\*.*~"
+	@if exist "9.deflate\*~" del "9.deflate\*~"
+	@if exist "9.deflate\*.bak" del "9.deflate\*.bak"
+
+	@if exist "15.zlib\*.*~" del "15.zlib\*.*~"
+	@if exist "15.zlib\*~" del "15.zlib\*~"
+	@if exist "15.zlib\*.bak" del "15.zlib\*.bak"
+
+	@if exist "inc\*~" del "inc\*~"
+	@if exist *~ del *~
+	@if exist *.bak del *.bak
+	@if exist obj\*.o del obj\*.o
+  
+	@if exist "*.o" del "*.o"

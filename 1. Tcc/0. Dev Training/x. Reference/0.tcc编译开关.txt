@@ -1,0 +1,114 @@
+tcc version 0.9.26 - Tiny C Compiler - Copyright (C) 2001-2006 Fabrice Bellard
+Usage: tcc [options...] [-o outfile] [-c] infile(s)...
+       tcc [options...] -run infile [arguments...]
+General options:
+  -c          compile only - generate an object file
+  -o outfile  set output filename
+  -run        run compiled source
+  -fflag      set or reset (with 'no-' prefix) 'flag' (see man page)
+  -Wwarning   set or reset (with 'no-' prefix) 'warning' (see man page)
+  -w          disable all warnings
+  -v          show version
+  -vv         show included files (as sole argument: show search paths)
+  -dumpversion
+  -bench      show compilation statistics
+Preprocessor options:
+  -E          preprocess only
+  -Idir       add include path 'dir'
+  -Dsym[=val] define 'sym' with value 'val'
+  -Usym       undefine 'sym'
+Linker options:
+  -Ldir       add library path 'dir'
+  -llib       link with dynamic or static library 'lib'
+  -pthread    link with -lpthread and -D_REENTRANT (POSIX Linux)
+  -r          generate (relocatable) object file
+  -rdynamic   export all global symbols to dynamic linker
+  -shared     generate a shared library
+  -soname     set name for shared library to be used at runtime
+  -static     static linking
+  -Wl,-opt[=val]  set linker option (see manual)
+Debugger options:
+  -g          generate runtime debug info
+  -bt N       show N callers in stack traces
+Misc options:
+  -nostdinc   do not use standard system include paths
+  -nostdlib   do not link with standard crt and libraries
+  -Bdir       use 'dir' as tcc internal library and include path
+  -MD         generate target dependencies for make
+  -MF depfile put generated dependencies here
+
+ 
+   fib.c 是一个标准C语言例程，不多说, 编译它:
+
+   tcc fib.c
+   
+   hello_win.c 是一个Windows GUI例程， 编译它：tcc hello_win.c
+
+   dll.c 是一个dll 例程，编译它：
+
+　　
+
+     tcc -shared dll.c       //生成dll.dll文件
+
+     tiny_impdef dll.dll     // 生成dll.def文件
+
+     tcc hello_dll.c dll.def //hello_dll.c 是调用 dll.dll 的例程
+
+
+E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\1. utils>make
+ -f15.zlib/zlib1.mak
+15.zlib/zlib1.mak:30: *** missing separator.  Stop.
+
+all: $(SHAREDLIB)
+
+	@echo "hello, begin zlib1.dll compile, all"
+
+@echo 前加上“tab”控制符后就不再报下面的错误了makefile:4: *** missing separator. Stop
+
+
+E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\1. utils>make
+ -f15.zlib/zlib1.mak
+make: *** No rule to make target 'obj', needed by 'adler32.o'.  Stop.
+
+一个是因为不可见空格字符，一个是因为路径错误，都是Makefile书写文件
+
+自己检查自己的Makefile.am，很久很久，才突然想起来关于tab和空格不通用的问题
+
+把实际编译的命令行前的8个空格删除，换成了tab，立刻成功。
+
+-----------------
+E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\1. utils>make
+ all  -f15.zlib/zlib1.mak
+adler32.o  rule....
+tcc -c -o adler32.o ./15.zlib/adler32.c
+process_begin: CreateProcess(NULL, tcc -c -o adler32.o ./15.zlib/adler32.c, ...)
+ failed.
+make (e=2):
+15.zlib/zlib1.mak:36: recipe for target 'adler32.o' failed
+make: *** [adler32.o] Error 2
+
+E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\1. utils>
+
+这个错误 make (e=2)  是系统找不到指定的文件。。。。
+
+奇怪，单独在命令行下运行  tcc -c -o adler32.o ./15.zlib/adler32.c 就可以， 为啥在骂客服中就不行。
+
+同样， tcc -shared -o zlib1.dll adler32.o 命令行下也行(.o文件用上面的命令行下运行产生)， 但是在makefile中不行
+
+真是费劲，试着用nmake, 直接就通过了。。。。。
+
+但是 生成的zlib1.dll 没有输出函数。。。
+
+#if defined(WINDOWS) || defined(WIN32)
+   /* If building or using zlib as a DLL, define ZLIB_DLL.
+    * This is not mandatory, but it offers a little performance increase.
+    */
+#  ifdef ZLIB_DLL
+#    if defined(WIN32) && (!defined(__BORLANDC__) || (__BORLANDC__ >= 0x500))
+#      ifdef ZLIB_INTERNAL
+#        define ZEXTERN extern __declspec(dllexport)
+#      else
+#        define ZEXTERN extern __declspec(dllimport)
+#      endif
+#    endif
+#  endif  /* ZLIB_DLL */

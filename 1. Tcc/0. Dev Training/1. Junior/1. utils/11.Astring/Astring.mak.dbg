@@ -1,0 +1,44 @@
+##################################################################################
+#
+#                   Copyright (C) 2001-2002 AQUGEN TECH CO.£¬LTD                
+#                                All Rights Reserved                            
+#
+##################################################################################
+#
+#
+
+!ifndef TARGETOS
+TARGETOS=WINNT
+!endif
+
+!include <ntwin32.mak>
+
+
+!if "$(CPU)" == "i386"
+cflags = $(cflags) -D_CRTAPI1=_cdecl -D_CRTAPI2=_cdecl
+!else
+cflags = $(cflags) -D_CRTAPI1= -D_CRTAPI2=
+!endif
+
+cvars=-DNT -DWIN -DWIN32
+obj=obj
+mycflag = -Fo.\$(obj)\\
+
+all: Astring.dll
+
+
+# Inference rule for updating the object files
+#.c.obj:
+#  $(cc) $(cdebug) $(cflags) $(cvars) $*.c
+
+# Update the object file if necessary
+
+$(obj)\Astring.obj: Astring.cpp
+    IF NOT EXIST $(obj) md obj
+    $(cc) $(cdebug) $(cflags) $(mycflag) $(cvars) Astring.cpp
+
+Astring.dll:	$(obj)\Astring.obj
+	$(link) $(linkdebug) $(dlllflags) -def:Astring.def -out:Astring.dll \
+			$(obj)\Astring.obj  $(guilibs)
+
+

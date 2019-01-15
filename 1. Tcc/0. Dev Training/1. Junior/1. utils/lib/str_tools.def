@@ -1,4 +1,32 @@
 LIBRARY str_tools.dll
 
 EXPORTS
+CutMemo
+CutMemoEx
+CutQuote
+DelCharInString
+GetQuotePos
+IfHaveQuote
+Iplong2Ipstr
+Ipstr2Iplong
+IsChinese
 IsNumberStr
+IsNumericStr2
+LowerStr
+MaskSubStr
+NumericStrSort
+RemoveCrLf
+ReplaceSubStr
+Space
+StrNumAdd
+UpperStr
+ValidIpstr
+ch_monfmt
+cstrcpy
+cstrlen
+lpatoi
+ltrim
+mstrcpy
+mtrim
+nAlphaOfStr
+rtrim

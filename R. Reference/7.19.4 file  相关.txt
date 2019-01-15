@@ -263,6 +263,8 @@
     #include <stdio.h>
     int fseek(FILE *stream, long int offset, int whence);
 
+    SEEK_END
+
 .3. fsetpos() º¯Êý
 
     #include <stdio.h>

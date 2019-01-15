@@ -1,0 +1,18 @@
+EXPORTS
+	GetTmpFile				@1
+	GetDirectoryOfFile		@2
+	GetCapacityOfDir		@3
+	CreateDirOfFile			@4
+	GetFullPath				@5
+	IfDirectoryExist		@6
+	CopyDir					@7
+	ifSubDir				@8
+	RemoveDir				@9
+	IfFileExist				@10
+	GetSizeOfFile			@11
+	GetNoPathFileName		@12
+	CreateDir				@13
+	AppendFile				@14
+	CreateCopyRightInfo		@15
+
+

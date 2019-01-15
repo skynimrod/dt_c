@@ -1,0 +1,170 @@
+E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\20.解压缩\zli
+b-1.2.11\zlib-1.2.11>make install -f  Makefile.gcc SHARED_MODE=1
+gcc  -O3 -Wall -c -o adler32.o adler32.c
+gcc  -O3 -Wall -c -o compress.o compress.c
+gcc  -O3 -Wall -c -o crc32.o crc32.c
+gcc  -O3 -Wall -c -o deflate.o deflate.c
+gcc  -O3 -Wall -c -o gzclose.o gzclose.c
+gcc  -O3 -Wall -c -o gzlib.o gzlib.c
+gcc  -O3 -Wall -c -o gzread.o gzread.c
+gcc  -O3 -Wall -c -o gzwrite.o gzwrite.c
+gcc  -O3 -Wall -c -o infback.o infback.c
+gcc  -O3 -Wall -c -o inffast.o inffast.c
+gcc  -O3 -Wall -c -o inflate.o inflate.c
+gcc  -O3 -Wall -c -o inftrees.o inftrees.c
+gcc  -O3 -Wall -c -o trees.o trees.c
+gcc  -O3 -Wall -c -o uncompr.o uncompr.c
+gcc  -O3 -Wall -c -o zutil.o zutil.c
+ar rcs libz.a adler32.o compress.o crc32.o deflate.o gzclose.o gzlib.o gzread.o
+gzwrite.o infback.o inffast.o inflate.o inftrees.o trees.o uncompr.o zutil.o
+ar: could not create temporary file whilst writing archive: no more archived files
+Makefile.gcc:91: recipe for target 'libz.a' failed
+make: *** [libz.a] Error 1
+
+E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\20.解压缩\zli
+b-1.2.11\zlib-1.2.11>
+
+
+ar rcs libz.a adler32.o compress.o crc32.o deflate.o gzclose.o gzlib.o gzread.o gzwrite.o infback.o inffast.o inflate.o inftrees.o trees.o uncompr.o zutil.o
+
+上面的错误是因为命令行错误， 应该用下面的
+make install -fwin32/Makefile.gcc SHARED_MODE=1
+
+出现新的错误.
+
+E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\20.解压缩\zli
+b-1.2.11\zlib-1.2.11>make install -fwin32/Makefile.gcc SHARED_MODE=1
+ar rcs libz.a adler32.o compress.o crc32.o deflate.o gzclose.o gzlib.o gzread.o
+gzwrite.o infback.o inffast.o inflate.o inftrees.o trees.o uncompr.o zutil.o
+windres --define GCC_WINDRES -o zlibrc.o win32/zlib1.rc
+gcc -shared -Wl,--out-implib,libz.dll.a  \
+-o zlib1.dll win32/zlib.def adler32.o compress.o crc32.o deflate.o gzclose.o gzl
+ib.o gzread.o gzwrite.o infback.o inffast.o inflate.o inftrees.o trees.o uncompr
+.o zutil.o  zlibrc.o
+strip zlib1.dll
+INCLUDE_PATH, LIBRARY_PATH, and BINARY_PATH must be specified
+win32/Makefile.gcc:128: recipe for target 'install' failed
+make: *** [install] Error 1
+
+E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\20.解压缩\zli
+b-1.2.11\zlib-1.2.11>
+
+设置上面要求的3个环境变量
+
+set INCLUDE_PATH="E:/E_1_Developement Tools/1 C&C++/1. Tcc/0. Dev Training/1. Junior/20.解压缩/zlib-1.2.11/zlib-1.2.1/include"
+
+set LIBRARY_PATH="E:/E_1_Developement Tools/1 C&C++/1. Tcc/0. Dev Training/1. Junior/20.解压缩/zlib-1.2.11/zlib-1.2.1/lib
+"
+set BINARY_PATH="E:/E_1_Developement Tools/1 C&C++/1. Tcc/0. Dev Training/1. Junior/20.解压缩/zlib-1.2.11/zlib-1.2.1/bin"
+
+后来用了带目录的win32/Makefile.gcc  仍然出现上面的错误。  clean 后 关闭所有的源程序的vim, 然后重新 make
+
+E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\20.解压缩\zli
+b-1.2.11\zlib-1.2.11>make install -fwin32/Makefile.gcc SHARED_MODE=1
+gcc  -O3 -Wall -c -o adler32.o adler32.c
+gcc  -O3 -Wall -c -o compress.o compress.c
+gcc  -O3 -Wall -c -o crc32.o crc32.c
+gcc  -O3 -Wall -c -o deflate.o deflate.c
+gcc  -O3 -Wall -c -o gzclose.o gzclose.c
+gcc  -O3 -Wall -c -o gzlib.o gzlib.c
+gcc  -O3 -Wall -c -o gzread.o gzread.c
+gcc  -O3 -Wall -c -o gzwrite.o gzwrite.c
+gcc  -O3 -Wall -c -o infback.o infback.c
+gcc  -O3 -Wall -c -o inffast.o inffast.c
+gcc  -O3 -Wall -c -o inflate.o inflate.c
+gcc  -O3 -Wall -c -o inftrees.o inftrees.c
+gcc  -O3 -Wall -c -o trees.o trees.c
+gcc  -O3 -Wall -c -o uncompr.o uncompr.c
+gcc  -O3 -Wall -c -o zutil.o zutil.c
+ar rcs libz.a adler32.o compress.o crc32.o deflate.o gzclose.o gzlib.o gzread.o
+gzwrite.o infback.o inffast.o inflate.o inftrees.o trees.o uncompr.o zutil.o
+windres --define GCC_WINDRES -o zlibrc.o win32/zlib1.rc
+gcc -shared -Wl,--out-implib,libz.dll.a  \
+-o zlib1.dll win32/zlib.def adler32.o compress.o crc32.o deflate.o gzclose.o gzl
+ib.o gzread.o gzwrite.o infback.o inffast.o inflate.o inftrees.o trees.o uncompr
+.o zutil.o  zlibrc.o
+strip zlib1.dll
+strip:zlib1.dll: could not create temporary file to hold stripped copy: no error
+
+win32/Makefile.gcc:96: recipe for target 'zlib1.dll' failed
+make: *** [zlib1.dll] Error 1
+
+E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\20.解压缩\zli
+b-1.2.11\zlib-1.2.11>
+
+strip 错误。。。。
+
+下面是man strip获得到的信息，简单的说就是给文件脱掉外衣，具体就是从特定文件中剥掉一些符号信息和调试信息，使文件变小。
+
+E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\1. utils>strip
+Usage: strip <option(s)> in-file(s)
+ Removes symbols and sections from files
+ The options are:
+  -I --input-target=<bfdname>      Assume input file is in format <bfdname>
+  -O --output-target=<bfdname>     Create an output file in format <bfdname>
+  -F --target=<bfdname>            Set both input and output format to <bfdname>
+
+  -p --preserve-dates              Copy modified/access timestamps to the output
+
+  -D --enable-deterministic-archives
+                                   Produce deterministic output when stripping a
+rchives
+  -U --disable-deterministic-archives
+                                   Disable -D behavior (default)
+  -R --remove-section=<name>       Also remove section <name> from the output
+     --remove-relocations <name>   Remove relocations from section <name>
+  -s --strip-all                   Remove all symbol and relocation information
+  -g -S -d --strip-debug           Remove all debugging symbols & sections
+     --strip-dwo                   Remove all DWO sections
+     --strip-unneeded              Remove all symbols not needed by relocations
+     --only-keep-debug             Strip everything but the debug information
+  -M  --merge-notes                Remove redundant entries in note sections (de
+fault)
+      --no-merge-notes             Do not attempt to remove redundant notes
+  -N --strip-symbol=<name>         Do not copy symbol <name>
+  -K --keep-symbol=<name>          Do not strip symbol <name>
+     --keep-file-symbols           Do not strip file symbol(s)
+  -w --wildcard                    Permit wildcard in symbol comparison
+  -x --discard-all                 Remove all non-global symbols
+  -X --discard-locals              Remove any compiler-generated symbols
+  -v --verbose                     List all object files modified
+  -V --version                     Display this program's version number
+  -h --help                        Display this output
+     --info                        List object formats & architectures supported
+
+  -o <file>                        Place stripped output into <file>
+strip: supported targets: pe-i386 pei-i386 elf32-i386 elf32-iamcu elf32-little e
+lf32-big plugin srec symbolsrec verilog tekhex binary ihex
+
+E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\1. utils>
+
+
+总是出现不能创建临时文件，  干脆 直接用gcc连接.o 文件创建zlib1.dll, 跳过ar, strip.
+
+g:\2.c\zlib-1.2.11\zlib-1.2.11>gcc -shared -Wl,--out-implib,libz.dll.a -o zlib1.
+dll win32/zlib.def adler32.o compress.o crc32.o deflate.o gzclose.o gzlib.o gzre
+ad.o gzwrite.o infback.o inffast.o inflate.o inftrees.o trees.o uncompr.o zutil.
+o
+
+成功链接产生zlib1.dll
+
+下面测试下能不能用。
+
+gcc  -O3 -Wall -c -o example.o -I. test/example.c    通过
+gcc  -o example.exe example.o -L. zlib1.dll          通过
+
+
+OK    zlib1.dll可用！！！！！
+
+g:\2.c\zlib-1.2.11\zlib-1.2.11>example
+zlib version 1.2.11 = 0x12b0, compile flags = 0x55
+uncompress(): hello, hello!
+gzread(): hello, hello!
+gzgets() after gzseek:  hello!
+inflate(): hello, hello!
+large_inflate(): OK
+after inflateSync(): hello, hello!
+inflate with dictionary: hello, hello!
+
+g:\2.c\zlib-1.2.11\zlib-1.2.11>
+

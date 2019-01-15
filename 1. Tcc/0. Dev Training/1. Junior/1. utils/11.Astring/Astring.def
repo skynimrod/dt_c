@@ -1,0 +1,33 @@
+EXPORTS
+	ltrim				@1
+	mtrim				@2
+	rtrim				@3
+	UpperStr			@4
+	LowerStr			@5
+	GetQuotePos			@6
+	CutMemo				@7
+	IfHaveQuote			@8
+	CutQuote			@9
+	CutMemoEx			@10
+	DelCharInString		@11
+	ch_monfmt			@12
+	StrNumAdd			@13
+	RemoveCrLf			@14
+	Space				@15
+	IsNumericStr		@16
+	IsNumericStr2		@17
+	NumericStrSort		@18
+	IsChinese			@20
+	nAlphaOfStr			@21
+	cstrlen				@22
+	cstrcpy				@23
+	mstrcpy				@24
+	GetFirstWord		@25
+	lpatoi				@26
+	ValidIpstr			@27
+	Ipstr2Iplong		@28
+	Iplong2Ipstr		@29
+	ReplaceSubStr		@30
+	MaskSubStr			@31
+
+
