@@ -28,7 +28,7 @@
 
     // about FILEMAP  µÄ²Ù×÷
     void        print_fm( FILEMAP * fm_p );
-    FILEMAP *   initReadFileMap( char * srcFile );
+    FILEMAP *   initFileMap( char * srcFile );
     void        freeFileMap( FILEMAP * fm_p );
     uchar *     fm_readLine( FILEMAP *fm_p );
     uchar *     fm_read( FILEMAP *fm_p, long length, long start );

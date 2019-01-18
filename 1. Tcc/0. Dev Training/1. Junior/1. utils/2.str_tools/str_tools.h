@@ -15,6 +15,11 @@
     //        3.   ifDirExist()
     //        4.   
     //
+    #ifndef __STR_TOOLS_H__    // define str_tools.h Start {
+    #define __STR_TOOLS_H__
+
+    #include <stdbool.h>                // bool 类型的定义在该文件中, 如果没有包含该文件,  引用 str_tools.h时, 总会出现inc/str_tools.h:49: error: ';' expected (got "IsNumberStr")
+
     char *	ltrim( char	*str ); 
     char *	mtrim( char	*str ); 
     char *	rtrim( char	*str ); 
@@ -42,6 +47,8 @@
     char *  Space( int num );
 
     int  lpatoi( char * instr );
+
+    bool IsNumberStr( char *buf );
 
     int  IsNumericStr( char *buf );
     int  IsNumericStr2( char *buf, char splitchar );                        // splitchar 缺省=','
@@ -71,3 +78,4 @@
     unsigned int  mstrcpy( char *pszDist, const char *pszSource, int nPos, int nSize );
     int  GetFirstWord( const char *pszSource, char *deststr );
         
+    #endif

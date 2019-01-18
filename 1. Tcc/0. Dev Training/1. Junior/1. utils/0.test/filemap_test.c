@@ -10,7 +10,7 @@ void main(void)
     FILEMAP     *fp;
     
     // 1. 测试初始化
-    fp = initReadFileMap( srcFile );
+    fp = initFileMap( srcFile );
     
 
     // 2. 测试 读取一行

@@ -12,4 +12,5 @@ else
 fi
 
 git push -u origin master;
+git push -u origin master;
 echo "end!"

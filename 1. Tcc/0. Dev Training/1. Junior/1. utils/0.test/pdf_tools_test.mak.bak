@@ -10,16 +10,16 @@
 source	= 0.test
 bin		= bin
 inc		= inc
-lib   	= lib
+lib   = lib
 
 
-all: str_tools_test.exe 
+all: pdf_tools_test.exe 
 
-str_tools_test.exe:
-	tcc -L$(lib) -lstr_tools -I$(inc) "$(source)\str_tools_test.c"
-	
-	move str_tools_test.exe $(bin)\str_tools_test.exe	
-	copy $(lib)\str_tools.dll $(bin)\str_tools.dll
+pdf_tools_test.exe:
+	 tcc -L$(lib) -lpdf_tools -lfilemap -lfile_tools -lstr_tools -I$(inc) "$(source)\pdf_tools_test.c"
+	 move pdf_tools_test.exe $(bin)\pdf_tools_test.exe
+	 copy $(lib)\filemap.dll $(bin)\filemap.dll
+	 copy $(lib)\file_tools.dll $(bin)\file_tools.dll
 		
 
 	 

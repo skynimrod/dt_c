@@ -5,5 +5,5 @@ fm_read
 fm_readLine
 fm_seek
 freeFileMap
-initReadFileMap
+initFileMap
 print_fm

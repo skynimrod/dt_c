@@ -16,7 +16,7 @@ inc		= inc
 all: pdf_tools.dll
 
 pdf_tools.dll: "$(source)\pdf_tools.c"
-	tcc -shared -L$(lib) -lfile_tools -lfilemap -lmemorymap "$(source)\pdf_tools.c"
+	tcc -shared -L$(lib) -lfile_tools -lfilemap -lmemorymap -lstr_tools -I$(inc) "$(source)\pdf_tools.c"
 
 	IF not Exist "$(inc)" md "$(inc)"
 	copy "$(source)\pdf_tools.h" "$(inc)\pdf_tools.h"	 

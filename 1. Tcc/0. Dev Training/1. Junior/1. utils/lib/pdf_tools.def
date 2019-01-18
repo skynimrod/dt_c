@@ -1,0 +1,4 @@
+LIBRARY pdf_tools.dll
+
+EXPORTS
+parsePDF

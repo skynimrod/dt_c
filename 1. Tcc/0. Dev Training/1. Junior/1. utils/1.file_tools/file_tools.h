@@ -18,6 +18,8 @@
     #ifndef __FILE_TOOLS_H__    // define file_tools.h Start {
     #define __FILE_TOOLS_H__
 
+    #include <stdio.h>
+
     size_t      getFileSize( char *fname );
     int		    ifOpened( char * filename );
 
