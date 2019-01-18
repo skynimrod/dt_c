@@ -7,23 +7,23 @@
 #
 #
 
-source	= 16.pdf_tools
-obj		= obj
-lib		= lib
-inc		= inc
+source	= 18.memorymap
+obj			= obj
+lib			= lib
+inc			= inc
 
 
-all: pdf_tools.dll
+all: memorymap.dll
 
-pdf_tools.dll: "$(source)\pdf_tools.c"
-	tcc -shared "$(source)\pdf_tools.c"
+memorymap.dll: "$(source)\memorymap.c"
+	tcc -shared -I$(inc) "$(source)\memorymap.c"
 
 	IF not Exist "$(inc)" md "$(inc)"
-	copy "$(source)\pdf_tools.h" "$(inc)\pdf_tools.h"	 
+	copy "$(source)\memorymap.h" "$(inc)\memorymap.h"	 
 
 	IF not Exist "$(lib)" md "$(lib)"
-	echo "$(lib)\pdf_tools.dll"
-	move pdf_tools.dll "$(lib)\pdf_tools.dll"	 
-	move pdf_tools.def "$(lib)\pdf_tools.def"	 
+	echo "$(lib)\memorymap.dll"
+	move memorymap.dll "$(lib)\memorymap.dll"	 
+	move memorymap.def "$(lib)\memorymap.def"	 
 
 

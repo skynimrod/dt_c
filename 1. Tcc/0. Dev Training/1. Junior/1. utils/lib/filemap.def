@@ -1,0 +1,9 @@
+LIBRARY filemap.dll
+
+EXPORTS
+fm_read
+fm_readLine
+fm_seek
+freeFileMap
+initReadFileMap
+print_fm

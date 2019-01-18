@@ -1,17 +1,21 @@
 #!include "1.file_tools/file_tools.mak"
-!include "2.str_tools/str_tools.mak"
+#!include "2.str_tools/str_tools.mak"
 #!include "3.date_tools/date_tools.mak"
 #!include "6.exercise/exercise.mak"
 #!include "7.JSON_tools/cJSON2/cJSON_tools.mak"
 #!include "7.JSON_tools/cJSON2/cJSONtest.mak"
 #!include "8.time_tools/time_tools.mak"
 #!include "9.deflate/deflate.mak"
-#!include "0.test/7.cJSONtest/cJSON_test.mak"
 #!include "15.zlib/zlib1.mak"
+!include "17.filemap/filemap.mak"
+!include "18.memorymap/memorymap.mak"
 
+#!include "0.test/7.cJSONtest/cJSON_test.mak"
 #!include "0.test/file_tools_test.mak"
-!include "0.test/str_tools_test.mak"
+#!include "0.test/str_tools_test.mak"
 #!include "0.test/zlib_test.mak"
+!include "0.test/filemap_test.mak"
+!include "0.test/memorymap_test.mak"
 
 #all: clean
 clean:
@@ -42,6 +46,14 @@ clean:
 	@if exist "15.zlib\*.*~" del "15.zlib\*.*~"
 	@if exist "15.zlib\*~" del "15.zlib\*~"
 	@if exist "15.zlib\*.bak" del "15.zlib\*.bak"
+
+	@if exist "17.filemap\*.*~" del "17.filemap\*.*~"
+	@if exist "17.filemap\*~" del "17.filemap\*~"
+	@if exist "17.filemap\*.bak" del "17.filemap\*.bak"
+
+	@if exist "18.memorymap\*.*~" del "18.memorymap\*.*~"
+	@if exist "18.memorymap\*~" del "18.memorymap\*~"
+	@if exist "18.memorymap\*.bak" del "18.memorymap\*.bak"
 
 	@if exist "inc\*~" del "inc\*~"
 	@if exist *~ del *~

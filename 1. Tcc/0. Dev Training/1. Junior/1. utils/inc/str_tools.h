@@ -59,7 +59,7 @@
 
     unsigned int   IP2HEX( char * pszIP);
 
-    //bool  HexIP2str( unsigned int uiIPaddress, char * pszIPAddress);
+    //bool  HexIP2str( unsigned int uiIPaddress, char * pszIPAddress);     // 已经编码，未整理
 
     int  IsChinese( const char *pszSource );
 

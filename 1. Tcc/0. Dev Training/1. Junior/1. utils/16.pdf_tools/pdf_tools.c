@@ -52,4 +52,45 @@
     //      # 30. processTm()
     //      # 31. processTstar()
     //      # 99. rlen()
+    //      
+    //      # 1.  getStartxrefPos()
 
+    #
+    #include "pdf_tools.h"
+
+
+    //一下为内部调用的API
+    //**************************************************************************
+    //  函数名称 : getStartxrefPos()
+    //  功    能 :
+    //		获取xref 位置信息
+    //  入口参数 :
+    //            fname : 文件名称
+    //  出口参数 :
+    //            无
+    //  返 回 值 :
+    //            char  * : 目标字符串
+    //  Author :
+    //            Adams
+    //  Create Date :
+    //            1999.07.19
+    //  Modify history (modifier and date) :
+    //
+    //	使用说明 :
+    //			调用后源串不变, 对中文空格不处理, 只处理开头西文空格与Tab键            
+    //	Standard .h  :
+    //            string.h--strlen()        
+    //	Develope Tools:
+    //			  SCO UNIX Development CC   
+    //			  Visual C++ 6.0            
+    //	Environment:
+    //			1. SCO UNIX 5.0.4          
+    //			2. Windows NT WorkStation SimpleChinese 4.0 
+    //				Can be used in console、MFC Application for Windows
+    //***************************************************************************
+    //
+    long getStartxrefPos( FILEMAP * fm_p )
+    {
+         // 先定位到距离文件尾48个字节处, 一般xref在文件尾
+         fm_seek( fm_p, );   
+    }

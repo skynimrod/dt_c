@@ -1,0 +1,9 @@
+LIBRARY memorymap.dll
+
+EXPORTS
+freeMemoryMap
+initMemoryMap
+mm_read
+mm_readLine
+mm_seek
+print_mm

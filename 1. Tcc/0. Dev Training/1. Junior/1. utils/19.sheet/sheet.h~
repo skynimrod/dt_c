@@ -16,15 +16,25 @@
     #define __SHEET_H__
 
     typedef unsigned char  uchar;
-    
-    typedef struct __filemap {
-        char    *   filename;
-        long    *   filelen;
-        uchar * 	stream;
-	    long	    streamlen;
-	    long	    pos;
 
-    }FILEMAP;
+    // PDF_Parse-> decode() 中使用
+    
+    typedef struct __textmap {      // 文本信息节点
+        uint        cellid;         // 单元格编号
+        struct      txt {
+            char  * buf;            // 文本内容
+            int     x;              // x 坐标
+            int     y;              // y 坐标
+        };
+        TEXT_MAP *  pre;            // 前一个 文本信息节点
+        TEXT_MAP *  next;           // 后一个文本信息节点
+    }TEXT_MAP;
+
+    typedef struct __cellmap {
+    }CELL_MAP;
+
+    typedef struct __cellIndexMap {
+    } CELL_INDEX_MAP;
 
     // about FILEMAP  的操作
     void        print_fm( FILEMAP * fm_p );

@@ -5,39 +5,34 @@
     //
     //**************************************************
     //**************************************************
-    // Model :    filemap
+    // Model :    sheet
     //
-    // Description : about filemap operation.
+    // Description : about sheet operation.
     //
     // Interface :
     //      1.  initReadFileMap()
     //
-    #ifndef __FILEMAP_H__    // define filemap.h Start {
-    #define __FILEMAP_H__
+    #ifndef __SHEET_H__    // define sheet.h Start {
+    #define __SHEET_H__
 
     typedef unsigned char  uchar;
     
     typedef struct __filemap {
-	    char    *   filename;
-	    size_t	    filelen;
-	    uchar   *   stream;         // 字节流
-	    size_t	    steamlen;
-	    size_t	    pos;
+        char    *   filename;
+        long    *   filelen;
+        uchar * 	stream;
+	    long	    streamlen;
+	    long	    pos;
 
     }FILEMAP;
-
-    typedef struct __memorymap {
-	    char * 	_byteStream;
-	    char * 	buf;
-	    long	buflen;
-	    long	pos;
-
-    }MEMORYMAP;
 
     // about FILEMAP  的操作
     void        print_fm( FILEMAP * fm_p );
     FILEMAP *   initReadFileMap( char * srcFile );
     void        freeFileMap( FILEMAP * fm_p );
+    uchar *     fm_readLine( FILEMAP *fm_p );
+    uchar *     fm_read( FILEMAP *fm_p, long length, long start );
+    void        fm_seek( FILEMAP  * fm_p, long pos );
 
 
-    #endif                   // define filemap.h ENd }
+    #endif                   // define sheet.h ENd }
