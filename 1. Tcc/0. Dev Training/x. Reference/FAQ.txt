@@ -1,0 +1,24 @@
+16.pdf_tools/pdf_tools.c:406: error: incompatible types for redefinition of 'getXREF'
+NMAKE : fatal error U1077: 'tcc' : return code '0x1'
+
+分析:  
+
+   getXREF() 定义如下
+
+    XREF * getXREF( FILEMAP * fm_p, long xrefpos, POSMAP *posmap_p, TRAILER *trailer_p )
+
+
+   问题是只要使用就出上面的错误
+
+        XREF        *   xref_p = NULL;          //  存放有效地xref 信息.
+
+
+        xref_p = (XREF *)getXREF( fm_p, xrefpos, posmap_p, trailer_p );
+
+   如果不使用,  则编译没有任何错误。。。。。。
+
+   原因是  getXREF() 函数的定义在后面, 而parsePDF()函数定义在前面, 那么在parsePDF()中调用getXREF() 其实是找不到的。
+
+   只需要在parsePDF()函数之前声明getXREF() 函数即可.
+
+    XREF * getXREF( FILEMAP * fm_p, long xrefpos, POSMAP *posmap_p, TRAILER *trailer_p );

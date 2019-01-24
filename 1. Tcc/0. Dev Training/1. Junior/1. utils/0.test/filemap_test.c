@@ -5,7 +5,7 @@
 void main(void)
 {
 	char srcFile[]="readme.txt";
-    uchar   * buf = NULL;
+    char   * buf = NULL;
 
     FILEMAP     *fp;
     
@@ -29,7 +29,7 @@ void main(void)
     }
 
     // 3. 测试从当前位置读取指定字节流
-    buf = fm_read( fp, 11, 0 );   // 从开始读取11个字节, 内容为". 如果使用"
+    buf = (char *)fm_read( fp, 11, 0 );   // 从开始读取11个字节, 内容为". 如果使用"
 
     if ( buf ) {
         printf("前11字节为:\n%s\n", buf );

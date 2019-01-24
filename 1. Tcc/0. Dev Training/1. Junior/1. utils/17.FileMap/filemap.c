@@ -215,10 +215,10 @@
     //
     //***************************************************************************
     //
-    uchar * DLL_EXPORT fm_readLine( FILEMAP *fm_p )
+    char * DLL_EXPORT fm_readLine( FILEMAP *fm_p )
     {
         long        curpos;         // 记录内存文件的当前位置
-        uchar       ch;
+        char       ch;
         uchar   *   retbuf = NULL;
         
         if ( fm_p->pos < 0 )               // 容错处理, 如果当前位置为负数， 则重置为头部0
@@ -234,7 +234,7 @@
             
             if ( ch == 13 || ch == 10 ) {  //  找到换行回车了   13 = "\0x0D", 10 = "0x0A"
                 // 先把\0A或\0D之前的数据获取出来
-                retbuf = ( uchar * ) malloc( i-curpos + 1 );
+                retbuf = ( char * ) malloc( i-curpos + 1 );
                 memset( retbuf, 0, i-curpos+1 );
 
                 memcpy( retbuf, &fm_p->stream[curpos], i-curpos );

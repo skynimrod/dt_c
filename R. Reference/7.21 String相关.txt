@@ -115,6 +115,8 @@
      #include <string.h>
      char *strtok(char * restrict s1, const char * restrict s2);
 
+     需要注意的是:  返回的指针仅仅是指向对应的位置，并没有申请空间, 但是怎么增加  尾0的？？？  不需要释放内存
+
 . 7.21.6 其他(Miscellaneous) 函数
 
   1. memset() 函数

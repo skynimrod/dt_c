@@ -10,16 +10,14 @@
 source	= 0.test
 bin		= bin
 inc		= inc
-lib   	= lib
+lib   = lib
 
 
-all: str_tools_test.exe 
+all: exe 
 
-str_tools_test.exe:
+exe:
 	tcc -L$(lib) -lstr_tools -I$(inc) "$(source)\str_tools_test.c"
-	
-	move str_tools_test.exe $(bin)\str_tools_test.exe	
+	move str_tools_test.exe $(bin)\str_tools_test.exe
 	copy $(lib)\str_tools.dll $(bin)\str_tools.dll
-		
 
 	 
