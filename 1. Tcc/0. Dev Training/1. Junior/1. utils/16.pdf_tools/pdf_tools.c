@@ -89,6 +89,7 @@
 
     int getXREF( FILEMAP * fm_p, XREF * xref_p,  long xrefpos, POSMAP *posmap_p, TRAILER *trailer_p );
     
+    void  freeAll( POSMAP * posmap_p, TRAILER * trailer_p, XREF * xref_p, FILEMAP * fm_p );
     void print_trailer( TRAILER * trailer_p );
 
 
@@ -140,8 +141,10 @@
 
         xrefpos   = getStartXrefPos( fm_p );          // 获取startxref 的内容, 也就是第一个xref 的位置
 
-        if ( xrefpos < 0 )
+        if ( xrefpos < 0 ) {
+            freeFileMap( fm_p );
             return -1; 
+        }
        
         // posmap_p 初始化
         posmap_p = (POSMAP *)malloc( sizeof(POSMAP) + 1 );
@@ -155,12 +158,14 @@
 
         ret = getXREF( fm_p, xref_p, xrefpos, posmap_p, trailer_p );
 
+        if ( xref_p->retcode < 0 ) {
+            printf("出错了\n");
+            freeAll( posmap_p, trailer_p, xref_p, fm_p );
+            return -1;
+        }
         print_trailer( trailer_p ); 
 
-        free( posmap_p );
-        free( trailer_p );
-        free( xref_p );
-        freeFileMap( fm_p );
+        freeAll( posmap_p, trailer_p, xref_p, fm_p );
 
         return 0;
     }
@@ -384,8 +389,6 @@
     {   
         int         i = 0 ;
         
-        printf(" --- ifXrefPosProcessed(), xrefpos=%d -\n", xrefpos);
-
         if ( posmap_p == NULL )       // 给定位置信息不在链表中
             return false;
         
@@ -394,8 +397,6 @@
                 return true;
             i ++;
         }
-
-        printf(" --- ifXrefPosProcessed()  end  -\n");
 
         // 如果遍历完链表也没有找到, 说明该地址没有在链表中, 即对应的xref没有处理过
         return false;
@@ -407,14 +408,11 @@
     {
         char        * buf;
         
-        printf(" --- procFirstLine() -\n");
         xref_p->retcode = -1;
 
-        printf(" ---111111111111111111 -\n");
         if( ifXrefPosProcessed( xrefpos, posmap_p ) )   // 如果该地址已经处理过,  表示文件格式出错了, 直接返回xref_p (retcode=-1)
             return -1;
         
-        printf(" --- 222222222222222222222222------------ -\n");
         // 该地址没有处理过, 把该地址添加到链表尾部
         posmap_p->xrefpos[ posmap_p->cursor ] = xrefpos;
         posmap_p->cursor += 1;
@@ -422,7 +420,6 @@
         fm_seek( fm_p, xrefpos );
 
         buf = fm_readLine( fm_p );
-        printf("XREF 第一行: buf=%s\n", buf);
 
         if ( !buf || !strstr( buf, "xref" ) ) {     // 第一行没有"xref", 格式错误
             xref_p->retcode = -40421;
@@ -434,7 +431,8 @@
         if ( buf )          // 由于 fm_readLine() 内部会申请内存, 这儿需要先释放之前申请的内存
             free( buf );
 
-        printf(" --- procFirstLine() End -\n");
+        xref_p->retcode = 0;
+
         return 0;
     }
 
@@ -446,14 +444,10 @@
         char    *   item;
         int         ret;
 
-        printf(" --- procSecondLine() -\n");
-        
         buf = fm_readLine( fm_p);
 
         if ( !buf )         // 获取数据出错
             return -1;
-
-        printf( "buf=%s\n", buf);
 
         // 如果包含trailer, 表示需要继续在trailer寻找下一个xrefpos, 然后再解析xref
         if ( strstr( buf, "trailer" ) ) {     // 处理trailer 
@@ -526,6 +520,8 @@
         if ( buf )
             free( buf );
 
+        xref_p->retcode = 0;
+        
         ret = getXREF( fm_p, xref_p, trailer_p->Prev, posmap_p, trailer_p );
     }
 
@@ -569,12 +565,6 @@
             free( buf );            // 释放内存, 后面还需要用使用buf指针
         }
 
-        /*
-        for ( int i = 0; i < objSum; i ++ ){
-            printf("%d: [%016d]\n",i,objpos_p[i]);
-        }
-        */
-
         return objpos_p;
     }
 
@@ -596,11 +586,14 @@
 
         //print_trailer( trailer_p );
         
-        if( trailer_p->retcode < 0 )
+        if( trailer_p->retcode < 0 ) {
+            free( buf );
             return -1;
+        }
 
         if ( strstr( buf, "Prev" ) ) {
             ret = getXREF( fm_p, xref_p, trailer_p->Prev, posmap_p, trailer_p );
+            free( buf );
             return 0;
         }
         
@@ -620,7 +613,7 @@
         // 1. 第一行的处理
         ret = procFirstLine( fm_p, xrefpos, xref_p, posmap_p );
         if ( ret != 0 ) 
-            return NULL;
+            return -1;
 
         // 2. 第二行的处理
         ret = procSecondLine( fm_p, &firstObj, &objSum, trailer_p );       // 为了增加可读性, 将第一行的处理封装在一个函数中
@@ -630,6 +623,7 @@
             if ( !trailer_p || trailer_p->retcode < 0 ) {            // 如果trailer无数据, 则出错
                 return -1;
             }
+            printf("\n到这儿了？\n");
             return getXREF( fm_p, xref_p, trailer_p->Prev, posmap_p, trailer_p );
         }
 
@@ -664,5 +658,21 @@
 
         return 0;
         
+    }
+
+
+    void  freeAll( POSMAP * posmap_p, TRAILER * trailer_p, XREF * xref_p, FILEMAP * fm_p )
+    {
+        if ( posmap_p )
+            free( posmap_p );
+
+        if ( trailer_p )
+            free( trailer_p );
+
+        if ( xref_p )
+            free( xref_p );
+
+        if ( fm_p )
+            freeFileMap( fm_p );
     }
 
