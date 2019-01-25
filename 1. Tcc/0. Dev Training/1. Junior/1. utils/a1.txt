@@ -1,9 +1,0 @@
-filemap->filename=F:/F_T_tmp/1202.PDF
-filemap->filelen=451945
-filemap->pos=0
-filemap->filename=F:/F_T_tmp/1202.PDF
-filemap->filelen=451945
-filemap->pos=0
---in getXREF()
- --- procFirstLine() -
- --- ifXrefPosProcessed() -

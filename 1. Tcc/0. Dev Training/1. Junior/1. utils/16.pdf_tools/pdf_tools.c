@@ -61,10 +61,10 @@
 
     #define DLL_EXPORT __declspec(dllexport)
 
-    // 位置信息映射表, 记录已经处理过的xref位置信息, 防止重复处理,造成死循环
-    typedef struct __posmap_ {
-        long                xrefpos;
-        struct __posmap_  * next;
+    // 
+    typedef struct __posmap__{
+        int     cursor;                 // 游标, 最后一个登记的xref地址位置后面的位置
+        long    xrefpos[128];           // 假设最大可能有128个xref地址
     }POSMAP;
 
     // 交叉引用表  XREF 信息
@@ -75,18 +75,19 @@
     } XREF;
 
     // trailer 信息中包含: 根object编号，object数量,  startxref( xref 位置信息)
+    #define ID_LEN  128             // 设定 Trailer中的ID 最大长度为128， 一般是不会超过这个长度
     typedef struct __trailer__ {
         int         Root;       // 根对象ID
         int         Size;       // 对象数量. 比对象最大编号大1. 编号为0的对象 不是数据对象.
         // Encrypt    // 如果文件加密则有
         long        Info;       // 可选. 记录文档信息的对象ID.   作者信息等等
-        char      * ID;         // 可选。 为了保证文件的唯一性, 强烈建议有该内容. 
+        char        ID[ID_LEN+1];         // 可选。 为了保证文件的唯一性, 强烈建议有该内容. 
         long        Prev;       // 前一个Trailer的地址.
         long        xrefStm;    // 可用的xref地址
         int         retcode;    // 额外添加的内容, 用来判断该Trailer是否有效
     } TRAILER;
 
-    XREF * getXREF( FILEMAP * fm_p, long xrefpos, POSMAP *posmap_p, TRAILER *trailer_p );
+    int getXREF( FILEMAP * fm_p, XREF * xref_p,  long xrefpos, POSMAP *posmap_p, TRAILER *trailer_p );
     
     void print_trailer( TRAILER * trailer_p );
 
@@ -126,12 +127,13 @@
     //
     int DLL_EXPORT parsePDF( char * desfile,  char * srcfile )
     {
+        int             ret;
         FILEMAP       * fm_p;
         long            xrefpos;                // xref 起始位置
 
-        POSMAP      *   posmap_p = NULL;        //  链表, 因为无法确认实际有几个xref, 用来记录已经处理过的xref, 防止出现死循环
+        POSMAP      *   posmap_p;               //  因为无法确认实际有几个xref, 用来记录已经处理过的xref, 防止出现死循环。 最大128个, 
         XREF        *   xref_p = NULL;          //  存放有效地xref 信息.
-        TRAILER     *   trailer_p = NULL;       //  存放 有效地trailer信息
+        TRAILER     *   trailer_p ;       //  存放 有效地trailer信息
 
         fm_p        = initFileMap( srcfile );
         print_fm( fm_p );
@@ -142,15 +144,27 @@
             return -1; 
        
         // posmap_p 初始化
-        posmap_p = (POSMAP *) malloc( sizeof(POSMAP) );
-        memset( posmap_p, 0, sizeof(POSMAP) );
+        posmap_p = (POSMAP *)malloc( sizeof(POSMAP) + 1 );
+        memset( posmap_p, 0, sizeof(POSMAP) + 1 );
         
-        xref_p = (XREF *)getXREF( fm_p, xrefpos, posmap_p, trailer_p );
+        trailer_p = (TRAILER *) malloc( sizeof(TRAILER) +1  );
+        memset( trailer_p, 0, sizeof(TRAILER) + 1 );
+
+        xref_p = (XREF *)malloc( sizeof(XREF) + 1 );
+        memset( xref_p, 0, sizeof(XREF) + 1);
+
+        ret = getXREF( fm_p, xref_p, xrefpos, posmap_p, trailer_p );
 
         print_trailer( trailer_p ); 
 
+        free( posmap_p );
+        free( trailer_p );
+        free( xref_p );
+        freeFileMap( fm_p );
+
         return 0;
     }
+
 
 
     //一下为内部调用的API
@@ -218,8 +232,6 @@
              }
          }
     }
-
-
     //**************************************************************************
     //  函数名称 : getTrailer()
     //  功    能 :
@@ -251,18 +263,14 @@
     //				Can be used in console、MFC Application for Windows
     //***************************************************************************
     //
-    TRAILER * getTrailer( char * buf )
+    int getTrailer( char * buf, TRAILER * trailer_p )
     {
-        TRAILER     *   trailer_p;
-        char        *   buf;
         char        *   item;
         int             len;
 
         if ( !buf )             // 容错处理, 空指针不处理
-            return NULL;
+            return -1;
 
-        trailer_p = ( TRAILER * )malloc( sizeof(TRAILER) );
-        
         trailer_p->retcode = -1;        // 初始化为-1, 假设不能获取trailer 成功
 
         item = (char *)strtok( buf , "/ " );     //  第一项可能是"trailer<<"或"<<", 丢弃
@@ -297,9 +305,8 @@
 
                 len =  strlen( item ) - 2;          // -2 是不包括"ID"
                 
-                trailer_p->ID = (char *)malloc( len +1 );      
-                memset( trailer_p->ID, 0, len + 1 );
-                memcpy( trailer_p->ID, item, len );
+                memset( trailer_p->ID, 0, ID_LEN + 1 );     
+                memcpy( trailer_p->ID, item+2, len );       // +2 是跳过开头的"ID"
             }
 
             if ( memcmp( item, "Prev", 4 ) == 0 ) {  // 5. Prev 项目
@@ -320,23 +327,7 @@
         } 
 
         trailer_p->retcode = i;         // 获得的有效项目的数量
-        return trailer_p;
-    }
-
-    // 释放trailer指针内存
-    void  freeTrailer( TRAILER * trailer_p )
-    {
-        if ( !trailer_p )           // 空指针不用释放内存
-            return;
-
-        if ( trailer_p->ID )
-            free( trailer_p->ID );
-
-        memset( trailer_p, 0, sizeof(TRAILER));
-
-        free( trailer_p );
-        
-        return;
+        return 0;
     }
 
     // 调试用函数
@@ -347,14 +338,13 @@
             return;
         }
 
-        printf("Size=%d\n", trailer_p->Size );
-        printf("Root=%d\n", trailer_p->Root );
-        printf("Info=%d\n", trailer_p->Info );
-        if ( trailer_p->ID != NULL )
-            printf("ID=%s\n", trailer_p->ID );
-        printf("Prev=%d\n", trailer_p->Prev );
-        printf("xrefStm=%d\n", trailer_p->xrefStm );
-        printf("retcode=%d\n", trailer_p->retcode );
+        printf("Size=%d\n",     trailer_p->Size );
+        printf("Root=%d\n",     trailer_p->Root );
+        printf("Info=%d\n",     trailer_p->Info );
+        printf("ID=%s\n",       trailer_p->ID );
+        printf("Prev=%d\n",     trailer_p->Prev );
+        printf("xrefStm=%d\n",  trailer_p->xrefStm );
+        printf("retcode=%d\n",  trailer_p->retcode );
         return;
     }
 
@@ -392,18 +382,17 @@
     //  ifXrefPosProcessed()  是内部函数, 用来判断xrefpos地址对应的xref 是否已经被处理过, 防止循环处理同一个xref变成死循环
     bool    ifXrefPosProcessed( long xrefpos, POSMAP * posmap_p )
     {   
-        POSMAP  *   tmp_p = posmap_p;   // 为了不破坏posmap_p 内容， 临时指针变量来遍历
-
+        int         i = 0 ;
+        
         printf(" --- ifXrefPosProcessed(), xrefpos=%d -\n", xrefpos);
 
         if ( posmap_p == NULL )       // 给定位置信息不在链表中
             return false;
         
-        while( tmp_p != NULL ) {
-            printf( "%d\n", tmp_p->xrefpos );
-            if ( xrefpos == tmp_p->xrefpos )    // 给定地址在链表中， 表示已经处理过了
+        while ( i < posmap_p->cursor ) {    // 
+            if ( xrefpos == posmap_p->xrefpos[i] )
                 return true;
-            tmp_p = (POSMAP *)tmp_p->next;
+            i ++;
         }
 
         printf(" --- ifXrefPosProcessed()  end  -\n");
@@ -413,26 +402,12 @@
 
     }
 
-    void freeXREF( XREF * xref_p )
-    {
-        if ( !xref_p )    // 空指针不用释放 
-            return;
-
-        if (  xref_p->objpos_p )
-            free( xref_p->objpos_p ); 
-
-        free( xref_p );
-    }
-
     // XREF 数据区第一行的处理, 判断是否已经处理过该地址指向的xref(容错处理, 防止死循环)
     int procFirstLine( FILEMAP *fm_p, long xrefpos, XREF * xref_p, POSMAP * posmap_p )
     {
         char        * buf;
         
         printf(" --- procFirstLine() -\n");
-
-
-        xref_p = (XREF *)malloc( sizeof( XREF ) );
         xref_p->retcode = -1;
 
         printf(" ---111111111111111111 -\n");
@@ -441,8 +416,8 @@
         
         printf(" --- 222222222222222222222222------------ -\n");
         // 该地址没有处理过, 把该地址添加到链表尾部
-        posmap_p->next = (POSMAP *)malloc( sizeof(POSMAP) );
-        posmap_p->next->xrefpos = xrefpos;
+        posmap_p->xrefpos[ posmap_p->cursor ] = xrefpos;
+        posmap_p->cursor += 1;
 
         fm_seek( fm_p, xrefpos );
 
@@ -467,8 +442,9 @@
     // 返回至:  -1  表示出错,  0 表示获取成功
     int procSecondLine( FILEMAP * fm_p, int   * firstObj, int * objSum, TRAILER * trailer_p ) 
     {
-        char    * buf;
-        char    * item;
+        char    *   buf;
+        char    *   item;
+        int         ret;
 
         printf(" --- procSecondLine() -\n");
         
@@ -481,8 +457,8 @@
 
         // 如果包含trailer, 表示需要继续在trailer寻找下一个xrefpos, 然后再解析xref
         if ( strstr( buf, "trailer" ) ) {     // 处理trailer 
-            freeTrailer( trailer_p );           // 获取 trailer之前先释放内存, 防止之前已经申请过内存
-            trailer_p = getTrailer( buf );
+            printf("--------- 第二行有trailer....\n");
+            ret =  getTrailer( buf, trailer_p );
             free( buf );
             return 1;
         }
@@ -516,7 +492,8 @@
     // 处理objSum < 1 的情况.  容错处理
     void procObjSumLT1( FILEMAP *fm_p, XREF * xref_p, POSMAP *posmap_p, TRAILER * trailer_p )
     {
-        char    * buf;
+        char    *   buf;
+        int         ret;
 
         printf("--in procObjSumLT1()\n");
 
@@ -538,21 +515,18 @@
                 return xref_p;     
         }
 
-        freeTrailer( trailer_p );         // 由于 getTrailer() 内部会申请内存, 所以这儿要释放之前可能申请的内存
-        trailer_p = getTrailer( buf );
+        ret = getTrailer( buf, trailer_p );
 
         if ( trailer_p->retcode < 0 || !strstr( buf, "Prev" ) || trailer_p->Prev <= 0 ) { 
             // 无效的xref之后的trailer无效或没有包含有效的self.xref 地址, 则出错返回
             free( buf );
-            freeTrailer( trailer_p );
             return xref_p;
         }
 
         if ( buf )
             free( buf );
 
-        freeXREF( xref_p );     // 嵌套调用前必须释放内存, 嵌套调用里面会重新申请内存.
-        xref_p = (XREF *)getXREF( fm_p, trailer_p->Prev, posmap_p, trailer_p );
+        ret = getXREF( fm_p, xref_p, trailer_p->Prev, posmap_p, trailer_p );
     }
 
     // 获取每个对象的位置信息, 
@@ -564,23 +538,17 @@
         char        *   item;
         long        *   objpos_p;
 
-        printf("--in getOBJPOS() objSum=%d\n", objSum);
-
         objpos_p = ( long * )malloc( sizeof(long) * objSum );       // 指向一个long数组, 长度未objSum
 
         // 只有 对象编号 < 对象总数  才进行处理
         for ( int i =0; i < objSum; i ++ ) {
             buf = fm_readLine( fm_p );      // 获取的应该是 0000000016 00000 n类似格式
 
-            printf("\nbuf=%s\n", buf);
-
             item = (char *)strtok( buf, " " );          // 其实只要获取第一项就可以, 第一项是地址， 全部获取是为了容错
             int   j = 0;
             while ( item ) {
-                printf("item=%s\n", item);
                 if ( j == 0 || j == 1 ) {           // 第一,二项应该是数字, 容错处理
                     if ( !IsNumberStr( item ) )  {
-                        printf("-------------------------23------------------------\n");
                         free( buf );
                         return NULL;
                     }
@@ -592,8 +560,8 @@
                 item = (char *)strtok( NULL, " " );
                 j ++;
             }
+
             if (  j > 3 )   {   // 如果超过3项， 表示格式不正确
-                printf("----s--j=%d------\n", j);
                 free( buf );
                 return NULL;
             }
@@ -601,85 +569,75 @@
             free( buf );            // 释放内存, 后面还需要用使用buf指针
         }
 
+        /*
         for ( int i = 0; i < objSum; i ++ ){
             printf("%d: [%016d]\n",i,objpos_p[i]);
         }
+        */
 
         return objpos_p;
     }
 
-    TRAILER * procTrailer( FILEMAP * fm_p, XREF * xref_p, POSMAP *posmap_p, TRAILER * trailer_p )
+    int procTrailer( FILEMAP * fm_p, XREF * xref_p, POSMAP *posmap_p, TRAILER * trailer_p )
     {
         char     *  buf;
-        TRAILER *   trailer_p2;
-        
+        int         ret;
+
         buf = fm_readLine( fm_p );
-        
-        if ( !buf ){
-            printf("\nERROR!!!\n");
+        if ( !buf )
             return;
-        }
 
         if ( !strstr( buf, "Root" ) ) { // 如果trailer.<<...>>格式的话, trailer的内容实际上在下一行
             free( buf );
             buf = fm_readLine( fm_p );
         }
+
+        ret = getTrailer( buf, trailer_p );
+
+        //print_trailer( trailer_p );
         
-        trailer_p2 = getTrailer( buf );
-        if( trailer_p2->retcode < 0 )
-            return;
+        if( trailer_p->retcode < 0 )
+            return -1;
 
         if ( strstr( buf, "Prev" ) ) {
-            printf("\n继续嵌套获取xref\n");
-
-            free( xref_p );
-            xref_p = getXREF( fm_p, trailer_p->Prev, posmap_p, trailer_p );
-            return NULL;
+            ret = getXREF( fm_p, xref_p, trailer_p->Prev, posmap_p, trailer_p );
+            return 0;
         }
         
-        return trailer_p2;
+        return 0;
     }
 
 
-    XREF * getXREF( FILEMAP * fm_p, long xrefpos, POSMAP *posmap_p, TRAILER *trailer_p )
+    int getXREF( FILEMAP * fm_p, XREF * xref_p, long xrefpos, POSMAP *posmap_p, TRAILER *trailer_p )
     {
-        XREF    *   xref_p;
         int         firstObj;       // xref 中第一行记录的第一个对象编号
         int         objSum;         //                    对象总数量
         int         ret;
                 
         if ( fm_p == NULL )
-            return NULL;
-
-        printf("--in getXREF()\n");
+            return -1;
 
         // 1. 第一行的处理
         ret = procFirstLine( fm_p, xrefpos, xref_p, posmap_p );
-        if ( ret != 0 ) {
-            freeXREF( xref_p );
+        if ( ret != 0 ) 
             return NULL;
-        }
 
-        printf("------------开始第二行的处理\n");
         // 2. 第二行的处理
         ret = procSecondLine( fm_p, &firstObj, &objSum, trailer_p );       // 为了增加可读性, 将第一行的处理封装在一个函数中
         if ( ret < 0 )                     // 返回至不等于0 表示出错了,直接返回xref_p,  xref_p->retcode =-1(初始化de值), 也就是表示出错了
-            return xref_p;
+            return -1;
         if ( ret == 1 ) {               // 如果返回1, 表示找到trailer了, 说明需要继续找下一个xref, 嵌套调用getXREF(), 后面的处理跳过
             if ( !trailer_p || trailer_p->retcode < 0 ) {            // 如果trailer无数据, 则出错
-                freeXREF( xref_p );
-                freeTrailer( trailer_p );
-                return NULL;
+                return -1;
             }
-            freeXREF( xref_p );
-            return getXREF( fm_p, trailer_p->Prev, posmap_p, trailer_p );
+            return getXREF( fm_p, xref_p, trailer_p->Prev, posmap_p, trailer_p );
         }
 
         // 3. objSum < 1 的情况容错处理。 这种情况有可能, doc文件转存pdf后, 第一个xref 就是0 0, 
         // 后面的trailer指向新的xref, 这儿应该继续处理trailer， 如果没有Prev 就错了      
         if ( objSum < 1 ) {
             procObjSumLT1( fm_p, xref_p, posmap_p, trailer_p );
-            return xref_p;
+            return 0;
         }
 
         xref_p->objTotal = objSum;
@@ -688,24 +646,23 @@
         if ( xref_p->objpos_p == NULL ) {
             printf("位置信息没返回！\n");
             xref_p->retcode = -40425;       // 对象位置信息 格式错误
-            return xref_p;
+            return -1;
         }
 
+        
         for ( int i=0; i < xref_p->objTotal; i ++ ) {
             printf("xref_p->objpos_p[%d]=%016d\n",i, xref_p->objpos_p[i] );
         }
-
+        
         // 5. 获取完 对象位置数据后, 处理trailer 部分数据
-        freeTrailer( trailer_p );
-        trailer_p = procTrailer( fm_p, xref_p, posmap_p, trailer_p );
+        ret = procTrailer( fm_p, xref_p, posmap_p, trailer_p );
 
-        print_trailer(trailer_p);
+        //print_trailer(trailer_p);
 
         if ( !trailer_p )
             printf("没有有效传递trailer\n");
-        
 
-        return xref_p;
+        return 0;
         
     }
 
