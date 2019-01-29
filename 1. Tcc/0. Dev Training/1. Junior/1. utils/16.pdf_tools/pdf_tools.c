@@ -87,10 +87,18 @@
         int         retcode;    // 额外添加的内容, 用来判断该Trailer是否有效
     } TRAILER;
 
-    int getXREF( FILEMAP * fm_p, XREF * xref_p,  long xrefpos, POSMAP *posmap_p, TRAILER *trailer_p );
+    typedef struct __pages__ {
+        int         total;      // 总页数
+        int         cursor;     // 最后一个叶子页面对象存储在leafs数组中的位置(下标), 这个是为了便于处理
+        int    *   leafs_p;      // long型数组, 用来存放叶子页面对象编号
+    }PAGES;
+
+    int     getXREF( FILEMAP * fm_p, XREF * xref_p,  long xrefpos, POSMAP *posmap_p, TRAILER *trailer_p );
     
-    void  freeAll( POSMAP * posmap_p, TRAILER * trailer_p, XREF * xref_p, FILEMAP * fm_p );
-    void print_trailer( TRAILER * trailer_p );
+    void    freeAll( POSMAP * posmap_p, TRAILER * trailer_p, XREF * xref_p, PAGES *pages_p, FILEMAP * fm_p );
+    void    print_trailer( TRAILER * trailer_p );
+    int     getPages( FILEMAP * fm_p, XREF * xref_p,  PAGES *pages_p, int Root );
+    char    * getObjContent( FILEMAP * fm_p, XREF *xref_p, int  objNo );
 
 
     //**************************************************************************
@@ -134,7 +142,9 @@
 
         POSMAP      *   posmap_p;               //  因为无法确认实际有几个xref, 用来记录已经处理过的xref, 防止出现死循环。 最大128个, 
         XREF        *   xref_p = NULL;          //  存放有效地xref 信息.
-        TRAILER     *   trailer_p ;       //  存放 有效地trailer信息
+        TRAILER     *   trailer_p ;             //  存放 有效地trailer信息
+
+        PAGES       *   pages_p;                //  存放页面对应内容存放的对象信息
 
         fm_p        = initFileMap( srcfile );
         print_fm( fm_p );
@@ -158,14 +168,20 @@
 
         ret = getXREF( fm_p, xref_p, xrefpos, posmap_p, trailer_p );
 
-        if ( xref_p->retcode < 0 ) {
+        if ( xref_p->retcode < 0 || trailer_p->retcode < 0 ) {
             printf("出错了\n");
-            freeAll( posmap_p, trailer_p, xref_p, fm_p );
+            freeAll( posmap_p, trailer_p, xref_p, pages_p, fm_p );
             return -1;
         }
         print_trailer( trailer_p ); 
 
-        freeAll( posmap_p, trailer_p, xref_p, fm_p );
+        // 下面获取页面对象信息
+        pages_p = (PAGES *)malloc( sizeof(PAGES) + 1 );
+        memset( pages_p, 0, sizeof(pages_p) + 1);
+
+        ret = getPages( fm_p, xref_p, pages_p, trailer_p->Root );
+
+        freeAll( posmap_p, trailer_p, xref_p, pages_p, fm_p );
 
         return 0;
     }
@@ -304,14 +320,16 @@
                 trailer_p->Info = atoi( item);
             }
 
-            if ( memcmp( item, "ID", 2 ) == 0 ) {  // 4. ID 项目 ID[<BE239411BFD7D4D9318C29408037556><5CA7DFC3C76C2F42985CAE05DBD580F9>]
+            if ( memcmp( item, "ID", 2 ) == 0 ) {  // 4. ID 项目 ID [<BE239411BFD7D4D9318C29408037556><5CA7DFC3C76C2F42985CAE05DBD580F9>]>>
                 item = (char *)strtok( NULL, "/ " );          
                 printf("ID 的值为:%s\n", item );
 
-                len =  strlen( item ) - 2;          // -2 是不包括"ID"
+                len = 0;
+                while ( len < strlen( item ) && !( item[len] == '>' && item[len+1] == '>' ) ) //  处理尾部的">>" 
+                    len ++;
                 
                 memset( trailer_p->ID, 0, ID_LEN + 1 );     
-                memcpy( trailer_p->ID, item+2, len );       // +2 是跳过开头的"ID"
+                memcpy( trailer_p->ID, item, len );       // [<BE239411BFD7D4D9318C29408037556><5CA7DFC3C76C2F42985CAE05DBD580F9>]
             }
 
             if ( memcmp( item, "Prev", 4 ) == 0 ) {  // 5. Prev 项目
@@ -660,8 +678,284 @@
         
     }
 
+    // ------------获取所有的页 对应的对象的信息
+    // 获取指定对象中的指定item的内容
+    char * getItemOfObj( FILEMAP * fm_p, XREF *xref_p, int obj, char *item ) 
+    {
+        char    * buf;
+        char    * tmpbuf;
+        char    * value;
+        int     len;
+        
+        buf = (char *)getObjContent( fm_p, xref_p, obj );
+        if ( !buf )
+            return NULL;
 
-    void  freeAll( POSMAP * posmap_p, TRAILER * trailer_p, XREF * xref_p, FILEMAP * fm_p )
+        tmpbuf = (char *)strtok( buf, "/" );
+        while ( tmpbuf != NULL ) {
+            if ( strstr( tmpbuf, item ) ) {     // 找到了包含item 的项目 
+                len = strlen( tmpbuf );
+                value = ( char * )malloc( len + 1 );
+                memset( value, 0, len + 1 );
+                memcpy( value, tmpbuf, len );
+                
+                free( buf );
+                return value;
+            }
+            tmpbuf = (char *)strtok( NULL, "/" );
+        }
+
+        free( buf );
+        return NULL;
+
+    }
+
+    /* 根据对象编号获取对象的内容, 使用内存映射文件 
+     * 入口参数:
+     *      obj     是整数字符串 ， 对应的是对象编号
+     *      self.xref    self.xref哈希表， 存放的是 对象编号:对象物理位置
+     * 返回:
+     *      对象的文字描述内容部分.
+     * 说明:
+     *      对象的描述部分， 第一行是 3 0 R , 也就是对象编号等信息, 直接过滤即可. 
+     *      第二行才是对象的描述性文本内容.
+     * 2016.12.19:
+     *      修正, 对于有 \xae 类似的内容, 需要额外处理.
+     * 调用的外部方法有:
+     *      1. seek() ------------------>util_fileService
+     *      2. readLine() -------------->util_fileService
+     * 调用的类对象内部的方法有:
+     *      1. getObjPosInself.xref()
+     */
+    char    * getObjContent( FILEMAP * fm_p, XREF *xref_p, int  objNo )
+    {
+        char    * buf;
+
+        if ( !fm_p || !xref_p || objNo <= 0 )       // 无效参数
+            return NULL;
+
+        fm_seek( fm_p, xref_p->objpos_p[objNo] );       //由于数组下标是从0开始， 对象1对应的下标是0
+        
+        buf = fm_readLine( fm_p );      // 第一行是  3 0 R  也就是对象编号
+        if ( !buf ) 
+            return NULL;
+
+        free( buf );
+        buf = fm_readLine( fm_p );      // 第二行才是对象对应的数据
+        
+        if ( !buf )
+            return NULL;
+       
+        return buf;
+    }
+    // 下面是页面相关信息的处理i
+
+    void printPages( PAGES * pages_p )
+    {
+        if ( pages_p == NULL ) {
+            printf("\npages_p 是空指针！\n");
+            return ;
+        }
+
+        printf( "pages_p->total = %d\n", pages_p->total );
+
+        for ( int i = 0; i < pages_p->total; i ++ )
+            printf("pages_p->leafs_p[%d]=%d\n", i, pages_p->leafs_p[i] ); 
+    }
+    //
+
+    // getPagesObjList() 仅在  getPages() 中使用, 是为了简化代码长度， 便于阅读代码。
+    // 处理 "Kids[3 0 R 12 0 R]" 字符串 , 调用前的代码已经确保该字符串的正确性, 所以不用再容错了
+    // 注意也可能是"Kids [6 0 R ....]"
+    int getPagesObjList( char * item, int count, int *objlist )
+    {
+        int         i, j, k;        // i  用来标记当前下标, j 用来计算空格数,  k 用来标记对象编号之前位置的下标
+        int         n=0;              // 用来标记pageslist下标， 不能超过count
+        int         len;
+        char        buf[16];            // 用来获取对象编号字符串
+
+        len = strlen( item );
+        
+        j = 0;      // Kids[3 0 R 12 0 R], 用来在遍历字符串是计算对象数量, j 用来计算空格数, 3的倍数碰到一个对象
+        n = 0;
+        for ( i = 0; i < len && n < count ; i ++ ) {
+            if ( item[i] == '[' ) {         //  根据(空格数+1)/3来计算总页数，从而申请空间, 不判断'R'是怕有些文件改字段会变化
+                k = i;
+                while( item[i] != ' ' && item[i] != ']' && i < len && n < count )    // '['后面的第一个数字是第一个页面对象编号, i < len 是容错, 防止意外(比如格式不正确)
+                    i ++;
+                if ( i>= len || n >= count ) {
+                    printf("溢出了！！\n");
+                    return -1;
+                }
+
+                memset( buf, 0, 16 );
+                memcpy( buf, &item[k+1], i-(k+1) );
+                objlist[n] = atoi(buf);
+
+                printf( "第%d个对象:%s\n", n+1,  buf );
+                n ++;
+            }
+            if ( item[i] == ' ' )  {         // 只要碰到空格, 先j ++ ,   "Kids[3 0 R 12 0 R]" 
+                printf("getPagesObjList()  i=%d item[%d]=%c j=%d-n=%d---\n", i, i, item[i], j, n);
+                if ( n > 0 )                // 防止 "Kids [" 中这种情况中的空格不该计数
+                    j ++;
+                if ( j == 3 ) {          // 如果j=3，k 就记下i 的值, 因为下一个就是对象编号
+                    k = i;
+                    i ++;               // 跳过这个空格  
+                    while( item[i] != ' ' && item[i] != ']'  && i < len && n < count )    // 具体处理同上
+                        i ++;
+
+                    if ( i>=len || n >= count) 
+                        return -1;
+
+                    j = 1;   // 用来计算下一个对象编号之前的空格数, 因为这个空格也要计数
+                    memset( buf, 0, 16 );
+                    memcpy( buf, &item[k+1], i-(k+1) );
+                    objlist[n] = atoi(buf);
+
+                    printf( "第%d个对象:%s\n", n+1,  buf );
+                    n ++;
+                }
+            }
+
+        }
+
+        return 0;
+    }
+
+    // getPageleaf() 是用来获取所有的叶子页面对象, 也就是带有Content的对象信息, 该对象也就是页面数据对象
+    // 每个页面对象实际上也就是对应一个页面的数据, leafs 是个long 型数组
+    int getPageleaf( FILEMAP * fm_p, XREF * xref_p, int obj, long *leafs )
+    {
+        char        * buf;
+        char        * item;
+        int         kidscount;
+        char        * pages_p;
+
+        // # 5251||<</Count 100/Kids[5252 0 R 5253 0 R 5254 0 R 5255 0 R 5256 0 R 5257 0 R 5258 0 R 5259 0 R 5260 0 R 5261 0 R]/Parent 5250 0 R/Type/Pages>>
+        buf = getObjContent( fm_p, xref_p, obj );
+        /*
+        if ( strstr( buf, "Kids" ) ) {
+            item = (char *) strtok( buf, "/" );
+            while( item ) {
+                if () {
+                }
+            }
+        }
+
+        */
+        free( buf );
+        
+            
+        return 0;
+
+    }
+    
+    /*Root 对象的内容例子如下:  (注意， 下面的例子实际上是没有换行的， 这儿为了方便阅读分行了)
+     *       1 0 obj
+
+        <</AcroForm 51135 0 R/Lang(zh-CN)/MarkInfo<</Marked true>>
+        /Metadata 51137 0 R/OCProperties<</D<</AS[<</Category[/View]/Event/View/OCGs[50601 0 R]>>
+        <</Category[/Print]/Event/Print/OCGs[50601 0 R]>>
+        <</Category[/Export]/Event/Export/OCGs[50601 0 R]>>]
+        /ON[50601 0 R]/Order[]/RBGroups[]>>/OCGs[50601 0 R]>>
+        /Outlines 607 0 R/Pages 2 0 R/StructTreeRoot 1066 0 R/Type/Catalog>>
+     *          
+     *          通过上面的Root信息, 可以获得pages 对象信息， 然后通过这个对象编号在获得
+     *          所有的页面对应的原始对象的编号(该对象未必是内容对象，即不是叶子对象)
+     *          (下面的例子中Kids中的内容省略了很多， 不然太长)
+     *          
+     *          Pages 对象含有Kids 项, 该项包含的就是页面对象。 该页面对象有可能还会含有Kids项.  
+     *          只有含有content的对象才是叶子对象， 否则都应该含有Kids项。 
+     *          
+            2 0 obj
+            <</Count 266/Kids[3 0 R。。。298 0 R 299 0 R]/Type/Pages>>
+     *
+     *          另外: 含有Content的叶子对象， 可能有多个stream 对象。 即一页对应多个内容对象。如下:
+     *          5272||<</Contents[5278 0 R 5279 0 R 5280 0 R 5281 0 R 5282 0 R 5283 0 R 5291 0 R 5292 0 R]/CropBox[9 0 603 792]/MediaBox[0 0 612 792]/Parent 5252 0 R/Resources 5273 0 R/Rotate 0/Type/Page>>
+     *
+     *              返回的是Pages 对象编号
+     *          参见:
+     *              page信息.txt    --- 一个英文PDF文件的Root, Pages, Kids, Content 对象的信息罗列。
+                注意: 
+                    如果是全英文pdf 文件， 可能没有type0 对象, 也就是没有cmap 对象列表
+     */
+    int     getPages( FILEMAP * fm_p, XREF * xref_p,  PAGES *pages_p, int Root )
+    {
+        int         pagesobj;
+        char    *   buf;
+        char    *   item;
+        int         ret = -1;
+
+        buf = getItemOfObj( fm_p, xref_p, Root, "Pages" );
+        if ( !buf )
+            return -1;
+
+        int i = 1;
+        item = (char *)strtok( buf, " " );   // 解析 Pages 2 0 R
+        while ( item != NULL ) {
+            if ( i == 2 ) {                      // 页面对象对应的是第二项数字2
+                pagesobj = atoi( item );
+                break;
+            }
+
+            item = (char *) strtok( NULL, " " );
+            i ++;
+        }
+        free( buf );
+        // 如果i > 2 说明没有找到Pages对象编号, 也就是出错了
+        if ( i > 2 ) 
+            return -1;
+
+        // 下面获取所有内容页面的对象信息 
+        printf("pages obj = %d\n", pagesobj);
+
+        // 获取Pages  对象中的页面对象的数据(主要是页面数量, 页面内容对象通过嵌套函数getPageleaf()获取 )
+        buf = getObjContent( fm_p, xref_p, pagesobj );      
+        printf( "Pages content =%s\n", buf );
+        item = (char *)strtok( buf, "/" );
+        while ( item != NULL ) {
+            if ( strstr( item, "Count" ) ) {     // 找到了包含Count 的项目 Count 2
+                pages_p->total = atoi( item + 6 );    // +6是为了跳过 "Count "
+            }
+            if ( strstr( item, "Kids" ) ) {     // Kids[3 0 R 12 0 R]  这就是所有的页面对象
+                pages_p->leafs_p = (int *)malloc( sizeof(int)* pages_p->total + 1);
+                memset( pages_p->leafs_p, 0, sizeof(int)* pages_p->total + 1 );
+                
+                ret = getPagesObjList( item, pages_p->total, pages_p->leafs_p );   // 注意 这儿pages_p->leafs_p 还不是最终的页面叶子对象
+            }
+            item = (char *)strtok( NULL, "/" );
+        }
+
+        printPages( pages_p );
+        for ( int j = 0; j < pages_p->total; j ++ ) {
+            ret = getPageleaf( fm_p, xref_p, pages_p->leafs_p[j], pages_p->leafs_p );
+            if ( ret < 0 ) 
+                return ret;
+        }
+
+        return ret;
+    }
+
+    void freeXREF( XREF * xref_p ) 
+    {
+        if ( xref_p->objpos_p )
+            free( xref_p->objpos_p );
+
+        free( xref_p );
+    }
+
+    void freePAGES( PAGES * pages_p ) 
+    {
+        printf("--\n");
+        if ( pages_p->leafs_p != NULL )
+            free(  pages_p->leafs_p );
+        printf("--\n");
+
+        free( pages_p );
+    }
+
+    void  freeAll( POSMAP * posmap_p, TRAILER * trailer_p, XREF * xref_p, PAGES *pages_p, FILEMAP * fm_p )
     {
         if ( posmap_p )
             free( posmap_p );
@@ -669,8 +963,9 @@
         if ( trailer_p )
             free( trailer_p );
 
-        if ( xref_p )
-            free( xref_p );
+        freeXREF( xref_p );
+
+        //freePAGES( pages_p );
 
         if ( fm_p )
             freeFileMap( fm_p );
