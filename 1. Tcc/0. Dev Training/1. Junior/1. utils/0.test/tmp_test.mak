@@ -16,7 +16,7 @@ lib   = lib
 all: tmp_test 
 
 tmp_test:
-	tcc "$(source)\tmp_test.c"
+	tcc -L$(lib) -lstr_tools -I$(inc) "$(source)\tmp_test.c"
 	move tmp_test.exe $(bin)\tmp_test.exe
 
 	 

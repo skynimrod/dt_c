@@ -87,11 +87,36 @@
         int         retcode;    // 额外添加的内容, 用来判断该Trailer是否有效
     } TRAILER;
 
+    #define L_FONTNAME      64
+    typedef struct __fontmap__ {    // 一个字体占用一个FONTMAP
+        int         obj;                        // type0 字体对应的对象编号
+        char        fontname[L_FONTNAME+1];     // type0 字体名称
+    }FONTMAP;
+
     typedef struct __pages__ {
         int         total;      // 总页数
         int         cursor;     // 最后一个叶子页面对象存储在leafs数组中的位置(下标), 这个是为了便于处理
-        int    *   leafs_p;      // long型数组, 用来存放叶子页面对象编号
+        int     *   leafs_p;        // 数组, 用来存放叶子页面对象编号
+        int     **  c_objlist_p;    // leafs_p中的叶子对象包含的内容对象列表 c_objlist_p[total][对象列表]
+        FONTMAP **  fontmap_p;      // fontname[页数量total][多少个字体][FONTMAP]
     }PAGES;
+
+    // 下面是 CMAP 部分的数据结构定义
+    typedef struct __cmap__ {
+        int         code;
+        int         decode;
+    } CMAP;
+
+    typedef struct __cmaplist__ {
+        int         pageNo;     // 页面编号
+        int         count;      // CMAP 数量
+        CMAP        * cmaps_p;  // 该页面使用的CMAPs, 可能是多个
+    }CMAPLIST;
+
+    typedef struct __contentMap__ {     // 记录每页中的内容页面对象
+        int         obj;            // 内容对象编号
+        int         * objlist;      // 内容对象编号所含的对象列表
+    }CONTENTMAP;
 
     int     getXREF( FILEMAP * fm_p, XREF * xref_p,  long xrefpos, POSMAP *posmap_p, TRAILER *trailer_p );
     
@@ -100,6 +125,15 @@
     int     getPages( FILEMAP * fm_p, XREF * xref_p,  PAGES *pages_p, int Root );
     char    * getObjContent( FILEMAP * fm_p, XREF *xref_p, int  objNo );
 
+    int     getContentMap( FILEMAP *fm_p, XREF *xref_p, PAGES *pages_p );
+    int     getFontMap( FILEMAP *fm_p, XREF *xref_p, PAGES *pages_p );
+    
+    int     getCMAPLIST( FILEMAP *fm_p, XREF *xref_p, PAGES *pages_p, CMAPLIST * cmaplist_p );
+
+    // 下面的函数为测试函数, 用来把相关信息输出到文件中, 便于查阅
+    void    printXREFContent( FILEMAP * fm_p, XREF * xref_p, char * filename );
+    void    printPAGESContent( FILEMAP * fm_p, XREF * xref_p, PAGES *pages_p, char * filename );
+    void    printXREFContent( FILEMAP * fm_p, XREF * xref_p, char * filename );
 
     //**************************************************************************
     //  函数名称 : parsePDF()
@@ -144,7 +178,7 @@
         XREF        *   xref_p = NULL;          //  存放有效地xref 信息.
         TRAILER     *   trailer_p ;             //  存放 有效地trailer信息
 
-        PAGES       *   pages_p;                //  存放页面对应内容存放的对象信息
+        PAGES       *   pages_p;                //  存放页面对应内容存放的对象信息(Content对象)
 
         fm_p        = initFileMap( srcfile );
         print_fm( fm_p );
@@ -166,6 +200,7 @@
         xref_p = (XREF *)malloc( sizeof(XREF) + 1 );
         memset( xref_p, 0, sizeof(XREF) + 1);
 
+        // 1. 获取XREF 和 Trailer
         ret = getXREF( fm_p, xref_p, xrefpos, posmap_p, trailer_p );
 
         if ( xref_p->retcode < 0 || trailer_p->retcode < 0 ) {
@@ -174,13 +209,28 @@
             return -1;
         }
         print_trailer( trailer_p ); 
+        printXREFContent( fm_p, xref_p, "F:/F_T_tmp/tmp1/xrefAll_c.txt" );
 
-        // 下面获取页面对象信息
+        // 2. 下面获取页面 叶子对象信息 PAGES->leafs_p
         pages_p = (PAGES *)malloc( sizeof(PAGES) + 1 );
         memset( pages_p, 0, sizeof(pages_p) + 1);
 
         ret = getPages( fm_p, xref_p, pages_p, trailer_p->Root );
 
+        // 下面是CMAP 相关的处理
+        /*
+        CMAPLIST    *cmaplist_p;
+        cmaplist_p = (CMAPLIST *)malloc(sizeof(CMAPLIST)+1);
+        memset( cmaplist_p, 0, sizeof(CMAPLIST) + 1 );
+
+        getCMAPLIST( fm_p, xref_p, pages_p, cmaplist_p );
+        */
+        // 3. 获取每页对应的内容对象列表 contentMap
+        getContentMap( fm_p, xref_p, pages_p );
+        getFontMap( fm_p, xref_p, pages_p );
+
+
+        
         freeAll( posmap_p, trailer_p, xref_p, pages_p, fm_p );
 
         return 0;
@@ -767,7 +817,7 @@
     // getPagesObjList() 仅在  getPages() 中使用, 是为了简化代码长度， 便于阅读代码。
     // 处理 "Kids[3 0 R 12 0 R]" 字符串 , 调用前的代码已经确保该字符串的正确性, 所以不用再容错了
     // 注意也可能是"Kids [6 0 R ....]"
-    int getPagesObjList( char * item, int count, int *objlist )
+    int getObjList( char * item, int count, int *objlist )
     {
         int         i, j, k;        // i  用来标记当前下标, j 用来计算空格数,  k 用来标记对象编号之前位置的下标
         int         n=0;              // 用来标记pageslist下标， 不能超过count
@@ -792,11 +842,9 @@
                 memcpy( buf, &item[k+1], i-(k+1) );
                 objlist[n] = atoi(buf);
 
-                printf( "第%d个对象:%s\n", n+1,  buf );
                 n ++;
             }
             if ( item[i] == ' ' )  {         // 只要碰到空格, 先j ++ ,   "Kids[3 0 R 12 0 R]" 
-                printf("getPagesObjList()  i=%d item[%d]=%c j=%d-n=%d---\n", i, i, item[i], j, n);
                 if ( n > 0 )                // 防止 "Kids [" 中这种情况中的空格不该计数
                     j ++;
                 if ( j == 3 ) {          // 如果j=3，k 就记下i 的值, 因为下一个就是对象编号
@@ -813,7 +861,6 @@
                     memcpy( buf, &item[k+1], i-(k+1) );
                     objlist[n] = atoi(buf);
 
-                    printf( "第%d个对象:%s\n", n+1,  buf );
                     n ++;
                 }
             }
@@ -823,32 +870,88 @@
         return 0;
     }
 
+    // 获取拆分后的第几个项
+    char    *strsplit( char * src, char * split, int n )
+    {
+        char    * item;
+        int     i=0;
+        
+        item = (char *)strtok( src, split );
+        while ( item ) {
+            i ++;
+            if ( i == n )
+                return item;
+
+            item = (char *)strtok( NULL, split );
+        }
+
+        return NULL;
+
+    }
+
     // getPageleaf() 是用来获取所有的叶子页面对象, 也就是带有Content的对象信息, 该对象也就是页面数据对象
     // 每个页面对象实际上也就是对应一个页面的数据, leafs 是个long 型数组
-    int getPageleaf( FILEMAP * fm_p, XREF * xref_p, int obj, long *leafs )
+    // cursor 是用来标记leafs_p的位移的
+    int getPageleaf( FILEMAP * fm_p, XREF * xref_p, int obj, int *leafs_p, int *cursor )
     {
         char        * buf;
         char        * item;
         int         kidscount;
-        char        * pages_p;
+        int         * objlist;
+        int         ret;
+
 
         // # 5251||<</Count 100/Kids[5252 0 R 5253 0 R 5254 0 R 5255 0 R 5256 0 R 5257 0 R 5258 0 R 5259 0 R 5260 0 R 5261 0 R]/Parent 5250 0 R/Type/Pages>>
         buf = getObjContent( fm_p, xref_p, obj );
-        /*
-        if ( strstr( buf, "Kids" ) ) {
+        
+        if ( strstr( buf, "Kids" ) ) {      // 如果有"Kids", 说明不是叶子页面, 需要继续嵌套遍历kids页面, 直到找到最终的内容页面
             item = (char *) strtok( buf, "/" );
             while( item ) {
-                if () {
+                if ( strstr( item, "Count" ) ) {    // kids 数量  //Count 100
+                    kidscount = atoi( strsplit( item, " ", 2 ) );
+                }
+                if ( strstr( item, "Kids" ) ) {
+                    objlist = (int *)malloc( sizeof(int) * kidscount + 1 );
+                    memset( objlist, 0, sizeof(int)*kidscount + 1 );
+                    ret = getObjList( item, kidscount, objlist );
                 }
             }
+            // 逐个处理页面对象, 找到叶子对象, 并填充到leafs_p
+            for ( int i = 0; i < kidscount; i ++ ) {
+                for ( int j=0; j < *cursor; j ++ ) {
+                    if ( leafs_p[j] == objlist[i] ) {   // 容错.如果该对象已经存在于 leafs_p, 格式有问题，一个叶子页面对象不可能分属于多个页面
+                        free( objlist );
+                        free(buf);
+                        return -1;
+                    }
+                }
+                ret = getPageleaf( fm_p, xref_p, objlist[i], leafs_p, cursor );
+                if ( ret < 0 ) {
+                    free( objlist );
+                    free(buf);
+                    return ret;
+                }
+            }
+        } else if( strstr( buf, "Contents" ) ){ //只有含有 Contents 的对象才是真正的叶子对象
+            //printf("叶子对象:%s\n", buf);
+            
+            for ( int i=0; i < *cursor; i ++ ) {
+                if ( leafs_p[i] == obj ) {   // 容错.如果该对象已经存在于 leafs_p, 格式有问题，一个叶子页面对象不可能分属于多个页面    
+                    if ( objlist )
+                        free( objlist );
+                    free(buf);
+                    return -1;
+                }
+            } 
+            leafs_p[*cursor] = obj;
+            //printf("找到一个叶子对象%d(第%d页)\n", obj, *cursor+1 );
+            *cursor += 1;
         }
 
-        */
         free( buf );
-        
-            
-        return 0;
-
+        if ( objlist )
+            free( objlist );
+        return ret;
     }
     
     /*Root 对象的内容例子如下:  (注意， 下面的例子实际上是没有换行的， 这儿为了方便阅读分行了)
@@ -922,17 +1025,18 @@
                 pages_p->leafs_p = (int *)malloc( sizeof(int)* pages_p->total + 1);
                 memset( pages_p->leafs_p, 0, sizeof(int)* pages_p->total + 1 );
                 
-                ret = getPagesObjList( item, pages_p->total, pages_p->leafs_p );   // 注意 这儿pages_p->leafs_p 还不是最终的页面叶子对象
+                ret = getObjList( item, pages_p->total, pages_p->leafs_p );   // 注意 这儿pages_p->leafs_p 还不是最终的页面叶子对象
             }
             item = (char *)strtok( NULL, "/" );
         }
 
-        printPages( pages_p );
+        //printPages( pages_p );
         for ( int j = 0; j < pages_p->total; j ++ ) {
-            ret = getPageleaf( fm_p, xref_p, pages_p->leafs_p[j], pages_p->leafs_p );
+            ret = getPageleaf( fm_p, xref_p, pages_p->leafs_p[j], pages_p->leafs_p, &pages_p->cursor );
             if ( ret < 0 ) 
                 return ret;
         }
+        printPages( pages_p );
 
         return ret;
     }
@@ -965,9 +1069,368 @@
 
         freeXREF( xref_p );
 
-        //freePAGES( pages_p );
+        freePAGES( pages_p );
 
         if ( fm_p )
             freeFileMap( fm_p );
     }
 
+
+    // 下面的函数为测试函数, 用来把相关信息输出到文件中, 便于查阅
+    void printXREFContent( FILEMAP * fm_p, XREF * xref_p, char * filename )
+    {
+        char        * buf;
+
+        FILE        * fp;
+
+        if ( !fm_p || !xref_p || !filename )
+            return;
+
+        if ( !( fp=fopen( filename, "wb") )) 
+            return;
+        
+        
+        for ( int i =0; i < xref_p->objTotal; i ++ ) {
+            buf = getObjContent( fm_p, xref_p, i );
+
+            if ( buf ) {
+                printf( "\n%d||%s\n", i, buf);
+                fprintf( fp, "\n%d||%s\n", i, buf);
+                free( buf );
+            }
+        }
+        printf( "--------------------------------we------------we---------\n");
+
+        fclose( fp );
+        return;
+    }
+
+    void printPAGESContent( FILEMAP * fm_p, XREF * xref_p, PAGES *pages_p, char * filename )
+    {
+        return;
+    }
+
+
+    // ----------- 下面是 CMAP  相关处理
+    //
+    // writeRawData()
+    //     调试函数, 把stream中的字节流写入到文件中, 便于查看
+    void writeRawData( char * filename, uchar *bytes, int len )
+    {
+        FILE        * fp;
+        int         l;
+
+        if ( !( fp=fopen( filename, "wb") )) 
+            return;
+
+        l = fwrite( bytes, len, 1, fp );
+        printf("\n实际写入文件长度l=%d, 应该写入 len=%d\n", l, len);
+        fclose( fp );
+        
+        return ;
+    }
+
+    // 根据解码后的数据流 获取cmap 的编码
+    int getCMAP( char *stream, CMAP * cmap_p )
+    {
+        return 0;
+    }
+    //
+    // procType0Stream()
+    int procType0Stream( FILEMAP *fm_p, XREF *xref_p, int obj, CMAP *cmap_p )
+    {
+        int     ret;
+        // 1. F052  是里面有对钩的方括号, 无法print(), 也无法在txt文件中显示. 
+        char    * codeFilter[] = {"F052", "F0FE"};
+
+        char    *buf;
+        uchar   *bytes;
+        int     len;
+        
+        printf( "\nprocType0_1()#####对象编号为：\n" + obj );
+        
+        //# 有2种情况.
+        //    # 50569||<</Filter/FlateDecode/Length 7645>>stream
+        //    # 50569||<</Filter/FlateDecode/Length 7645>>\r\nstream        
+        //
+        buf = getItemOfObj( fm_p, xref_p, obj, "Length" );
+        if ( !buf ) {   // 没有找到Length项， 出错了
+            printf( "CMAP:obj=%d Error 3, no ToUnicode Length", obj );
+            return -1;
+        } 
+        len = atoi( strsplit( buf, " ", 2 ) );    // 获取 /Length 7645 中的数字 7645, 属于该字符串的第2项, 也就是字节流长度
+        free( buf );
+
+        // 下面的处理要小心, 如果上面的content 中包含stream, 就不要再跳过一行了, 如果不包括, 才需要跳过一行。。。！！！！！！
+        buf = getObjContent( fm_p, xref_p, obj );
+        if ( !buf ) {
+            printf("%d 没有获取到数据!\n", obj );
+            return -1;
+        }
+
+        if ( !strstr( buf, "stream" ) ) {  //用来区分是\r\nstream\r\n 还是stream\r\n
+            free( buf );
+            buf = fm_readLine( fm_p );      // 跳过 stream\r\n
+            free(buf);
+        }
+
+        bytes = fm_read( fm_p, len, fm_p->pos );
+
+        writeRawData( "\nF:/F_T_tmp/tmp1/test_raw.dat\n", bytes, len );
+        
+        free( bytes );
+        
+
+        // OK， 现在 buf 中的字节流就是steam 的内容， 下面进行解压, 解压后的内容存放在desbuf
+        /*
+        if ( "stream" not in content):    # 2016.12.20  用来区分是\r\nstream\r\n 还是stream\r\n
+                print("没有stream, 需要再跳过一行--------------------------")
+                buf = self.file_tools.readLine()                        # 跳过 stream\r\n
+            buf, len1 = self.file_tools.read( len1 )  # 由于通过 getItemOfObj(), 内存文件 正好定位到stream 的起始位置
+            if ( obj == "51134") :
+                print( "pos=%d; l=%d; len=%d, stream=" % ( self.file_tools.getPosition(),l, len1 ) )
+                print( buf )
+
+            with open("f:/F_t_tmp/tmp1/%s_row.dat" % obj, "wb") as fs:
+                fs.write(buf)
+          */      
+    }
+
+    // 计算指定字符在字符串中出现的次数
+    int  countChrInStr( char * buf, char ch ) 
+    {
+        int     i = 0 ;
+        int     len = strlen(buf);
+        int     n=0;
+
+        printf("buf=%s!\n", buf);
+        
+        while( i < len )  {
+            if ( buf[i] == ch )
+                n ++;
+            i ++;
+        }
+
+        printf("buf=%s,  \'%c\'出现的次数为%d\n", buf, ch, n);
+
+        return i;
+    }
+
+    // 判断给定的对象是否是type0 字体, 即是否有CMAP
+    bool isType0( FILEMAP *fm_p, XREF * xref_p, int obj ) 
+    {
+        char    *buf;
+
+        buf = (char *)getObjContent( fm_p, xref_p, obj );
+
+        if ( !buf )
+            return false;
+
+        if ( strstr( buf, "Type0" ) ) {     // 如果有Type0 项, 则表明是CMAP 对象
+            free( buf );
+            return true;
+        } else {
+            free( buf );
+            return false;
+        }
+    }
+
+    // <</Contents[5278 0 R 5279 0 R 5280 0]/CropBox[9 0 603 792]/MediaBox[0 0 612 792]/Parent 5252 0 R/Resources 5273 0 R/Rotate 0/Type/Page>>
+    // 获取叶子对象 对应的内容对象列表  pages_p->c_objlist_p;
+    //  pages_p->c_objlist_p[i] 对应的就是第i页的内容对象列表指针
+    int getContentMap( FILEMAP *fm_p, XREF *xref_p, PAGES *pages_p )
+    {
+        int         ret;
+        char        * buf;
+        int         * leafs_p = pages_p->leafs_p;       // 这个是为了简化代码长度
+        int         count;
+        
+        pages_p->c_objlist_p = (int **)malloc(sizeof(int)*pages_p->total + 1 );
+        memset( pages_p->c_objlist_p, 0, sizeof(int)*pages_p->total + 1  );
+
+        for ( int i=0; i < pages_p->total; i ++ ) {
+            printf("---------------------------%d-------------------\n", i+1);
+            buf = (char *)getItemOfObj( fm_p, xref_p, leafs_p[i], "Contents" );
+            printf( "叶子对象(第%d页):%d| 内容:%s", i+1, leafs_p[i], buf );
+
+            if ( strchr(buf, '[' ) ) { // 如果有中括号, 表示包含多个内容对象,  Contents[5278 0 R 5279 0 R]
+                count = countChrInStr( rtrim(buf), ' ' );  // 先计算字符串中出现的空格数
+                count = (count+1)/3;                // 计算出对象数量, +1 是因为第一个对象只有2个空格
+                
+                pages_p->c_objlist_p[i] = (int *)malloc( sizeof(int ) * (count + 1) );
+                memset(  pages_p->c_objlist_p[i], 0, sizeof(int ) * (count + 1) );
+                ret = getObjList( buf, count, pages_p->c_objlist_p[i] );
+            }
+            else {
+                count =1;                   // 没有中括号, 就1个内容对象。 Contents 7 0 R
+                printf("就一个内容对象(buf=%s)\n", buf);
+                
+                pages_p->c_objlist_p[i] = (int *)malloc( sizeof(int ) * (count + 1) );
+                memset( pages_p->c_objlist_p[i], 0, sizeof(int ) * (count + 1) );
+
+                pages_p->c_objlist_p[i][0] = atoi( strsplit( buf, " ", 2 ) );       // 第二项就是内容对象
+            }
+
+            
+            printf("\nobj %d 的内容对象为:", leafs_p[i] );
+            for( int j=0; j < count; j ++) 
+                printf("%d|", pages_p->c_objlist_p[i][j]);
+            printf("\n");
+            
+            free( buf );
+        }
+        return 0;
+    }
+
+    // 获取字体数量, 这个函数是为了简化代码长度, 提高代码可读性剥离出来的一个函数
+    int getFontCount( FILEMAP *fm_p, XREF * xref_p, int obj )
+    {
+        int     count = 0;
+        char    * buf, * item;
+        bool    flag = false;
+            
+        buf = (char *)getObjContent( fm_p, xref_p, obj );    // /Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>
+        printf( "叶子对象%d| font:%s\n",  obj, buf );
+            
+        item = (char *)strtok( buf, "/" );
+        while( item && !flag ){     // flag = true 表示字体已经处理完毕， 退出循环
+            if ( ! strstr( item, "Font" ) ) { // 没找到Font 就继续找下一个
+                item = (char *)strtok( NULL, "/" );
+                continue;
+            }
+            // 如果找到了"Font", 继续循环处理获取所有字体
+            while ( item ) {
+                item = (char *)strtok( NULL, "/" );
+                count ++;
+                if ( strstr( item, ">>") ) {        // 如果碰到">>"表示这是最后一个字体了
+                    flag = true;
+                    break;
+                }
+            }
+                
+        }
+        free( buf );
+        return count;
+    }
+
+    // <</Contents 57 0 R/Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+    // 获取叶子对象 对应的内容对象列表  pages_p->c_objlist_p;
+    //  pages_p->fontmap_p 是2级指针, 第一级数组是多少个叶子页面, 第二级是页面的字体数组
+    int getFontMap( FILEMAP *fm_p, XREF *xref_p, PAGES *pages_p )
+    {
+        int         ret;
+        char        * buf, * item;
+        int         * leafs_p = pages_p->leafs_p;       // 这个是为了简化代码长度
+        int         count;
+        bool        flag = false;
+        
+        pages_p->fontmap_p = (FONTMAP **)malloc(sizeof( FONTMAP * ) * pages_p->total + 1 );
+        memset( pages_p->fontmap_p, 0, sizeof( FONTMAP * ) * pages_p->total + 1  );
+
+        for ( int i=0; i < pages_p->total; i ++ ) {
+            printf("----------------FontMap-%d--(obj=%d)-----------------\n", i+1, leafs_p[i] );
+            count = getFontCount( fm_p, xref_p, leafs_p[i] );
+
+            pages_p->fontmap_p[i] = (FONTMAP *) malloc( sizeof( FONTMAP ) * count  + 1 );  // FONTMAP 数组
+            memset( pages_p->fontmap_p[i], 0, sizeof( FONTMAP ) * count  + 1 );
+            
+            buf = (char *)getObjContent( fm_p, xref_p, leafs_p[i] );
+            
+            printf( "\n获取Font 数据:%s\n", buf);
+            item = (char *)strtok( buf, "/" );
+            
+            while( item && !flag ){     // flag = true 表示字体已经处理完毕， 退出循环
+                printf( "item = %s\n", item );
+                if ( ! strstr( item, "Font" ) ) { // 没找到Font 就继续找下一个
+                    item = (char *)strtok( NULL, "/" );
+                    continue;
+                }
+                
+                //     如果找到了"Font", 继续循环处理获取所有字体
+                while ( item ) {
+                    item = (char *)strtok( NULL, "/" );
+                    printf("Font 信息: %s\n", item );
+                    if ( strstr( item, ">>") ) {        // 如果碰到">>"表示这是最后一个字体了
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+            free(buf);
+        }
+        return 0;
+    }
+
+    // 根据 Pages_p 来获取每页对应的cmap列表
+    // <</Contents[5278 0 R 5279 0 R 5280 0 R 5281 0 R 5282 0 R 5283 0 R 5291 0 R 5292 0 R]/CropBox[9 0 603 792]/MediaBox[0 0 612 792]/Parent 5252 0 R/Resources 5273 0 R/Rotate 0/Type/Page>>
+    int getCMAPLIST( FILEMAP *fm_p, XREF *xref_p, PAGES *pages_p, CMAPLIST * cmaplist_p )
+    {
+        int         ret;
+        char        * buf, * item;
+        int         * leafs_p = pages_p->leafs_p;
+        int         * objlist;
+        int         count;
+        
+        for ( int i=0; i < pages_p->total; i ++ ) {
+            buf = (char *)getItemOfObj( fm_p, xref_p, leafs_p[i], "Contents" );
+            printf( "叶子对象(第%d页):%d| 内容:%s", i+1, leafs_p[i], buf );
+
+            count = countChrInStr( rtrim(buf), ' ' );  // 先计算字符串中出现的空格数
+            if ( strchr(buf, '[' ) ) {    // 如果有中括号, 表示包含多个内容对象,  Contents[5278 0 R 5279 0 R]
+                count = (count+1)/3;                // 计算出对象数量, +1 是因为第一个对象只有2个空格
+                
+                objlist = (int *)malloc( sizeof(int) * count + 1 );
+                memset( objlist, 0, sizeof(int) * count + 1 );
+                ret = getObjList( buf, count, * objlist );
+            }
+            else {
+                count =1;                   // 没有中括号, 就1个内容对象。 Contents 7 0 R
+                
+                objlist = (int *)malloc( sizeof(int) + 1 );
+                memset( objlist, 0, sizeof(int) * count + 1 );
+                objlist[0] = atoi( strsplit( buf, " ", 2 ) );       // 第二项就是内容对象
+            }
+
+            printf("\nobj %d 的内容对象为:", leafs_p[i] );
+            for( int j=0; j < count; j ++) 
+                printf("%d|", objlist[j]);
+            printf("\n");
+
+            free( buf );
+
+            // 下面处理type0 的对象, 也就是cmap对象
+            // 1. 先获取 叶子对象的信息中的Font内容
+            // 2. 解析 Font 内容， 获得各个字体对象的对象编号
+            // 3. 处理字体对象(依据获得的对象编号获得内容), 如果该对象内容有Type0, 表示是cmap, 处理记录
+            // /Font<</C2_0 5 0 R/TT0 10 0 R/TT1 12 0 R/TT2 14 0 R/TT3 17 0 R>>
+            // Font 部分是后面<<>>包含字体内容， 但是字体又都是/开始的
+            buf = (char *)getItemOfObj( fm_p, xref_p, leafs_p[i], "Font" );
+            printf( "叶子对象(第%d页):%d| Font内容:%s", i+1, leafs_p[i], buf );
+            free(buf);
+
+        }
+    }
+
+    int getCMAPS( FILEMAP *fm_p, XREF *xref_p )
+    {   
+        char    * buf;
+    }
+/*
+ *     typedef struct __cmap__ {
+        int         *code;
+        int         *decode;
+    } CMAP;
+
+    #define L_FONTNAME      64
+    typedef struct __cmap__ {
+        int         obj;
+        char        fontname[L_FONTNAME+1];     // 字体名称
+    }CMAPS;
+
+    typedef struct __cmaplist__ {
+        int         pageNo;     // 页面编号
+        int         count;      // CMAP 数量
+        CMAP        * cmaps_p;  // 该页面使用的CMAPs, 可能是多个
+    }CMAPLIST;
+
+ */

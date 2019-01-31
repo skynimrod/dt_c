@@ -16,8 +16,7 @@ lib   = lib
 all: tmp_test 
 
 tmp_test:
-	tcc "$(source)\tmp_test.c"
-	move str_tools_test.exe $(bin)\str_tools_test.exe
-	copy $(lib)\str_tools.dll $(bin)\str_tools.dll
+	tcc -L$(lib) -lstr_tools -I$(inc)"$(source)\tmp_test.c"
+	move tmp_test.exe $(bin)\tmp_test.exe
 
 	 
