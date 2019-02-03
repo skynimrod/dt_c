@@ -1,5 +1,5 @@
 #include "1.file_tools/file_tools.mak"
-!include "2.str_tools/str_tools.mak"
+#!include "2.str_tools/str_tools.mak"
 #!include "3.date_tools/date_tools.mak"
 #!include "6.exercise/exercise.mak"
 #!include "7.JSON_tools/cJSON2/cJSON_tools.mak"
@@ -7,7 +7,7 @@
 #!include "8.time_tools/time_tools.mak"
 #!include "9.deflate/deflate.mak"
 #!include "15.zlib/zlib1.mak"
-#!include "17.filemap/filemap.mak"
+!include "17.filemap/filemap.mak"
 #!include "18.memorymap/memorymap.mak"
 !include "16.pdf_tools/pdf_tools.mak"
 

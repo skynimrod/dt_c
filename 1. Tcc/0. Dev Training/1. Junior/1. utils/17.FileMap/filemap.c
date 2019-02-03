@@ -219,7 +219,7 @@
     {
         long        curpos;         // 记录内存文件的当前位置
         char        ch;
-        char   *    retbuf = NULL;
+        char   *    retbuf;
        
         if ( !fm_p )
             return NULL;
@@ -243,6 +243,7 @@
                 memcpy( retbuf, &fm_p->stream[curpos], i-curpos );
 
                 // 继续往后面找找， 如果是\0D 或 \0A 继续跳过
+                printf("读取的一行:%s(%p)\n", retbuf, retbuf );
                           
                 curpos = i;      // curpos  赋值为当前的位置
                 ch = fm_p->stream[curpos];
