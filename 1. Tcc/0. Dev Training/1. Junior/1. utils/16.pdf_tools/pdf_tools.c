@@ -101,7 +101,8 @@
 
     } CODE;
     typedef struct __cmap__ {
-        char        *fontname;
+        char        fontname[32];   // 一般字体名字不会超过32个字符, 暂时按32字节设计
+        int         obj;
         int         total;          // 编码数量
         CODE        * code_p;       // 数组, 多个编码
     } CMAP;
@@ -128,8 +129,6 @@
     int     getFontMap( FILEMAP *fm_p, XREF *xref_p, PAGES *pages_p );
     int     getCMAPS( FILEMAP *fm_p, XREF *xref_p, PAGES *pages_p );
     
-    int     getCMAPLIST( FILEMAP *fm_p, XREF *xref_p, PAGES *pages_p, CMAPLIST * cmaplist_p );
-
     // 下面的函数为测试函数, 用来把相关信息输出到文件中, 便于查阅
     void    printXREFContent( FILEMAP * fm_p, XREF * xref_p, char * filename );
     void    printPAGESContent( FILEMAP * fm_p, XREF * xref_p, PAGES *pages_p, char * filename );
@@ -1135,12 +1134,6 @@
         return ;
     }
 
-    // 根据解码后的数据流 获取cmap 的编码
-    int getCMAP( char *stream, CMAP * cmap_p )
-    {
-        return 0;
-    }
-    //
     // procType0Stream()
     int procType0Stream( FILEMAP *fm_p, XREF *xref_p, int obj, CMAP *cmap_p )
     {
@@ -1349,6 +1342,48 @@
         return NULL;
     }
 
+    // getType0Font()  中间函数, 简化函数长度, 增加可读性
+    // type0list  内容格式为: " FT8 8 FT15 15 FT20 20 FT62 62 FT87 87"
+    int getType0Font( PAGES * pages_p, int type0count, char * type0list )
+    {  
+        int     n = 0;  // 空格数量, 1表示第一个空格, type0list 中包含type0 字体名和对应的对象编号, 用空格分隔。 " FT8 8 FT15 15 FT20 20 FT62 62 FT87 87"
+        int     k = 0;  // 标记空格的位置, 用来截取type0字体名称和对象编号
+        // 遍历一遍type0list  获取type0字体名称与对象编号
+        int     len = strlen( type0list );
+        char    ttt[8];     // 临时存放字体对象编号, 
+
+        printf( "type0 count=%d, type0 list:{%s}\n", type0count, type0list );
+        pages_p->cmaptotal = type0count;
+        pages_p->cmaps_p = (CMAP *)malloc( sizeof(CMAP) * type0count + 1);
+        memset( pages_p->cmaps_p, 0, sizeof(CMAP)*type0count + 1 );
+
+        for ( int i = 0; i < len && n/2 <= type0count; i ++ ) {
+            if ( type0list[i] == ' ' ) {     // 找到空格
+                k = i+1;                  // 记录空格后的位置, 找到下一个空格，则2个空格之间就是要找的项目
+                n ++;
+                i ++;       // 跳过空格
+                while( type0list[i] != ' ' && i < len )    // 找下一个空格 
+                    i ++;
+                if ( n%2 == 1 ) {     // 如果 n % 2 = 1, 表示是字体名称, 则 字体下标为: n/2+n%2-1, 例: 1/2+1%2-1 = 0(简化为 n/2), 因为下标是从0开始的
+                    memcpy( pages_p->cmaps_p[ n/2 ].fontname, &(type0list[k]), i-k ); 
+                    printf("%d: n=%d, 字体名称:%s\n", n/2, n, pages_p->cmaps_p[n/2].fontname );
+                } else if ( n%2 == 0 ) {    // 如果 n%2 = 0, 表示是字体对象编号, 则对应的下标是 n/2+n%2-1, 例如: 2/2+2%2-1=0(简化为 n/2-1)
+                    memset( ttt, 0, 8 );
+                    memcpy( ttt, type0list+k , i-k );
+                    pages_p->cmaps_p[ n/2-1 ].obj = atoi( ttt );
+                    
+                    printf("%d: n=%d 字体对象编号:%d\n", n/2-1, n, pages_p->cmaps_p[n/2-1].obj );
+                } 
+                    
+                i --;       // i 回退到空格位置, 这样循环才能正常进行
+            }
+        }
+
+        return 0;
+
+    }
+
+
     // 获取叶子对象 对应的内容对象列表  pages_p->c_objlist_p;
     //  pages_p->fontmap_p 是2级指针, 第一级数组是多少个叶子页面, 第二级是页面的字体数组
     int getFontMap( FILEMAP *fm_p, XREF *xref_p, PAGES *pages_p )
@@ -1359,9 +1394,13 @@
         int         count;
         bool        flag;
         char        * tmpbuf;
+        int         type0count = 0;                     // 用来计数type0 字体个数(是除去重复的之后的数量), 是为了后面为type0字体申请存储空间的
+        char        type0list[2048];                    // 用来存放type0 字体名称 "F34 F20 T2"等, 去重后的存储在这儿
         
         pages_p->fontmap_p = (FONTMAP **)malloc(sizeof( FONTMAP * ) * pages_p->total + 1 );
         memset( pages_p->fontmap_p, 0, sizeof( FONTMAP * ) * pages_p->total + 1  );
+
+        memset( type0list, 0, 2048 );       // 初始化
 
         for ( int i=0; i < pages_p->total; i ++ ) {
             count = getFontCount( fm_p, xref_p, leafs_p[i] );       // 获取字体数量
@@ -1396,9 +1435,13 @@
                     free( tmpbuf );
                     
                     // 判断是否是type0
-                    if ( isType0( fm_p, xref_p, pages_p->fontmap_p[i][n].obj ) ) 
+                    if ( isType0( fm_p, xref_p, pages_p->fontmap_p[i][n].obj ) )  {
                         pages_p->fontmap_p[i][n].isType0 = true;
-                    else
+                        if( !strstr( type0list, pages_p->fontmap_p[i][n].fontname ) ) {  // 如果该type0名称没有在type0list中, 说明是新的type0字体, 添加进type0list, type0count ++
+                            sprintf( type0list, "%s %s %d", type0list, pages_p->fontmap_p[i][n].fontname, pages_p->fontmap_p[i][n].obj );
+                            type0count ++;
+                        }
+                    } else
                         pages_p->fontmap_p[i][n].isType0 = false;
 
                     n ++;
@@ -1410,17 +1453,50 @@
             }
             free(buf);
         }
+    
+        getType0Font( pages_p, type0count, type0list );
+        return 0;
+    }
+    // 处理Type0 对象, 获取 CMAP 编码
+    // <</Filter /FlateDecode /Length 279>>，
+    int getCMAP( FILEMAP *fm_p,  XREF *xref_p, CMAP *cmap_p )
+    {
+        char    *   buf;
+        int         len;
+        uchar   *    ubuf;
+        
+        buf = (char*)getItemOfObj( fm_p, xref_p, cmap_p->obj, "Length" );    //  /Length 279
+        if ( !buf )
+            return -1;
+        
+        len = atoi( strsplit1( buf, ' ', 2 ) );         // 取7645 数字， 也就是字节流长度
+        // 下面的处理要小心, 如果上面的对象的Content中包含stream, 就不要再跳过一行了, 如果不包括, 才需要跳过一行。。。！！！！！！
+        free(buf);
+
+        buf = (char*)getObjContent( fm_p, xref_p, cmap_p->obj );
+        if ( !strstr( buf, "stream" ) ) {            // 用来区分是\r\nstream\r\n 还是stream\r\n
+            free( buf );
+            buf = (char *)fm_readLine( fm_p );      // 跳过一行
+            free( buf );
+        }
+
+        ubuf = (uchar *)fm_read( fm_p, len, fm_p->pos );       // 读取指定长度的字节流
+
+        // 现在ubuf 中的字节流就是stream的内容， 下面进行解压, 解压后的内容存放在desbuf
+
         return 0;
     }
 
+
     /*
-     *     typedef struct __code_ {        // <0005> <0022>   int 是4字节, 字符串也是4字节, 那个比较起来或代码维护起来方便就用那种方式
+    typedef struct __code_ {        // <0005> <0022>   int 是4字节, 字符串也是4字节, 那个比较起来或代码维护起来方便就用那种方式
         int         code;       // 4位编码   0005
         int         decode;     // 4位解码   0022
 
     } CODE;
     typedef struct __cmap__ {
-        char        *fontname;
+        char        fontname[32];   // 一般字体名字不会超过32个字符, 暂时按32字节设计
+        int         obj;
         int         total;          // 编码数量
         CODE        * code_p;       // 数组, 多个编码
     } CMAP;
@@ -1434,95 +1510,17 @@
         int         cmaptotal;      // cmap 的总数量
         CMAP    *   cmaps_p;  // CMAP数组, 所有的cmap都放在数组里, 因为不同的也会复用很多相同的cmap
     }PAGES;
-
-
      * */
-    // 处理Type0 对象, 获取 CMAP 编码
-    // <</Filter /FlateDecode /Length 279>>，
-    int getCMAP( FILEMAP *fm_p,  XREF *xref_p, CMAP *cmap, int obj )
-    {
-        char    *   buf;
-        int         len;
-        uchar   *    ubuf;
-        
-        buf = (char*)getItemOfObj( fm_p, xref_p, obj, "Length" );    //  /Length 279
-        if ( !buf )
-            return -1;
-        
-        len = atoi( strsplit1( buf, ' ', 2 ) );         // 取7645 数字， 也就是字节流长度
-        // 下面的处理要小心, 如果上面的对象的Content中包含stream, 就不要再跳过一行了, 如果不包括, 才需要跳过一行。。。！！！！！！
-        free(buf);
-
-        buf = (char*)getObjContent( fm_p, xref_p, obj );
-        if ( !strstr( buf, "stream" ) ) {            // 用来区分是\r\nstream\r\n 还是stream\r\n
-            free( buf );
-            buf = (char *)fm_readLine( fm_p );      // 跳过一行
-            free( buf );
-        }
-
-        ubuf = (uchar *)fm_read( fm_p, len );       // 读取指定长度的字节流
-
-        // 现在ubuf 中的字节流就是stream的内容， 下面进行解压, 解压后的内容存放在desbuf
-
-        
-    }
-
-    // 处理pages_p->fontmap_p 中的type0字体对象, 获取CMAP 并存放着在cmap_p
+    // 处理pages_p->cmaps_p 中的type0字体对象, 获取CMAP 并存放着在cmap_p
     int getCMAPS( FILEMAP *fm_p, XREF *xref_p, PAGES *pages_p )
     {
         char    * buf;
+
+        for( int i=0; i < pages_p->cmaptotal; i ++ ) {
+            getCMAP( fm_p, xref_p, &(pages_p->cmaps_p[i]) );
+        }
             
         return 0;
     }
 
-    // 根据 Pages_p 来获取每页对应的cmap列表
-    // <</Contents[5278 0 R 5279 0 R 5280 0 R 5281 0 R 5282 0 R 5283 0 R 5291 0 R 5292 0 R]/CropBox[9 0 603 792]/MediaBox[0 0 612 792]/Parent 5252 0 R/Resources 5273 0 R/Rotate 0/Type/Page>>
-    int getCMAPLIST( FILEMAP *fm_p, XREF *xref_p, PAGES *pages_p, CMAPLIST * cmaplist_p )
-    {
-        int         ret;
-        char        * buf, * item;
-        int         * leafs_p = pages_p->leafs_p;
-        int         * objlist;
-        int         count;
-        
-        for ( int i=0; i < pages_p->total; i ++ ) {
-            buf = (char *)getItemOfObj( fm_p, xref_p, leafs_p[i], "Contents" );
-            printf( "叶子对象(第%d页):%d| 内容:%s", i+1, leafs_p[i], buf );
-
-            count = countChrInStr( rtrim(buf), ' ' );  // 先计算字符串中出现的空格数
-            if ( strchr(buf, '[' ) ) {    // 如果有中括号, 表示包含多个内容对象,  Contents[5278 0 R 5279 0 R]
-                count = (count+1)/3;                // 计算出对象数量, +1 是因为第一个对象只有2个空格
-                
-                objlist = (int *)malloc( sizeof(int) * count + 1 );
-                memset( objlist, 0, sizeof(int) * count + 1 );
-                ret = getObjList( buf, count, objlist );
-            }
-            else {
-                count =1;                   // 没有中括号, 就1个内容对象。 Contents 7 0 R
-                
-                objlist = (int *)malloc( sizeof(int) + 1 );
-                memset( objlist, 0, sizeof(int) * count + 1 );
-                objlist[0] = atoi( strsplit( buf, " ", 2 ) );       // 第二项就是内容对象
-            }
-
-            printf("\nobj %d 的内容对象为:", leafs_p[i] );
-            for( int j=0; j < count; j ++) 
-                printf("%d|", objlist[j]);
-            printf("\n");
-
-            free( buf );
-
-            // 下面处理type0 的对象, 也就是cmap对象
-            // 1. 先获取 叶子对象的信息中的Font内容
-            // 2. 解析 Font 内容， 获得各个字体对象的对象编号
-            // 3. 处理字体对象(依据获得的对象编号获得内容), 如果该对象内容有Type0, 表示是cmap, 处理记录
-            // /Font<</C2_0 5 0 R/TT0 10 0 R/TT1 12 0 R/TT2 14 0 R/TT3 17 0 R>>
-            // Font 部分是后面<<>>包含字体内容， 但是字体又都是/开始的
-            buf = (char *)getItemOfObj( fm_p, xref_p, leafs_p[i], "Font" );
-            printf( "叶子对象(第%d页):%d| Font内容:%s", i+1, leafs_p[i], buf );
-            free(buf);
-
-        }
-    }
-    
 

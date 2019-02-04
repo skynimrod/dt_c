@@ -92,8 +92,12 @@ void main(void)
 
     item= (char*) strsplit( buf, ' ', 2 ) ;
 
-    printf("buf=%s, 第%d 项:item=%s", buf, 2, item );
+    printf("buf=%s, 第%d 项:item=%s\n", buf, 2, item );
     free(item);
 
+    printf("1/2+1%%2-1=%d\n", 1/2+1%2-1);
+    printf("3/2+3%%2-1=%d\n", 3/2+3%2-1);
+    printf("5/2+5%%2-1=%d\n", 5/2+5%2-1);
+    printf("7/2+7%%2-1=%d\n", 7/2+7%2-1);
     return;
 }
