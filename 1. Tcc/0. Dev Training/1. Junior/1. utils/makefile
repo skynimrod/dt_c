@@ -7,6 +7,7 @@
 #!include "8.time_tools/time_tools.mak"
 #!include "9.deflate/deflate.mak"
 #!include "15.zlib/zlib1.mak"
+#!include "15.alib/alib.mak"
 #!include "17.filemap/filemap.mak"
 #!include "18.memorymap/memorymap.mak"
 !include "16.pdf_tools/pdf_tools.mak"
@@ -18,7 +19,7 @@
 #!include "0.test/filemap_test.mak"
 #!include "0.test/memorymap_test.mak"
 !include "0.test/pdf_tools_test.mak"
-!include "0.test/tmp_test.mak"
+#!include "0.test/tmp_test.mak"
 
 #all: clean
 clean:

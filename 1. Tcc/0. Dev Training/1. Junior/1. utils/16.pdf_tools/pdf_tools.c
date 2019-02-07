@@ -56,7 +56,9 @@
     //  
     #include "file_tools.h"
     #include "filemap.h"
+    #include "memorymap.h"
     #include "str_tools.h"
+    #include "zlib.h"
     #include "pdf_tools.h"
 
     #define DLL_EXPORT __declspec(dllexport)
@@ -102,7 +104,7 @@
     } CODE;
     typedef struct __cmap__ {
         char        fontname[32];   // 一般字体名字不会超过32个字符, 暂时按32字节设计
-        int         obj;
+        int         obj;            // 对于Type0 而言,开始时字体对象编号, 后来存放的是Type0对象对应的Unicode对象编号
         int         total;          // 编码数量
         CODE        * code_p;       // 数组, 多个编码
     } CMAP;
@@ -1134,66 +1136,6 @@
         return ;
     }
 
-    // procType0Stream()
-    int procType0Stream( FILEMAP *fm_p, XREF *xref_p, int obj, CMAP *cmap_p )
-    {
-        int     ret;
-        // 1. F052  是里面有对钩的方括号, 无法print(), 也无法在txt文件中显示. 
-        char    * codeFilter[] = {"F052", "F0FE"};
-
-        char    *buf;
-        uchar   *bytes;
-        int     len;
-        
-        printf( "\nprocType0_1()#####对象编号为：\n" + obj );
-        
-        //# 有2种情况.
-        //    # 50569||<</Filter/FlateDecode/Length 7645>>stream
-        //    # 50569||<</Filter/FlateDecode/Length 7645>>\r\nstream        
-        //
-        buf = getItemOfObj( fm_p, xref_p, obj, "Length" );
-        if ( !buf ) {   // 没有找到Length项， 出错了
-            printf( "CMAP:obj=%d Error 3, no ToUnicode Length", obj );
-            return -1;
-        } 
-        len = atoi( strsplit( buf, " ", 2 ) );    // 获取 /Length 7645 中的数字 7645, 属于该字符串的第2项, 也就是字节流长度
-        free( buf );
-
-        // 下面的处理要小心, 如果上面的content 中包含stream, 就不要再跳过一行了, 如果不包括, 才需要跳过一行。。。！！！！！！
-        buf = getObjContent( fm_p, xref_p, obj );
-        if ( !buf ) {
-            printf("%d 没有获取到数据!\n", obj );
-            return -1;
-        }
-
-        if ( !strstr( buf, "stream" ) ) {  //用来区分是\r\nstream\r\n 还是stream\r\n
-            free( buf );
-            buf = fm_readLine( fm_p );      // 跳过 stream\r\n
-            free(buf);
-        }
-
-        bytes = fm_read( fm_p, len, fm_p->pos );
-
-        writeRawData( "\nF:/F_T_tmp/tmp1/test_raw.dat\n", bytes, len );
-        
-        free( bytes );
-        
-
-        // OK， 现在 buf 中的字节流就是steam 的内容， 下面进行解压, 解压后的内容存放在desbuf
-        /*
-        if ( "stream" not in content):    # 2016.12.20  用来区分是\r\nstream\r\n 还是stream\r\n
-                print("没有stream, 需要再跳过一行--------------------------")
-                buf = self.file_tools.readLine()                        # 跳过 stream\r\n
-            buf, len1 = self.file_tools.read( len1 )  # 由于通过 getItemOfObj(), 内存文件 正好定位到stream 的起始位置
-            if ( obj == "51134") :
-                print( "pos=%d; l=%d; len=%d, stream=" % ( self.file_tools.getPosition(),l, len1 ) )
-                print( buf )
-
-            with open("f:/F_t_tmp/tmp1/%s_row.dat" % obj, "wb") as fs:
-                fs.write(buf)
-          */      
-    }
-
     // 计算指定字符在字符串中出现的次数
     int  countChrInStr( char * buf, char ch ) 
     {
@@ -1232,7 +1174,6 @@
             return false;
         }
     }
-
 
 
     // <</Contents[5278 0 R 5279 0 R 5280 0]/CropBox[9 0 603 792]/MediaBox[0 0 612 792]/Parent 5252 0 R/Resources 5273 0 R/Rotate 0/Type/Page>>
@@ -1327,7 +1268,7 @@
                 if ( m == n ) {     // 找到第几个项的位置了
                     retbuf = (char *)malloc( i-k+1);
                     memset( retbuf, 0, i-k+1);   
-                    memcpy( retbuf, buf+k, i-k );  
+                    memcpy( retbuf, buf+k, i-k );
                     return retbuf;
                 }
                 while( buf[i] == ch )       // 跳过连续的分隔符
@@ -1338,7 +1279,12 @@
             i ++;
         }
 
-        
+        if ( i == len && m == n-1 ) {   // 最后一项
+            retbuf = (char *)malloc( i-k+1);
+            memset( retbuf, 0, i-k+1);   
+            memcpy( retbuf, buf+k, i-k );
+            return retbuf;
+        }
         return NULL;
     }
 
@@ -1457,42 +1403,131 @@
         getType0Font( pages_p, type0count, type0list );
         return 0;
     }
-    // 处理Type0 对象, 获取 CMAP 编码
-    // <</Filter /FlateDecode /Length 279>>，
-    int getCMAP( FILEMAP *fm_p,  XREF *xref_p, CMAP *cmap_p )
-    {
-        char    *   buf;
-        int         len;
-        uchar   *    ubuf;
-        
-        buf = (char*)getItemOfObj( fm_p, xref_p, cmap_p->obj, "Length" );    //  /Length 279
-        if ( !buf )
-            return -1;
-        
-        len = atoi( strsplit1( buf, ' ', 2 ) );         // 取7645 数字， 也就是字节流长度
-        // 下面的处理要小心, 如果上面的对象的Content中包含stream, 就不要再跳过一行了, 如果不包括, 才需要跳过一行。。。！！！！！！
-        free(buf);
 
-        buf = (char*)getObjContent( fm_p, xref_p, cmap_p->obj );
-        if ( !strstr( buf, "stream" ) ) {            // 用来区分是\r\nstream\r\n 还是stream\r\n
-            free( buf );
-            buf = (char *)fm_readLine( fm_p );      // 跳过一行
+    // 局部函数, 仅在 getCMAP() 中使用, 处理字符串， 去除尾部的非数字部分, 一般是>>
+    void cutTail( char * buf )
+    {
+        int     len;
+        int     i =1;
+
+        len = strlen( buf );
+        while ( !( buf[len-i]>='0' && buf[len-i] <='9' ) ) {
+            buf[len-i] = 0;
+            i ++;
+        }
+    }
+    
+    // 获取CMAP中的编码映射总数量, 本地函数, 仅在procType0Stream() 中调用, 简化代码数量, 增加可读性
+    int getCMAPsum( MEMORYMAP * mm_p )
+    {
+        char    * buf;
+        int     mapsum;
+        int     total = 0;
+        
+        while ( 1 ){
+            buf = mm_readLine( mm_p );
+            if ( !buf )
+                break;
+            if ( strstr( buf, "endcmap" ) ) {// 增加推出循环处理, 防止有些缓冲区可能有遗留的尾巴
+                free( buf );
+                break;
+            }
+
+            /*
+                # 2 beginbfrange
+                #    <00B2> <00B2> [<2014>]
+                #    <00B3> <00B4> <201C>
+                #    endbfrange
+                #    这种格式的需要额外处理， 及解码有中括号
+                # 还有个begincodespacerange  .... 这个可能是限定编码范围的
+            */
+
+            
+            if ( strstr( buf, "beginbfchar" ) ) {   // 单个编码映射  100 beginbfchar
+
+                /*
+                printf("mm_p->pos=%d,\nmm_p->stream[%d]=%c, \nmm_p->stream[%d]=%c", 
+                      mm_p->pos,
+                    mm_p->pos + 14, mm_p->stream[mm_p->pos + 14],
+                    mm_p->pos + 15, mm_p->stream[mm_p->pos + 15],);
+                */
+
+                mapsum = atoi( strsplit1( buf, ' ', 1 ) );
+                total += mapsum;
+
+                // <1440> <5E10> , 单行是6+1+6+1 = 14个字节  0A 结尾的
+                mm_seek( mm_p, mm_p->pos + 14 * mapsum );       // 跳过 mapsum 个字符, 也就是编码映射部分
+                free( buf );
+                buf = mm_readLine( mm_p );                      // 跳过  endbfchar
+                printf(" buf = |%s|\n", buf );
+                free( buf );
+                printf("-----\n");
+            }
+            
+            if ( buf )
+                free( buf );
+
+            printf("---2\n");
+        }
+        return  total;
+    }
+
+    // 临时函数, 仅在getCMAP() 调用, 处理 type0 字节流, 获取cmap
+    // desbuf 中存放的是已经解压后的字节流,  
+    // dlen   是 desbuf 中的字节流的长度
+    // 编码映射似乎可以根据key值用函数算出 value, 但是需要多个函数, 暂时简单处理, 所有编码单独匹配, 未来动态创建映射函数来提高处理性能
+    // 注意: 碰到 F052, F0FE , 目前转换成空格(0020), 带对号的方框, 未来可以单独用对号替代
+    // 不适用链表方式实现, 维护麻烦, 遍历两次字节流, 第一次是为了计算编码映射数量, 用来申请内存.
+    int procType0Stream( CMAP *cmap_p, uchar * desbuf, uLong dlen )
+    {
+        MEMORYMAP   * mm_p;
+        char        * buf;
+        int         mapsum;     // 映射数量, 临时记录每个映射单元的编码映射数量
+        int         total = 0;  // 所有编码映射数量之和
+        
+        mm_p = initMemoryMap( desbuf, dlen );
+
+        total = getCMAPsum( mm_p );     // 获取CMAP中的编码映射总数量
+        while ( 1 ){
+            buf = mm_readLine( mm_p );
+            if ( !buf )
+                break;
+            if ( strstr( buf, "endcmap" ) ) {// 增加推出循环处理, 防止有些缓冲区可能有遗留的尾巴
+                free( buf );
+                break;
+            }
+            /*
+                # 2 beginbfrange
+                #    <00B2> <00B2> [<2014>]
+                #    <00B3> <00B4> <201C>
+                #    endbfrange
+                #    这种格式的需要额外处理， 及解码有中括号
+                # 还有个begincodespacerange  .... 这个可能是限定编码范围的
+            */
+
+            if ( strstr( buf, "beginbfchar" ) ) {   // 单个编码映射  100 beginbfchar
+                mapsum = atoi( strsplit1( buf, ' ', 1 ) );
+                cmap_p->total += mapsum;
+                for ( int i = 0; i < mapsum; i ++ ) {
+                    free( buf );
+                    buf = mm_readLine( mm_p );      // <1440> <5E10> 
+                    DelCharsInString( buf, "<>" );  // 删除 尖括号  "1440 5310" 
+                    free( buf );
+                }
+                
+            }
             free( buf );
         }
 
-        ubuf = (uchar *)fm_read( fm_p, len, fm_p->pos );       // 读取指定长度的字节流
-
-        // 现在ubuf 中的字节流就是stream的内容， 下面进行解压, 解压后的内容存放在desbuf
+        freeMemoryMap( mm_p);
 
         return 0;
     }
-
 
     /*
     typedef struct __code_ {        // <0005> <0022>   int 是4字节, 字符串也是4字节, 那个比较起来或代码维护起来方便就用那种方式
         int         code;       // 4位编码   0005
         int         decode;     // 4位解码   0022
-
     } CODE;
     typedef struct __cmap__ {
         char        fontname[32];   // 一般字体名字不会超过32个字符, 暂时按32字节设计
@@ -1511,12 +1546,93 @@
         CMAP    *   cmaps_p;  // CMAP数组, 所有的cmap都放在数组里, 因为不同的也会复用很多相同的cmap
     }PAGES;
      * */
+
+    #define CHECK_ERR(err, msg) { \
+        if (err != Z_OK) { \
+            fprintf(stderr, "%s error: %d\n", msg, err); \
+            exit(1); \
+        } \
+    }
+        
+    // 处理Type0 对象, 获取 CMAP 编码
+    // <</Filter /FlateDecode /Length 279>>，
+    int getCMAP( FILEMAP *fm_p,  XREF *xref_p, CMAP *cmap_p )
+    {
+        char    *   buf, * tmpbuf;
+        int         len;
+        uchar   *   ubuf,  * desbuf ;
+        int         ret;
+        
+        buf = (char*)getItemOfObj( fm_p, xref_p, cmap_p->obj, "Length" );    //  Length 279>>
+        if ( !buf )
+            return -1;
+
+        cutTail( buf );                         // 去除 279>> 后面的>>
+        tmpbuf = ( char *) strsplit1( buf, ' ', 2 );
+        len = atoi( tmpbuf );         // 取279 数字， 也就是字节流长度
+        free( tmpbuf );
+        
+        printf( "字节流长度为%d\n", len );
+        // 下面的处理要小心, 如果上面的对象的Content中包含stream, 就不要再跳过一行了, 如果不包括, 才需要跳过一行。。。！！！！！！
+        free(buf);
+
+        buf = (char*)getObjContent( fm_p, xref_p, cmap_p->obj );
+        if ( !strstr( buf, "stream" ) ) {            // 用来区分是\r\nstream\r\n 还是stream\r\n
+            free( buf );
+            buf = (char *)fm_readLine( fm_p );      // 跳过一行
+            free( buf );
+        }
+
+        ubuf = (uchar *)fm_read( fm_p, len, fm_p->pos );       // 读取指定长度的字节流
+
+        // 现在ubuf 中的字节流就是stream的内容， 下面进行解压, 解压后的内容存放在desbuf, 放在文件中的部分为调试代码, 最后注释或删除了
+        char        filename[128];
+        sprintf( filename, "f:/F_t_tmp/cmap/c_%d_stream.txt", cmap_p->obj );
+        printf("-----1--\n");
+        writeRawData( filename, ubuf, len );
+
+        // 解压
+        int     err;
+        uLong   dlen;
+
+        desbuf = (uchar *)malloc( len * 5 );
+        memset( desbuf, 0, len * 5 );
+        err = uncompress( desbuf, &dlen, ubuf, len );
+        CHECK_ERR(err, "uncompress");  
+
+        // 写文件时调试代码， 方便查看， 最终可以删除或注释
+        sprintf( filename, "f:/F_t_tmp/cmap/c_%d_cmap.txt", cmap_p->obj );
+        printf("-----2--\n");
+        writeRawData( filename, desbuf, dlen );
+
+        printf("%s\ndlen=%d, len=%d", desbuf, dlen, len );
+
+        ret = procType0Stream( cmap_p, desbuf, dlen );
+
+        free( desbuf );
+
+        return ret;
+    }
+
+
     // 处理pages_p->cmaps_p 中的type0字体对象, 获取CMAP 并存放着在cmap_p
+    //  type0 对象里面有个unicode对象, 里面只有stream流, 内容才是真正的CMAP信息
     int getCMAPS( FILEMAP *fm_p, XREF *xref_p, PAGES *pages_p )
     {
-        char    * buf;
-
+        char    *   buf, *tmpbuf;
+        int         obj;
+        
         for( int i=0; i < pages_p->cmaptotal; i ++ ) {
+            buf = (char*)getItemOfObj( fm_p, xref_p, pages_p->cmaps_p[i].obj, "ToUnicode" );    //  如果没有 ToUnicode, 那么就是出错了  ToUnicode 88 0 R
+            if ( !buf )
+                return -1;
+
+            tmpbuf = (char *)strsplit1( buf, ' ', 2 ) ;         // ToUnicode 88 0 R 第二项就是Unicode 对象编号
+            obj = atoi( tmpbuf );
+            free( tmpbuf );                                     // strsplit1() 内部申请了内存,所以需要释放
+            free( buf );                                        // getItemOfObj() 内部申请了内存,所以需要释放
+
+            pages_p->cmaps_p[i].obj = obj;                      // type0 字体对象编号 更新为  Unicode 对象编号
             getCMAP( fm_p, xref_p, &(pages_p->cmaps_p[i]) );
         }
             

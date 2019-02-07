@@ -41,6 +41,11 @@ void main(void)
     for ( int i=0; i < 10; i ++) {
        printf("b[%d]=%d\n",i, b[i]);
     }
+
+    sprintf( buf, "<0005> <0022>" );
+    DelCharsInString( buf, "<>" );
+    printf( "buf=%s|\n", buf );
+
     
     return;
 }

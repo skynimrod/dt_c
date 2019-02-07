@@ -5,6 +5,7 @@ CutMemo
 CutMemoEx
 CutQuote
 DelCharInString
+DelCharsInString
 GetQuotePos
 IfHaveQuote
 Iplong2Ipstr

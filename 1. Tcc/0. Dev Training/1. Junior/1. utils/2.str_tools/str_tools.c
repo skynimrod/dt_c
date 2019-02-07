@@ -749,6 +749,71 @@
 	}
 
 	//**************************************************************************
+	//  函数名称 : DelCharsInString()
+	//  功    能 :
+	//			删去源字符串中的多个指定字符, DelCharInString() 的增强函数
+	//  入口参数 :
+	//			char	*str		字符串指针(可能含有指定字母)
+	//			char	*chs	    多个指定字符
+	//  出口参数 :
+	//			char	*str		字符串指针(不含指定字符)
+	//  返 回 值 :
+	//			char  * : 目标字符串(不含指定字符)
+	//  Author   :
+	//			Adams                 
+	//  Create Date :
+	//		 2019.02.07       
+	//  Modify history (modifier and date) :
+	//                                      
+	//  使用说明 :
+	//			要求源串必须有尾0, 调用后源串发生变化
+	//			要求源串必须不是常量
+	//  Standard .h  :
+	//		1. string.h--strcpy()
+	//	User .h : 
+	//		1. Astring.h--GetQuotePos()、ltrim()、rtrim()、mtrim()
+	//  Develope Tools:
+	//			  SCO UNIX Development CC   
+	//			  Visual C++ 6.0            
+	//  Environment:
+	//           1. SCO UNIX 5.0.4          
+	//           2. Windows NT WorkStation SimpleChinese 4.0 
+	//              Can be used in console、MFC Application for Windows
+	//***************************************************************************
+	//
+	char * DLL_EXPORT DelCharsInString( char *str, char *chs )
+	{
+		char	tmp[BUFSIZ+1];
+
+		int		i, k, j;
+
+		i = 0; k = 0;
+		while (str[i]!='\0') {
+			if ( strchr( chs, str[i] ) ) {
+				k = i;
+
+				while ( strchr( chs, str[k] ) )	// 继续找后面是否有需要删除的字符
+					k++;
+			
+				strcpy(tmp,str+k);
+				j = 0;
+				while ( tmp[j] != 0 ){
+					if ( ! strchr( chs, tmp[j] ) ) {
+						str[i] = tmp[j];
+						i ++;
+					}
+					j ++; 
+				}
+				str[i] = 0;
+
+			}
+			i ++;
+		}
+		
+		return(str);
+	}
+
+	//**************************************************************************
 	//  函数名称 : ch_monfmt()
 	//  功    能 :
 	//			将金额阿拉伯数字字符串转为大写金额字符串

@@ -91,6 +91,7 @@ int DLL_EXPORT uncompress (dest, destLen, source, sourceLen)
     const Bytef *source;
     uLong sourceLen;
 {
+    printf("-------in uncompress()!!\n");
     return uncompress2(dest, destLen, source, &sourceLen);
 }
 

@@ -51,32 +51,54 @@ extern "C" {
   but other algorithms will be added later and will have the same stream
   interface.
 
+    'zlib'压缩哭提供了内存内压缩和解压函数, 包括解压后数据的校验. 这个版本只支
+  持一种压缩方法(deflation), 但是别的算法也会在将来加进去, 而且保留同样的stream接口.
+
     Compression can be done in a single step if the buffers are large enough,
   or can be done by repeated calls of the compression function.  In the latter
   case, the application must provide more input and/or consume the output
   (providing more output space) before each call.
 
+    如果空间足够, 压缩只有一个步骤就可以完成, 或者循环调用压缩寒素也可以完成. 
+  以后， 调用前应用必须供更多的输入输出消耗(提供更多的输出空间)
+
     The compressed data format used by default by the in-memory functions is
   the zlib format, which is a zlib wrapper documented in RFC 1950, wrapped
   around a deflate stream, which is itself documented in RFC 1951.
+
+    内存函数中使用的压缩数据格式 是zlib格式, 在RFC1950白皮书中, 包含一个deflate流,
+    在RFC1951中定义.
 
     The library also supports reading and writing files in gzip (.gz) format
   with an interface similar to that of stdio using the functions that start
   with "gz".  The gzip format is different from the zlib format.  gzip is a
   gzip wrapper, documented in RFC 1952, wrapped around a deflate stream.
 
+    这个库也支持读写gzip(.gz)格式的文件, 类似stdio中的文件操作函数前面添加"gz". 
+  gzip格式不同于zlib格式. gzip 是gzip包装, 在RFC1952种定义, 封装在deflate流中.
+
     This library can optionally read and write gzip and raw deflate streams in
   memory as well.
+
+    这个库能读写gzip和 裸deflate流.
 
     The zlib format was designed to be compact and fast for use in memory
   and on communications channels.  The gzip format was designed for single-
   file compression on file systems, has a larger header than zlib to maintain
   directory information, and uses a different, slower check method than zlib.
 
+    zlib 格式设计用来在内存和通讯中高效压缩. gzip 设计用来压缩文件系统中的单个文件,
+  有更大的文件头来维护目录信息.
+
     The library does not install any signal handler.  The decoder checks
   the consistency of the compressed data, so the library should never crash
   even in the case of corrupted input.
+
+    本库没有安装任何signal句柄. 解码后会检验压缩数据, 所以永远不会在输入数据中断后发生崩溃.
 */
+
+#define DLL_EXPORT __declspec(dllexport)   //
+
 
 typedef voidpf (*alloc_func) OF((voidpf opaque, uInt items, uInt size));
 typedef void   (*free_func)  OF((voidpf opaque, voidpf address));
@@ -84,11 +106,11 @@ typedef void   (*free_func)  OF((voidpf opaque, voidpf address));
 struct internal_state;
 
 typedef struct z_stream_s {
-    z_const Bytef *next_in;     /* next input byte */
-    uInt     avail_in;  /* number of bytes available at next_in */
-    uLong    total_in;  /* total number of input bytes read so far */
+    z_const Bytef *next_in;     /* next input byte                      下一个输入字节 */
+    uInt     avail_in;  /* number of bytes available at next_in         next_in 中有效的字节数 */
+    uLong    total_in;  /* total number of input bytes read so far      输入字节中的所有数量 */
 
-    Bytef    *next_out; /* next output byte will go here */
+    Bytef    *next_out; /* next output byte will go here                */
     uInt     avail_out; /* remaining free space at next_out */
     uLong    total_out; /* total number of bytes output so far */
 
@@ -108,8 +130,9 @@ typedef struct z_stream_s {
 typedef z_stream FAR *z_streamp;
 
 /*
-     gzip header information passed to and from zlib routines.  See RFC 1952
+      gzip header information passed to and from zlib routines.  See RFC 1952
   for more details on the meanings of these fields.
+      gzip 头信息. 
 */
 typedef struct gz_header_s {
     int     text;       /* true if compressed data believed to be text */
@@ -246,13 +269,16 @@ ZEXTERN int ZEXPORT deflateInit OF((z_streamp strm, int level));
    this will be done by deflate().
 */
 
+int DLL_EXPORT deflate (z_streamp strm, int flush);
 
-ZEXTERN int ZEXPORT deflate OF((z_streamp strm, int flush));
+//ZEXTERN int DLL_EXPORT deflate OF((z_streamp strm, int flush));
 /*
     deflate compresses as much data as possible, and stops when the input
   buffer becomes empty or the output buffer becomes full.  It may introduce
   some output latency (reading input without producing any output) except when
   forced to flush.
+   
+     deflate 尽可能压缩, 直到输入缓冲区为空或者输出缓冲区满了. 
 
     The detailed semantics are as follows.  deflate performs one or both of the
   following actions:
@@ -360,7 +386,7 @@ ZEXTERN int ZEXPORT deflate OF((z_streamp strm, int flush));
 */
 
 
-ZEXTERN int ZEXPORT deflateEnd OF((z_streamp strm));
+ZEXTERN int DLL_EXPORT deflateEnd OF((z_streamp strm));
 /*
      All dynamically allocated data structures for this stream are freed.
    This function discards any unprocessed input and does not flush any pending
@@ -517,7 +543,7 @@ ZEXTERN int ZEXPORT inflate OF((z_streamp strm, int flush));
 */
 
 
-ZEXTERN int ZEXPORT inflateEnd OF((z_streamp strm));
+ZEXTERN int DLL_EXPORT inflateEnd OF((z_streamp strm));
 /*
      All dynamically allocated data structures for this stream are freed.
    This function discards any unprocessed input and does not flush any pending

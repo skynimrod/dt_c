@@ -7,7 +7,8 @@
 #
 #  用nmake  编译
 #  
-source	= ./15.zlib/
+source	= 15.zlib/
+source1 = 15.zlib\			# 因为copy的时候不认/ , 只认 \
 obj			= obj/
 lib			= lib
 inc			= inc
@@ -20,6 +21,7 @@ CFLAGS =
 
 ZINC = 
 
+#OBJS = $(obj)adler32.o $(obj)deflate.o $(obj)crc32.o $(obj)trees.o $(obj)zutil.o
 OBJS = $(obj)adler32.o $(obj)compress.o $(obj)crc32.o $(obj)deflate.o $(obj)gzclose.o \
 			$(obj)gzlib.o $(obj)gzread.o $(obj)gzwrite.o $(obj)infback.o $(obj)inffast.o \
 			$(obj)inflate.o $(obj)inftrees.o $(obj)trees.o $(obj)uncompr.o $(obj)zutil.o
@@ -29,7 +31,10 @@ all: $(SHAREDLIB)
 $(SHAREDLIB): $(OBJS)
 	@echo "hello, begin zlib1.dll compile"
 	tcc -shared -o $@ $(OBJS)
-	move $@ lib\$@
+	move $@ $(lib)\$@
+	copy "$(source1)zlib.h" "$(inc)\zlib.h"
+	copy "$(source1)zutil.h" "$(inc)\zutil.h"
+	copy "$(source1)zconf.h" "$(inc)\zconf.h"
 	
 	
 $(obj)adler32.o: $(source)adler32.c

@@ -12,8 +12,10 @@ crc32
 crc32_combine
 crc32_combine64
 crc32_z
+deflate
 deflateBound
 deflateCopy
+deflateEnd
 deflateGetDictionary
 deflateInit_
 deflateParams

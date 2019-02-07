@@ -22,3 +22,24 @@ NMAKE : fatal error U1077: 'tcc' : return code '0x1'
    只需要在parsePDF()函数之前声明getXREF() 函数即可.
 
     XREF * getXREF( FILEMAP * fm_p, long xrefpos, POSMAP *posmap_p, TRAILER *trailer_p );
+
+.1. 创建DLL的时候
+
+。。。
+    #define DLL_EXPORT __declspec(dllexport)   //
+。。。
+
+int DLL_EXPORT adams( strm, flush ) 
+    z_streamp strm;
+    int flush;
+{
+    return 1;
+}
+int DLL_EXPORT deflate(strm, flush)
+    z_streamp strm;
+    int flush;
+{
+。。。
+}
+
+adams() 函数导出成功, deflate() 函数就到处失败(没有显示在dll中, depends.exe查看)

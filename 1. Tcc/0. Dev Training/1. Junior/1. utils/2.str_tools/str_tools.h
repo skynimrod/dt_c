@@ -36,6 +36,7 @@
     char *	CutQuote( char	*str, char Quote );
     
     char *	DelCharInString( char *str, char ch );
+	char *  DelCharsInString( char *str, char *chs );
 
     char *	ch_monfmt( char *out, char *in, int ilen );
 
