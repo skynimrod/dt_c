@@ -1101,7 +1101,7 @@
 
             if ( buf ) {
                 printf( "\n%d||%s\n", i, buf);
-                fprintf( fp, "\n%d||%s\n", i, buf);
+                fprintf( fp, "\n%d(%08X)||%s\n", i, xref_p->objpos_p[i], buf);
                 free( buf );
             }
         }
@@ -1442,15 +1442,10 @@
                 # 还有个begincodespacerange  .... 这个可能是限定编码范围的
             */
 
-            
+
+            /*            
             if ( strstr( buf, "beginbfchar" ) ) {   // 单个编码映射  100 beginbfchar
 
-                /*
-                printf("mm_p->pos=%d,\nmm_p->stream[%d]=%c, \nmm_p->stream[%d]=%c", 
-                      mm_p->pos,
-                    mm_p->pos + 14, mm_p->stream[mm_p->pos + 14],
-                    mm_p->pos + 15, mm_p->stream[mm_p->pos + 15],);
-                */
 
                 mapsum = atoi( strsplit1( buf, ' ', 1 ) );
                 total += mapsum;
@@ -1461,8 +1456,10 @@
                 buf = mm_readLine( mm_p );                      // 跳过  endbfchar
                 printf(" buf = |%s|\n", buf );
                 free( buf );
+                buf = NULL;
                 printf("-----\n");
             }
+            */
             
             if ( buf )
                 free( buf );
@@ -1513,6 +1510,7 @@
                     buf = mm_readLine( mm_p );      // <1440> <5E10> 
                     DelCharsInString( buf, "<>" );  // 删除 尖括号  "1440 5310" 
                     free( buf );
+                    buf = NULL;
                 }
                 
             }
@@ -1577,9 +1575,11 @@
         free(buf);
 
         buf = (char*)getObjContent( fm_p, xref_p, cmap_p->obj );
+        printf("buf=%s\n", buf);
         if ( !strstr( buf, "stream" ) ) {            // 用来区分是\r\nstream\r\n 还是stream\r\n
             free( buf );
             buf = (char *)fm_readLine( fm_p );      // 跳过一行
+        printf("buf=%s\n", buf);
             free( buf );
         }
 
@@ -1595,8 +1595,8 @@
         int     err;
         uLong   dlen;
 
-        desbuf = (uchar *)malloc( len * 5 );
-        memset( desbuf, 0, len * 5 );
+        desbuf = (uchar *)malloc( len * 6 );
+        memset( desbuf, 0, len * 6 );
         err = uncompress( desbuf, &dlen, ubuf, len );
         CHECK_ERR(err, "uncompress");  
 
@@ -1607,7 +1607,7 @@
 
         printf("%s\ndlen=%d, len=%d", desbuf, dlen, len );
 
-        ret = procType0Stream( cmap_p, desbuf, dlen );
+        //ret = procType0Stream( cmap_p, desbuf, dlen );
 
         free( desbuf );
 
