@@ -84,6 +84,7 @@
     int     parsePDF( char * desfile,  char * srcfile );
     PDF   * parsePDF1( char * srcfile );
     void  __declspec(dllexport)  freeALL2( PDF * pdf_p );
+    uchar * getSpecPage( PDF *pdf_p, int pageno );
     
 
     #endif

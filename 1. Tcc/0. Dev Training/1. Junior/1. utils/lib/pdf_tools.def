@@ -2,6 +2,7 @@ LIBRARY pdf_tools.dll
 
 EXPORTS
 freeALL2
+getPageSum
 getSpecPage
 parsePDF
 parsePDF1

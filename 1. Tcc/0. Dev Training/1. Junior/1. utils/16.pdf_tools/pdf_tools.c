@@ -114,7 +114,7 @@
         int         total;      // 总页数
         int         cursor;     // 最后一个叶子页面对象存储在leafs数组中的位置(下标), 这个是为了便于处理
         int     *   leafs_p;        // 数组, 用来存放叶子页面对象编号
-        int     **  c_objlist_p;    // leafs_p中的叶子对象包含的内容对象列表 c_objlist_p[total][对象列表]
+        int     **  c_objlist_p;    // leafs_p中的叶子对象包含的内容对象列表 c_objlist_p[total][对象列表], 对象列表第一个是列表数量
         FONTMAP **  fontmap_p;      // fontname[页数量total][多少个字体][FONTMAP]
         int         cmaptotal;      // cmap 的总数量
         CMAP    *   cmaps_p;  // CMAP数组, 所有的cmap都放在数组里, 因为不同的也会复用很多相同的cmap
@@ -305,14 +305,23 @@
         pdf_p->pages_p = (PAGES *)malloc( sizeof(PAGES) + 1 );
         memset( pdf_p->pages_p, 0, sizeof(PAGES) + 1);
     }
+
+    // 获取指定页的内容
     uchar * DLL_EXPORT getSpecPage( PDF *pdf_p, int pageno )
     {
         uchar       * desbuf = NULL;
+        int         obj;
+
+        if ( !pdf_p || pageno > pdf_p->pages_p->total || pageno < 1 )
+            return NULL;
+        
+        obj = pdf_p->pages_p->c_objlist_p[pageno-1];
+        printf( "第%d页的叶子对象是:%d\n", pageno, obj );
 
         return desbuf;
     }
 
-    int getPageSum( PDF * pdf_p ) 
+    int DLL_EXPORT getPageSum( PDF * pdf_p ) 
     {
         return pdf_p->pages_p->total;
     }
@@ -1293,7 +1302,7 @@
             if ( strchr(buf, '[' ) ) { // 如果有中括号, 表示包含多个内容对象,  Contents[5278 0 R 5279 0 R]
                 count = countChrInStr( rtrim(buf), ' ' );  // 先计算字符串中出现的空格数
                 count = (count+1)/3;                // 计算出对象数量, +1 是因为第一个对象只有2个空格
-                
+
                 pages_p->c_objlist_p[i] = (int *)malloc( sizeof(int ) * (count + 1) );
                 memset(  pages_p->c_objlist_p[i], 0, sizeof(int ) * (count + 1) );
                 ret = getObjList( buf, count, pages_p->c_objlist_p[i] );

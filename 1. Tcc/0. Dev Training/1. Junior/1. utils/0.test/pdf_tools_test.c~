@@ -18,7 +18,7 @@ void main(void)
 
     //printf( "\nret = %d\n", ret );
 
-    ta = (int *)malloc(sizeof(int) * 15);
+    ta = (int *)malloc(sizeof(int) * 5);
     printf("sizeof ta=%d\n", sizeof(ta));
 
     freeALL2( pdf_p );
