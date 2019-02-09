@@ -63,6 +63,7 @@
 
     #define DLL_EXPORT __declspec(dllexport)
 
+    /*
     // 
     typedef struct __posmap__{
         int     cursor;                 // 游标, 最后一个登记的xref地址位置后面的位置
@@ -77,7 +78,7 @@
     } XREF;
 
     // trailer 信息中包含: 根object编号，object数量,  startxref( xref 位置信息)
-    #define ID_LEN  128             // 设定 Trailer中的ID 最大长度为128， 一般是不会超过这个长度
+    #define L_ID  128             // 设定 Trailer中的ID 最大长度为128， 一般是不会超过这个长度
     typedef struct __trailer__ {
         int         Root;       // 根对象ID
         int         Size;       // 对象数量. 比对象最大编号大1. 编号为0的对象 不是数据对象.
@@ -93,7 +94,7 @@
     typedef struct __fontmap__ {    // 一个字体占用一个FONTMAP
         int         obj;                        // 字体对应的对象编号
         char        fontname[L_FONTNAME+1];     // 字体名称
-        bool        isType0;                    // true: 是type0, false : 不是type0
+        int         isType0;                    // 1: 是type0, 0 : 不是type0, 目前没有用, 暂时保留
     }FONTMAP;
 
     // 下面是 CMAP 部分的数据结构定义
@@ -119,10 +120,21 @@
         CMAP    *   cmaps_p;  // CMAP数组, 所有的cmap都放在数组里, 因为不同的也会复用很多相同的cmap
     }PAGES;
 
+    typedef struct __pdf__ {
+        POSMAP      * posmap_p;
+        FILEMAP     * fm_p;
+        XREF        * xref_p;
+        TRAILER     * trailer_p;
+        PAGES       * pages_p;
+    } PDF;
+    */
 
     int     getXREF( FILEMAP * fm_p, XREF * xref_p,  long xrefpos, POSMAP *posmap_p, TRAILER *trailer_p );
     
+    void    initPDF( PDF *pdf_p );
+    
     void    freeAll( POSMAP * posmap_p, TRAILER * trailer_p, XREF * xref_p, PAGES *pages_p, FILEMAP * fm_p );
+    void    freeALL2( PDF * pdf_p );
     void    print_trailer( TRAILER * trailer_p );
     int     getPages( FILEMAP * fm_p, XREF * xref_p,  PAGES *pages_p, int Root );
     char    * getObjContent( FILEMAP * fm_p, XREF *xref_p, int  objNo );
@@ -154,7 +166,9 @@
     //  Modify history (modifier and date) :
     //
     //	使用说明 :
-    //			            
+    //	    这个接口仅是将pdf文件解析, 并没有提取数据. 提取数据接口为: 
+    //	        1. getSpecPage( )
+    //	        2. getSpecKeyLine( )
     //	Standard .h  :
     //         filemap.h -----------FILEMAP,  fm_seek()    
     //         str_tools.h ---------IsNumberStr() 
@@ -169,6 +183,51 @@
     //				Can be used in console、MFC Application for Windows
     //***************************************************************************
     //
+    PDF * DLL_EXPORT parsePDF1( char * srcfile )
+    {
+        int             ret;
+        long            xrefpos;                // xref 起始位置
+        PDF         *   pdf_p;
+
+        pdf_p = (PDF *)malloc( sizeof(PDF) );
+        memset( pdf_p, 0, sizeof(PDF) );
+        
+        initPDF( pdf_p );
+
+        pdf_p->fm_p = initFileMap( srcfile );
+        print_fm( pdf_p->fm_p );
+
+        xrefpos   = getStartXrefPos( pdf_p->fm_p );          // 获取startxref 的内容, 也就是第一个xref 的位置
+        if ( xrefpos < 0 ) {
+            freeALL2( pdf_p );
+            return NULL; 
+        }
+       
+        // 1. 获取XREF 和 Trailer
+        ret = getXREF( pdf_p->fm_p, pdf_p->xref_p, xrefpos, pdf_p->posmap_p, pdf_p->trailer_p );
+
+        if ( pdf_p->xref_p->retcode < 0 || pdf_p->trailer_p->retcode < 0 ) {
+            printf("出错了\n");
+            freeALL2( pdf_p );
+            return NULL;
+        }
+        print_trailer( pdf_p->trailer_p ); 
+        printXREFContent( pdf_p->fm_p, pdf_p->xref_p, "F:/F_T_tmp/tmp1/xrefAll_c.txt" );
+
+        // 2. 下面获取页面 叶子对象信息 PAGES->leafs_p
+        ret = getPages( pdf_p->fm_p, pdf_p->xref_p, pdf_p->pages_p, pdf_p->trailer_p->Root );
+
+        // 下面是CMAP 相关的处理
+        // 3. 获取每页对应的内容对象列表pages_p->c_objlist_p 和 字体列表 pages_p->fontmap_p
+        getContentMap( pdf_p->fm_p, pdf_p->xref_p, pdf_p->pages_p );
+        getFontMap( pdf_p->fm_p, pdf_p->xref_p, pdf_p->pages_p );
+
+        // 3.1 处理字体列表 pages_p->fontmap_p, 获取 cmap 列表
+        getCMAPS( pdf_p->fm_p, pdf_p->xref_p, pdf_p->pages_p );
+        
+        return pdf_p;
+    }
+
     int DLL_EXPORT parsePDF( char * desfile,  char * srcfile )
     {
         int             ret;
@@ -219,14 +278,6 @@
         ret = getPages( fm_p, xref_p, pages_p, trailer_p->Root );
 
         // 下面是CMAP 相关的处理
-        /*
-        CMAPLIST    *cmaplist_p;
-        cmaplist_p = (CMAPLIST *)malloc(sizeof(CMAPLIST)+1);
-        memset( cmaplist_p, 0, sizeof(CMAPLIST) + 1 );
-
-        getCMAPLIST( fm_p, xref_p, pages_p, cmaplist_p );
-        */
-        
         // 3. 获取每页对应的内容对象列表pages_p->c_objlist_p 和 字体列表 pages_p->fontmap_p
         getContentMap( fm_p, xref_p, pages_p );
         getFontMap( fm_p, xref_p, pages_p );
@@ -240,9 +291,33 @@
         return 0;
     }
 
+    void initPDF( PDF *pdf_p )
+    {
+        pdf_p->posmap_p = (POSMAP *)malloc( sizeof(POSMAP) + 1 );
+        memset( pdf_p->posmap_p, 0, sizeof(POSMAP) + 1 );
+        
+        pdf_p->trailer_p = (TRAILER *) malloc( sizeof(TRAILER) +1  );
+        memset( pdf_p->trailer_p, 0, sizeof(TRAILER) + 1 );
 
+        pdf_p->xref_p = (XREF *)malloc( sizeof(XREF) + 1 );
+        memset( pdf_p->xref_p, 0, sizeof(XREF) + 1);
+            
+        pdf_p->pages_p = (PAGES *)malloc( sizeof(PAGES) + 1 );
+        memset( pdf_p->pages_p, 0, sizeof(PAGES) + 1);
+    }
+    uchar * DLL_EXPORT getSpecPage( PDF *pdf_p, int pageno )
+    {
+        uchar       * desbuf = NULL;
 
-    //一下为内部调用的API
+        return desbuf;
+    }
+
+    int getPageSum( PDF * pdf_p ) 
+    {
+        return pdf_p->pages_p->total;
+    }
+
+    //以下为内部调用的API
     //**************************************************************************
     //  函数名称 : getStartXrefPos()
     //  功    能 :
@@ -382,7 +457,7 @@
                 while ( len < strlen( item ) && !( item[len] == '>' && item[len+1] == '>' ) ) //  处理尾部的">>" 
                     len ++;
                 
-                memset( trailer_p->ID, 0, ID_LEN + 1 );     
+                memset( trailer_p->ID, 0, L_ID + 1 );     
                 memcpy( trailer_p->ID, item, len );       // [<BE239411BFD7D4D9318C29408037556><5CA7DFC3C76C2F42985CAE05DBD580F9>]
             }
 
@@ -561,8 +636,6 @@
         char    *   buf;
         int         ret;
 
-        printf("--in procObjSumLT1()\n");
-
         xref_p->retcode = -40424;       // 预设一个出错码
         buf = fm_readLine( fm_p );
 
@@ -683,12 +756,15 @@
             return -1;
 
         // 1. 第一行的处理
+        printf("----------------getxref()----------------1------------\n");
         ret = procFirstLine( fm_p, xrefpos, xref_p, posmap_p );
+        printf("----------------getxref()----------------2------------\n");
         if ( ret != 0 ) 
             return -1;
 
         // 2. 第二行的处理
         ret = procSecondLine( fm_p, &firstObj, &objSum, trailer_p );       // 为了增加可读性, 将第一行的处理封装在一个函数中
+        printf("----------------getxref()----------------3------------\n");
         if ( ret < 0 )                     // 返回至不等于0 表示出错了,直接返回xref_p,  xref_p->retcode =-1(初始化de值), 也就是表示出错了
             return -1;
         if ( ret == 1 ) {               // 如果返回1, 表示找到trailer了, 说明需要继续找下一个xref, 嵌套调用getXREF(), 后面的处理跳过
@@ -1065,6 +1141,26 @@
         free( pages_p );
     }
 
+    void  DLL_EXPORT freeALL2( PDF * pdf_p )
+    {
+        if ( pdf_p ) {
+            if ( pdf_p->posmap_p )
+                free( pdf_p->posmap_p );
+
+            if ( pdf_p->trailer_p )
+                free( pdf_p->trailer_p );
+
+            freeXREF( pdf_p->xref_p );
+
+            freePAGES( pdf_p->pages_p );
+
+            if ( pdf_p->fm_p )
+                freeFileMap( pdf_p->fm_p );
+
+            free( pdf_p );
+        }
+    }
+
     void  freeAll( POSMAP * posmap_p, TRAILER * trailer_p, XREF * xref_p, PAGES *pages_p, FILEMAP * fm_p )
     {
         if ( posmap_p )
@@ -1157,21 +1253,21 @@
     }
 
     // 判断给定的对象是否是type0 字体, 即是否有CMAP
-    bool isType0( FILEMAP *fm_p, XREF * xref_p, int obj ) 
+    int isType0( FILEMAP *fm_p, XREF * xref_p, int obj ) 
     {
         char    *buf;
 
         buf = (char *)getObjContent( fm_p, xref_p, obj );
 
         if ( !buf )
-            return false;
+            return 0;
 
         if ( strstr( buf, "Type0" ) ) {     // 如果有Type0 项, 则表明是CMAP 对象
             free( buf );
-            return true;
+            return 1;
         } else {
             free( buf );
-            return false;
+            return 1;
         }
     }
 
@@ -1382,13 +1478,13 @@
                     
                     // 判断是否是type0
                     if ( isType0( fm_p, xref_p, pages_p->fontmap_p[i][n].obj ) )  {
-                        pages_p->fontmap_p[i][n].isType0 = true;
+                        pages_p->fontmap_p[i][n].isType0 = 1;
                         if( !strstr( type0list, pages_p->fontmap_p[i][n].fontname ) ) {  // 如果该type0名称没有在type0list中, 说明是新的type0字体, 添加进type0list, type0count ++
                             sprintf( type0list, "%s %s %d", type0list, pages_p->fontmap_p[i][n].fontname, pages_p->fontmap_p[i][n].obj );
                             type0count ++;
                         }
                     } else
-                        pages_p->fontmap_p[i][n].isType0 = false;
+                        pages_p->fontmap_p[i][n].isType0 = 0;
 
                     n ++;
                     if ( strstr( item, ">>") ) {        // 如果碰到">>"表示这是最后一个字体了
@@ -1428,7 +1524,7 @@
             buf = mm_readLine( mm_p );
             if ( !buf )
                 break;
-            if ( strstr( buf, "endcmap" ) ) {// 增加推出循环处理, 防止有些缓冲区可能有遗留的尾巴
+            if ( strstr( buf, "endcmap" ) ) {// 增加退出循环处理, 防止有些缓冲区可能有遗留的尾巴
                 free( buf );
                 break;
             }
@@ -1442,12 +1538,9 @@
                 # 还有个begincodespacerange  .... 这个可能是限定编码范围的
             */
 
-
-            /*            
             if ( strstr( buf, "beginbfchar" ) ) {   // 单个编码映射  100 beginbfchar
-
-
                 mapsum = atoi( strsplit1( buf, ' ', 1 ) );
+                //printf("beginbfchar sum=%d\n", mapsum);
                 total += mapsum;
 
                 // <1440> <5E10> , 单行是6+1+6+1 = 14个字节  0A 结尾的
@@ -1456,16 +1549,26 @@
                 buf = mm_readLine( mm_p );                      // 跳过  endbfchar
                 printf(" buf = |%s|\n", buf );
                 free( buf );
-                buf = NULL;
-                printf("-----\n");
+                continue;
             }
-            */
+            
+            if ( strstr( buf, "beginbfrange" ) ) {   // 范围编码映射  2 beginbfrange
+                mapsum = atoi( strsplit1( buf, ' ', 1 ) );
+                //printf("beginbfrange sum=%d\n", mapsum);
+                total += mapsum;
+                for ( int i =0; i < mapsum; i ++ ) {        // 跳过 mapsum 行即可
+                    buf = mm_readLine( mm_p );
+                    free( buf );
+                    buf = NULL;
+                }
+                continue;
+            }
             
             if ( buf )
                 free( buf );
-
-            printf("---2\n");
         }
+
+        printf("-----------------------------------------cmap total=%d\n", total);
         return  total;
     }
 
@@ -1481,10 +1584,17 @@
         char        * buf;
         int         mapsum;     // 映射数量, 临时记录每个映射单元的编码映射数量
         int         total = 0;  // 所有编码映射数量之和
-        
+        int         n;          // cmap_p->code_p[n] 下标
+        int         start1, end1, start2;       // beginbfrange 中的起始结束编码
+
         mm_p = initMemoryMap( desbuf, dlen );
 
-        total = getCMAPsum( mm_p );     // 获取CMAP中的编码映射总数量
+        total = getCMAPsum( mm_p );     // 获取CMAP中的编码映射总数量,为cmap_p->code_p 申请空间做准备
+        
+        cmap_p->code_p = (CODE *)malloc( sizeof(CODE) * total + 1 );
+        memset( cmap_p->code_p, 0, sizeof(CODE)*total + 1 );
+        
+        cmap_p->total = total; 
         while ( 1 ){
             buf = mm_readLine( mm_p );
             if ( !buf )
@@ -1501,18 +1611,37 @@
                 #    这种格式的需要额外处理， 及解码有中括号
                 # 还有个begincodespacerange  .... 这个可能是限定编码范围的
             */
-
-            if ( strstr( buf, "beginbfchar" ) ) {   // 单个编码映射  100 beginbfchar
+            if ( strstr( buf, "beginbfchar" ) ) {           // 单个编码映射  100 beginbfchar
                 mapsum = atoi( strsplit1( buf, ' ', 1 ) );
-                cmap_p->total += mapsum;
-                for ( int i = 0; i < mapsum; i ++ ) {
+                for( int i = 0; i < mapsum; i ++ ) {
                     free( buf );
-                    buf = mm_readLine( mm_p );      // <1440> <5E10> 
-                    DelCharsInString( buf, "<>" );  // 删除 尖括号  "1440 5310" 
-                    free( buf );
-                    buf = NULL;
+                    buf = mm_readLine( mm_p );              // <1440> <5E10> 
+                    DelCharsInString( buf, "<>" );          // 删除 尖括号  "1440 5310" 
+                    cmap_p->code_p[n].code = atoi( strsplit1( buf, ' ', 1 ) );          // 1440
+                    cmap_p->code_p[n].decode = atoi( strsplit1( buf, ' ', 2 ) );        // 5310
+                    n ++;
                 }
-                
+                free( buf );
+                continue;
+            }else if ( strstr( buf, "beginbfrange" ) ) {   // 范围编码映射  2 beginbfrange
+                mapsum = atoi( strsplit1( buf, ' ', 1 ) );
+                //printf("beginbfrange sum=%d\n", mapsum);
+                total += mapsum;
+                for ( int i =0; i < mapsum; i ++ ) {        // 跳过 mapsum 行即可
+                    free( buf );
+                    buf = mm_readLine( mm_p );              // <01C3> <01C4> <3001>
+                    DelCharsInString( buf, "<>" );          // 删除 尖括号  "01C3 01C4 3001"
+                    start1 = atoi( strsplit1( buf, ' ', 1 ) );          // 01C3
+                    end1 = atoi( strsplit1( buf, ' ', 2 ) );          // 01C4
+                    start2 = atoi( strsplit1( buf, ' ', 3 ) );          // 3001
+                    for ( int i = 0; i <= end1-start1; i ++ ) {
+                        cmap_p->code_p[n].code = start1 + i;
+                        cmap_p->code_p[n].decode = start2 + i;
+                        n ++;
+                    }
+                }
+                free( buf );
+                continue;
             }
             free( buf );
         }
@@ -1605,9 +1734,9 @@
         printf("-----2--\n");
         writeRawData( filename, desbuf, dlen );
 
-        printf("%s\ndlen=%d, len=%d", desbuf, dlen, len );
+        printf("%s\ndlen=%d, len=%d\n", desbuf, dlen, len );
 
-        //ret = procType0Stream( cmap_p, desbuf, dlen );
+        ret = procType0Stream( cmap_p, desbuf, dlen );
 
         free( desbuf );
 

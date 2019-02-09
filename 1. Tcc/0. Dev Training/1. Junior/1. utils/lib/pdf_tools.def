@@ -1,4 +1,7 @@
 LIBRARY pdf_tools.dll
 
 EXPORTS
+freeALL2
+getSpecPage
 parsePDF
+parsePDF1

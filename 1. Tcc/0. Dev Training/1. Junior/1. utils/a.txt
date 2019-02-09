@@ -1,5 +1,0 @@
-tt[0].obj=0, tt[0].oblist address=0000000000376780
-tt[1].obj=1, tt[1].oblist address=0000000000376790
-tt[2].obj=2, tt[2].oblist address=00000000003767A0
-tt[3].obj=3, tt[3].oblist address=00000000003767B0
-tt[4].obj=4, tt[4].oblist address=00000000003767C0

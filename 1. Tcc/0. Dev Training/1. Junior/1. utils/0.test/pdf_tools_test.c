@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "filemap.h"
+#include "pdf_tools.h"
 
 
 void main(void)
@@ -8,10 +9,15 @@ void main(void)
     char    desFile[] = "F:/F_T_tmp/1202_0118.txt";
     
     int     ret;
+    PDF     * pdf_p;
 
-    ret = parsePDF( desFile, srcFile );
+    //ret = parsePDF( desFile, srcFile );
 
-    printf( "\nret = %d\n", ret );
+    pdf_p = parsePDF1( srcFile );
+
+    //printf( "\nret = %d\n", ret );
+
+    freeALL2( pdf_p );
 
     return;
 }
