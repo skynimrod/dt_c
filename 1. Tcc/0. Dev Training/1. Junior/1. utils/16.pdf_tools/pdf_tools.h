@@ -61,6 +61,7 @@
         int         obj;        
         int         total;     
         CODE        * code_p; 
+        float       comprRiatio;      
     } CMAP;
 
     typedef struct __pages__ {
@@ -71,6 +72,7 @@
         FONTMAP **  fontmap_p;  
         int         cmaptotal; 
         CMAP    *   cmaps_p;  
+        float   **  comprRatio;    
     }PAGES;
 
     typedef struct __pdf__ {

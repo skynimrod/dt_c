@@ -108,6 +108,7 @@
         int         obj;            // 对于Type0 而言,开始时字体对象编号, 后来存放的是Type0对象对应的Unicode对象编号
         int         total;          // 编码数量
         CODE        * code_p;       // 数组, 多个编码
+        float       comprRatio;      // CMAP 压缩率, 这个是用来了解压缩率的, 对于功能实现没有用处
     } CMAP;
 
     typedef struct __pages__ {
@@ -118,6 +119,7 @@
         FONTMAP **  fontmap_p;      // fontname[页数量total][多少个字体][FONTMAP]
         int         cmaptotal;      // cmap 的总数量
         CMAP    *   cmaps_p;  // CMAP数组, 所有的cmap都放在数组里, 因为不同的也会复用很多相同的cmap
+        float       **comprRatio;      // 每页数据内容压缩率, 这个是用来了解压缩率的, 对于功能实现没有用处, 数组, 对应c_objlist_p, 第二层数组的第一个元素是叶子对象数量
     }PAGES;
 
     typedef struct __pdf__ {
