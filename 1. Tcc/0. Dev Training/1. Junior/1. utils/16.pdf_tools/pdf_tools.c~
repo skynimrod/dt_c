@@ -373,7 +373,7 @@
             
             // 记录一下压缩率, 了解压缩成都
             pdf_p->pages_p->comprRatio_p[pageno-1][i] = (float)dlen/len;
-            printf(" 压缩率为:%2.2f\n", pdf_p->pages_p->comprRatio_p[pageno-1][i] );
+            printf(" 压缩率为:%2.2f\n", pdf_p->pages_p->comprRatio[pageno-1][i] );
 
             free( srcbuf );
             free( desbuf );
