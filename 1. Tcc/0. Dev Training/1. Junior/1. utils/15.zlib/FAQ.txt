@@ -1,0 +1,35 @@
+. 1. 解压缩的时候出现数据格式错误
+
+ -------in uncompress()!!
+uncompress error: -3
+
+   源码如下:
+
+        uchar       *srcbuf, * desbuf;
+        char        * buf;
+        int         obj;
+        int         count;
+        int         len;
+        char        filename[128];
+        int         err;
+        uLong       dlen;
+
+        .....
+
+
+            srcbuf = (uchar *)fm_read( pdf_p->fm_p, len, pdf_p->fm_p->pos ); // 读取指定长度的stream字节流
+        
+            sprintf( filename, "f:/F_t_tmp/tmp1/c_%d_row_stream.dat", obj );
+            writeRawData( filename, srcbuf, len );
+
+            desbuf = (uchar *)malloc( len * 10 );
+            memset( desbuf, 0, len * 10 );
+            err = uncompress( desbuf, &dlen, srcbuf, len );
+            CHECK_ERR(err, "uncompress");  
+
+
+ 分析:
+
+      查看 srcbuf 中的字节流, 发现是完全正确的, 但是为啥提示数据格式不对。
+
+      1202.pdf 也是可以正常打开的。 用别的pdf再试试。

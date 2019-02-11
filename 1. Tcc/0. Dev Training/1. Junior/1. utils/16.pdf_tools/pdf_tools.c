@@ -138,6 +138,12 @@
     void    print_trailer( TRAILER * trailer_p );
     int     getPages( FILEMAP * fm_p, XREF * xref_p,  PAGES *pages_p, int Root );
     char    * getObjContent( FILEMAP * fm_p, XREF *xref_p, int  objNo );
+    void    cutTail( char * buf );
+
+    char *  getItemOfObj( FILEMAP * fm_p, XREF *xref_p, int obj, char *item );
+    char *  getObjContent( FILEMAP * fm_p, XREF *xref_p, int  objNo );
+    void    writeRawData( char * filename, uchar *bytes, int len );
+    char *  strsplit1( char * buf, char ch, int n );
 
     int     getContentMap( FILEMAP *fm_p, XREF *xref_p, PAGES *pages_p );
     int     getFontMap( FILEMAP *fm_p, XREF *xref_p, PAGES *pages_p );
@@ -148,6 +154,13 @@
     void    printPAGESContent( FILEMAP * fm_p, XREF * xref_p, PAGES *pages_p, char * filename );
     void    printXREFContent( FILEMAP * fm_p, XREF * xref_p, char * filename );
 
+    #define CHECK_ERR(err, msg) { \
+        if (err != Z_OK) { \
+            fprintf(stderr, "%s error: %d\n", msg, err); \
+            exit(1); \
+        } \
+    }
+        
     //**************************************************************************
     //  函数名称 : parsePDF()
     //  功    能 :
@@ -202,7 +215,8 @@
             freeALL2( pdf_p );
             return NULL; 
         }
-       
+
+ printf("--------------------------1----xrefpos=%08X----------\n", xrefpos );       
         // 1. 获取XREF 和 Trailer
         ret = getXREF( pdf_p->fm_p, pdf_p->xref_p, xrefpos, pdf_p->posmap_p, pdf_p->trailer_p );
 
@@ -214,9 +228,11 @@
         print_trailer( pdf_p->trailer_p ); 
         printXREFContent( pdf_p->fm_p, pdf_p->xref_p, "F:/F_T_tmp/tmp1/xrefAll_c.txt" );
 
+ printf("--------------------------2--------------\n");       
         // 2. 下面获取页面 叶子对象信息 PAGES->leafs_p
         ret = getPages( pdf_p->fm_p, pdf_p->xref_p, pdf_p->pages_p, pdf_p->trailer_p->Root );
 
+ printf("--------------------------3--------------\n");       
         // 下面是CMAP 相关的处理
         // 3. 获取每页对应的内容对象列表pages_p->c_objlist_p 和 字体列表 pages_p->fontmap_p
         getContentMap( pdf_p->fm_p, pdf_p->xref_p, pdf_p->pages_p );
@@ -309,14 +325,58 @@
     // 获取指定页的内容
     uchar * DLL_EXPORT getSpecPage( PDF *pdf_p, int pageno )
     {
-        uchar       * desbuf = NULL;
+        uchar       *srcbuf, * desbuf;
+        char        * buf;
         int         obj;
+        int         count;
+        int         len;
+        char        filename[128];
+        int         err;
+        uLong       dlen;
+        
+
 
         if ( !pdf_p || pageno > pdf_p->pages_p->total || pageno < 1 )
             return NULL;
         
-        obj = pdf_p->pages_p->c_objlist_p[pageno-1];
-        printf( "第%d页的叶子对象是:%d\n", pageno, obj );
+        count = pdf_p->pages_p->c_objlist_p[pageno-1][0];           // 第0个元素是叶子页面数量, 有可能是多个
+        printf( "第%d页的叶子对象有%d个\n", pageno, count );
+
+        for ( int i = 1; i <= count; i ++ ) {
+            obj = pdf_p->pages_p->c_objlist_p[pageno-1][i];
+            printf("第%d个叶子内容对象为: %d\n", i, obj );
+            buf = getItemOfObj( pdf_p->fm_p, pdf_p->xref_p, obj, "Length" );    // <</Filter/FlateDecode/Length 1117>>stream
+            if ( !buf )     
+                return NULL;
+
+            //cutTail( buf );                         // 去除 1117>> 后面的>>
+            len = atoi( strsplit1( buf, ' ', 2 ) );     //
+            free( buf );
+            buf = getObjContent( pdf_p->fm_p, pdf_p->xref_p, obj ); 
+            printf("------------------asf2-------------buf=%s--len=%d--\n", buf, len );
+            if ( !strstr( buf, "stream" ) ) {   // 当前行没有stream的话, 
+                free( buf );
+                buf = fm_readLine( pdf_p->fm_p );            // 跳过 stream\r\n 这一行非数据
+            printf("-------------3----------buf=%s--pdf_p->fm_p->pos=%d--------- pdf_p->fm_p->streamlen=%d---\n", buf, pdf_p->fm_p->pos, pdf_p->fm_p->streamlen );
+                free( buf );
+            }
+            srcbuf = (uchar *)fm_read( pdf_p->fm_p, len, pdf_p->fm_p->pos ); // 读取指定长度的stream字节流
+        
+            sprintf( filename, "f:/F_t_tmp/tmp1/c_%d_row_stream.dat", obj );
+            writeRawData( filename, srcbuf, len );
+
+            desbuf = (uchar *)malloc( len * 10 );
+            memset( desbuf, 0, len * 10 );
+            err = uncompress( desbuf, &dlen, srcbuf, len );
+            CHECK_ERR(err, "uncompress");  
+
+            // 写文件时调试代码， 方便查看， 最终可以删除或注释
+            sprintf( filename, "f:/F_t_tmp/tmp1/c_%d_stream.txt", obj );
+            writeRawData( filename, desbuf, dlen );
+            
+            free( srcbuf );
+            free( desbuf );
+        }
 
         return desbuf;
     }
@@ -503,7 +563,7 @@
         printf("Root=%d\n",     trailer_p->Root );
         printf("Info=%d\n",     trailer_p->Info );
         printf("ID=%s\n",       trailer_p->ID );
-        printf("Prev=%d\n",     trailer_p->Prev );
+        printf("Prev=%d(%08X)\n",     trailer_p->Prev, trailer_p->Prev );
         printf("xrefStm=%d\n",  trailer_p->xrefStm );
         printf("retcode=%d\n",  trailer_p->retcode );
         return;
@@ -577,6 +637,8 @@
 
         buf = fm_readLine( fm_p );
 
+printf("buf=%s pos=%08X\n", buf, fm_p->pos);
+
         if ( !buf || !strstr( buf, "xref" ) ) {     // 第一行没有"xref", 格式错误
             xref_p->retcode = -40421;
             if ( buf )
@@ -584,9 +646,8 @@
             return -1;
         }
 
-        if ( buf )          // 由于 fm_readLine() 内部会申请内存, 这儿需要先释放之前申请的内存
-            free( buf );
-
+        free( buf );          // 由于 fm_readLine() 内部会申请内存, 这儿需要先释放之前申请的内存
+        
         xref_p->retcode = 0;
 
         return 0;
@@ -613,25 +674,11 @@
             return 1;
         }
 
-        // 开始解析xref数据区第二行
-        item = (char *)strtok( buf, " " );     // 第一行: 1 5267 之类的格式(起始对象编号 对象数量)
-        int     i = 0;
-        while( item != NULL ) {
-            printf( "\nitem-%s\n", item );
-            if ( !IsNumberStr( item ) || i >= 2 )   {   // 如果不是数字 或超过2项， 表示格式不正确
-                free( buf );
-                return -1;
-            }
-            
-            if ( i == 0 )
-                *firstObj = atoi( item );                // 起始对象编号
-            
-            if ( i == 1 ) 
-                *objSum = atoi( item );                  // 对象总数量
-            
-            item = (char *)strtok( NULL, " " );
-            i ++;
-        }
+        // 开始解析xref数据区第二行 1 5267 之类的格式(起始对象编号 对象数量), 如果是 0 1 则说明后面要根据后面trailer的地址继续检索
+
+        *objSum = atoi( strsplit1( buf, ' ', 2 ) );     // 起始对象编号
+        *firstObj = atoi( strsplit1( buf, ' ', 1 ) );   // 对象总数量
+
         free( buf );            // 释放内存
 
         printf( "\nfirstObj=%d, objSum=%d\n", *firstObj, *objSum);
@@ -639,14 +686,20 @@
         return 0;
     }
 
-    // 处理objSum < 1 的情况.  容错处理
-    void procObjSumLT1( FILEMAP *fm_p, XREF * xref_p, POSMAP *posmap_p, TRAILER * trailer_p )
+    // 处理objSum <= 1 的情况.  容错处理, 有可能是0 0  或者  0 1. 如果是0  1, 就要多跳过一行
+    void procObjSumLT1( FILEMAP *fm_p, XREF * xref_p, POSMAP *posmap_p, TRAILER * trailer_p, int objSum )
     {
         char    *   buf;
         int         ret;
 
         xref_p->retcode = -40424;       // 预设一个出错码
         buf = fm_readLine( fm_p );
+    
+printf("procObjSumLT1() buf = %s\n", buf);
+        if ( objSum == 1 ) {
+            free( buf );
+            buf = fm_readLine( fm_p );
+        }
 
         if ( !buf )                    // 无效格式
             return xref_p;
@@ -662,20 +715,19 @@
             if ( !buf )                 // 如果没有下一行数据, 无效格式
                 return xref_p;     
         }
-
+        
         ret = getTrailer( buf, trailer_p );
 
-        if ( trailer_p->retcode < 0 || !strstr( buf, "Prev" ) || trailer_p->Prev <= 0 ) { 
+        if ( trailer_p->retcode < 0 || trailer_p->Prev <= 0 ) { 
             // 无效的xref之后的trailer无效或没有包含有效的self.xref 地址, 则出错返回
             free( buf );
             return xref_p;
         }
 
-        if ( buf )
-            free( buf );
+        free( buf );
 
         xref_p->retcode = 0;
-        
+
         ret = getXREF( fm_p, xref_p, trailer_p->Prev, posmap_p, trailer_p );
     }
 
@@ -764,30 +816,27 @@
         if ( fm_p == NULL )
             return -1;
 
-        // 1. 第一行的处理
-        printf("----------------getxref()----------------1------------\n");
+        // 1. 第一行的处理. 判断是否已经处理过该地址指向的xref(容错处理, 防止死循环), 容错是否有"xref"
         ret = procFirstLine( fm_p, xrefpos, xref_p, posmap_p );
-        printf("----------------getxref()----------------2------------\n");
         if ( ret != 0 ) 
             return -1;
 
-        // 2. 第二行的处理
+        // 2. 第二行的处理.  获取 对象数量, 第一个对象编号
         ret = procSecondLine( fm_p, &firstObj, &objSum, trailer_p );       // 为了增加可读性, 将第一行的处理封装在一个函数中
-        printf("----------------getxref()----------------3------------\n");
         if ( ret < 0 )                     // 返回至不等于0 表示出错了,直接返回xref_p,  xref_p->retcode =-1(初始化de值), 也就是表示出错了
             return -1;
         if ( ret == 1 ) {               // 如果返回1, 表示找到trailer了, 说明需要继续找下一个xref, 嵌套调用getXREF(), 后面的处理跳过
             if ( !trailer_p || trailer_p->retcode < 0 ) {            // 如果trailer无数据, 则出错
                 return -1;
             }
-            printf("\n到这儿了？\n");
             return getXREF( fm_p, xref_p, trailer_p->Prev, posmap_p, trailer_p );
         }
 
         // 3. objSum < 1 的情况容错处理。 这种情况有可能, doc文件转存pdf后, 第一个xref 就是0 0, 
         // 后面的trailer指向新的xref, 这儿应该继续处理trailer， 如果没有Prev 就错了      
-        if ( objSum < 1 ) {
-            procObjSumLT1( fm_p, xref_p, posmap_p, trailer_p );
+        if ( objSum <= 1 ) {
+            printf( "objSum<=1 , objSum=%d\n", objSum );
+            procObjSumLT1( fm_p, xref_p, posmap_p, trailer_p, objSum );
             return 0;
         }
 
@@ -826,12 +875,10 @@
         char    * value;
         int     len;
         
-        printf("===in getItemOfObj() Begin= obj=%d==\n", obj);
         buf = (char *)getObjContent( fm_p, xref_p, obj );
         if ( !buf )
             return NULL;
 
-        printf( "getItemOfObj(), obj=%d,buf=%s\n", obj,  buf );
         tmpbuf = (char *)strtok( buf, "/" );
         while ( tmpbuf != NULL ) {
             if ( strstr( tmpbuf, item ) ) {     // 找到了包含item 的项目 
@@ -870,7 +917,7 @@
      */
     char    * getObjContent( FILEMAP * fm_p, XREF *xref_p, int  objNo )
     {
-        char    * buf=NULL;
+        char    * buf;
 
         if ( !fm_p || !xref_p || objNo <= 0 )       // 无效参数
             return NULL;
@@ -1142,10 +1189,8 @@
 
     void freePAGES( PAGES * pages_p ) 
     {
-        printf("--\n");
         if ( pages_p->leafs_p != NULL )
             free(  pages_p->leafs_p );
-        printf("--\n");
 
         free( pages_p );
     }
@@ -1205,12 +1250,10 @@
             buf = getObjContent( fm_p, xref_p, i );
 
             if ( buf ) {
-                printf( "\n%d||%s\n", i, buf);
                 fprintf( fp, "\n%d(%08X)||%s\n", i, xref_p->objpos_p[i], buf);
                 free( buf );
             }
         }
-        printf( "--------------------------------we------------we---------\n");
 
         fclose( fp );
         return;
@@ -1228,14 +1271,14 @@
     //     调试函数, 把stream中的字节流写入到文件中, 便于查看
     void writeRawData( char * filename, uchar *bytes, int len )
     {
-        FILE        * fp;
-        int         l;
+        FILE        *   fp;
+        size_t          l;
 
         if ( !( fp=fopen( filename, "wb") )) 
             return;
 
         l = fwrite( bytes, len, 1, fp );
-        printf("\n实际写入文件长度l=%d, 应该写入 len=%d\n", l, len);
+        printf("\n写成功次数:l=%d, 应该写入 len=%d\n", l, len);
         fclose( fp );
         
         return ;
@@ -1248,15 +1291,11 @@
         int     len = strlen(buf);
         int     n=0;
 
-        printf("buf=%s!\n", buf);
-        
         while( i < len )  {
             if ( buf[i] == ch )
                 n ++;
             i ++;
         }
-
-        printf("buf=%s,  \'%c\'出现的次数为%d\n", buf, ch, n);
 
         return i;
     }
@@ -1295,7 +1334,6 @@
         memset( pages_p->c_objlist_p, 0, sizeof(int *)*pages_p->total + 1  );
 
         for ( int i=0; i < pages_p->total; i ++ ) {
-            printf("---------------------------%d-------------------\n", i+1);
             buf = (char *)getItemOfObj( fm_p, xref_p, leafs_p[i], "Contents" );
             printf( "叶子对象(第%d页):%d| 内容:%s\n", i+1, leafs_p[i], buf );
 
@@ -1305,7 +1343,9 @@
 
                 pages_p->c_objlist_p[i] = (int *)malloc( sizeof(int ) * (count + 1) );
                 memset(  pages_p->c_objlist_p[i], 0, sizeof(int ) * (count + 1) );
-                ret = getObjList( buf, count, pages_p->c_objlist_p[i] );
+
+                 pages_p->c_objlist_p[i][0] = count;            // 第一个元素(下标为0) 放叶子内容对象数量
+                ret = getObjList( buf, count, &(pages_p->c_objlist_p[i][1]) );
             }
             else {
                 count =1;                   // 没有中括号, 就1个内容对象。 Contents 7 0 R
@@ -1314,7 +1354,8 @@
                 pages_p->c_objlist_p[i] = (int *)malloc( sizeof(int ) * (count + 1) );
                 memset( pages_p->c_objlist_p[i], 0, sizeof(int ) * (count + 1) );
 
-                pages_p->c_objlist_p[i][0] = atoi( strsplit( buf, " ", 2 ) );       // 第二项就是内容对象
+                pages_p->c_objlist_p[i][0] = 1;                                     // 数字第1项(下标为0)就是叶子内容对象数量
+                pages_p->c_objlist_p[i][1] = atoi( strsplit( buf, " ", 2 ) );       // buf 第二项就是内容对象
             }
 
             
@@ -1435,7 +1476,7 @@
     }
 
 
-    // 获取叶子对象 对应的内容对象列表  pages_p->c_objlist_p;
+    // 获取叶子对象 对应的字体对象列表  pages_p->fontmap_p;
     //  pages_p->fontmap_p 是2级指针, 第一级数组是多少个叶子页面, 第二级是页面的字体数组
     int getFontMap( FILEMAP *fm_p, XREF *xref_p, PAGES *pages_p )
     {
@@ -1549,21 +1590,18 @@
 
             if ( strstr( buf, "beginbfchar" ) ) {   // 单个编码映射  100 beginbfchar
                 mapsum = atoi( strsplit1( buf, ' ', 1 ) );
-                //printf("beginbfchar sum=%d\n", mapsum);
                 total += mapsum;
 
                 // <1440> <5E10> , 单行是6+1+6+1 = 14个字节  0A 结尾的
                 mm_seek( mm_p, mm_p->pos + 14 * mapsum );       // 跳过 mapsum 个字符, 也就是编码映射部分
                 free( buf );
                 buf = mm_readLine( mm_p );                      // 跳过  endbfchar
-                printf(" buf = |%s|\n", buf );
                 free( buf );
                 continue;
             }
             
             if ( strstr( buf, "beginbfrange" ) ) {   // 范围编码映射  2 beginbfrange
                 mapsum = atoi( strsplit1( buf, ' ', 1 ) );
-                //printf("beginbfrange sum=%d\n", mapsum);
                 total += mapsum;
                 for ( int i =0; i < mapsum; i ++ ) {        // 跳过 mapsum 行即可
                     buf = mm_readLine( mm_p );
@@ -1683,13 +1721,6 @@
     }PAGES;
      * */
 
-    #define CHECK_ERR(err, msg) { \
-        if (err != Z_OK) { \
-            fprintf(stderr, "%s error: %d\n", msg, err); \
-            exit(1); \
-        } \
-    }
-        
     // 处理Type0 对象, 获取 CMAP 编码
     // <</Filter /FlateDecode /Length 279>>，
     int getCMAP( FILEMAP *fm_p,  XREF *xref_p, CMAP *cmap_p )
@@ -1713,11 +1744,9 @@
         free(buf);
 
         buf = (char*)getObjContent( fm_p, xref_p, cmap_p->obj );
-        printf("buf=%s\n", buf);
         if ( !strstr( buf, "stream" ) ) {            // 用来区分是\r\nstream\r\n 还是stream\r\n
             free( buf );
             buf = (char *)fm_readLine( fm_p );      // 跳过一行
-        printf("buf=%s\n", buf);
             free( buf );
         }
 
@@ -1726,7 +1755,6 @@
         // 现在ubuf 中的字节流就是stream的内容， 下面进行解压, 解压后的内容存放在desbuf, 放在文件中的部分为调试代码, 最后注释或删除了
         char        filename[128];
         sprintf( filename, "f:/F_t_tmp/cmap/c_%d_stream.txt", cmap_p->obj );
-        printf("-----1--\n");
         writeRawData( filename, ubuf, len );
 
         // 解压
@@ -1740,13 +1768,13 @@
 
         // 写文件时调试代码， 方便查看， 最终可以删除或注释
         sprintf( filename, "f:/F_t_tmp/cmap/c_%d_cmap.txt", cmap_p->obj );
-        printf("-----2--\n");
         writeRawData( filename, desbuf, dlen );
 
-        printf("%s\ndlen=%d, len=%d\n", desbuf, dlen, len );
+        printf("dlen=%d, len=%d\n", dlen, len );
 
         ret = procType0Stream( cmap_p, desbuf, dlen );
 
+        free( ubuf );
         free( desbuf );
 
         return ret;

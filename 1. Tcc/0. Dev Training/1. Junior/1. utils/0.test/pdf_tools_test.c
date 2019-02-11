@@ -5,7 +5,7 @@
 
 void main(void)
 {
-	char    srcFile[] = "F:/F_T_tmp/1202.PDF";
+	char    srcFile[] = "F:/F_T_tmp/1218.PDF";
     char    desFile[] = "F:/F_T_tmp/1202_0118.txt";
     
     int     ret;
@@ -18,12 +18,9 @@ void main(void)
 
     //printf( "\nret = %d\n", ret );
 
-    ta = (int *)malloc(sizeof(int) * 15);
-    printf("sizeof ta=%d\n", sizeof(ta));
+    getSpecPage( pdf_p, 1 );
 
     freeALL2( pdf_p );
-
-    getSpecPage( pdf_p, 1 );
 
 
     return;

@@ -18,12 +18,9 @@ void main(void)
 
     //printf( "\nret = %d\n", ret );
 
-    ta = (int *)malloc(sizeof(int) * 5);
-    printf("sizeof ta=%d\n", sizeof(ta));
+    getSpecPage( pdf_p, 1 );
 
     freeALL2( pdf_p );
-
-    getSpecPage( pdf_p, 1 );
 
 
     return;

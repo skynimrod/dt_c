@@ -312,7 +312,7 @@
             rpos = fm_p->pos = start;
             
         // 实际读取长度的处理
-        //printf( "start=%d(%08x), len=%d, buflen=%d" , rpos, rpos, length, buflen );
+        printf( "start=%d(%08x), len=%d, buflen=%d" , rpos, rpos, length, buflen );
         if ( ( rpos + length ) > buflen )
             rlen = buflen - start;
 

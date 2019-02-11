@@ -249,6 +249,8 @@
      #include <stdio.h>
      size_t fwrite(const void * restrict ptr,size_t size, size_t nmemb,FILE * restrict stream);
 
+     返回值是写成功的个数， 对应的是nmemb(写几次)， 而不是写成功的字节数
+
 .==========================================
 
 . 7.19.9  文件位置函数
