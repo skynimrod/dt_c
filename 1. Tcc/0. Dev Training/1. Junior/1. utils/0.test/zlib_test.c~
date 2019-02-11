@@ -612,7 +612,7 @@ int main(argc, argv)
 #else
     test_compress(compr, comprLen, uncompr, uncomprLen);
 
-    printf("after test_compress(), comprLen=%d, uncomprLen=%d\n", comprLen, uncomprLen );
+    printf(after test_compress(), comprLen=%d, uncomprLen=%d\n", comprLen, uncomprLen );
 
     test_gzio((argc > 1 ? argv[1] : TESTFILE),
               uncompr, uncomprLen);

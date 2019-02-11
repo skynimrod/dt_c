@@ -216,7 +216,6 @@
             return NULL; 
         }
 
- printf("--------------------------1----xrefpos=%08X----------\n", xrefpos );       
         // 1. 获取XREF 和 Trailer
         ret = getXREF( pdf_p->fm_p, pdf_p->xref_p, xrefpos, pdf_p->posmap_p, pdf_p->trailer_p );
 
@@ -228,11 +227,9 @@
         print_trailer( pdf_p->trailer_p ); 
         printXREFContent( pdf_p->fm_p, pdf_p->xref_p, "F:/F_T_tmp/tmp1/xrefAll_c.txt" );
 
- printf("--------------------------2--------------\n");       
         // 2. 下面获取页面 叶子对象信息 PAGES->leafs_p
         ret = getPages( pdf_p->fm_p, pdf_p->xref_p, pdf_p->pages_p, pdf_p->trailer_p->Root );
 
- printf("--------------------------3--------------\n");       
         // 下面是CMAP 相关的处理
         // 3. 获取每页对应的内容对象列表pages_p->c_objlist_p 和 字体列表 pages_p->fontmap_p
         getContentMap( pdf_p->fm_p, pdf_p->xref_p, pdf_p->pages_p );
@@ -353,11 +350,9 @@
             len = atoi( strsplit1( buf, ' ', 2 ) );     //
             free( buf );
             buf = getObjContent( pdf_p->fm_p, pdf_p->xref_p, obj ); 
-            printf("------------------asf2-------------buf=%s--len=%d--\n", buf, len );
             if ( !strstr( buf, "stream" ) ) {   // 当前行没有stream的话, 
                 free( buf );
                 buf = fm_readLine( pdf_p->fm_p );            // 跳过 stream\r\n 这一行非数据
-            printf("-------------3----------buf=%s--pdf_p->fm_p->pos=%d--------- pdf_p->fm_p->streamlen=%d---\n", buf, pdf_p->fm_p->pos, pdf_p->fm_p->streamlen );
                 free( buf );
             }
             srcbuf = (uchar *)fm_read( pdf_p->fm_p, len, pdf_p->fm_p->pos ); // 读取指定长度的stream字节流
@@ -365,14 +360,14 @@
             sprintf( filename, "f:/F_t_tmp/tmp1/c_%d_row_stream.dat", obj );
             writeRawData( filename, srcbuf, len );
 
-            desbuf = (uchar *)malloc( len * 10 );
-            memset( desbuf, 0, len * 10 );
+            dlen = len * 10;                    // 注意, dlen 必须初始化足够存放解压后的数据, 否则解压就失败 ***** 很重要 *****
+            desbuf = (uchar *)calloc( dlen );
             err = uncompress( desbuf, &dlen, srcbuf, len );
-            CHECK_ERR(err, "uncompress");  
-
             // 写文件时调试代码， 方便查看， 最终可以删除或注释
+            CHECK_ERR(err, "uncompress");    // 奇怪，明明解压成功了, 但是返回的确实data_error (-3), 只能屏蔽该检测了
             sprintf( filename, "f:/F_t_tmp/tmp1/c_%d_stream.txt", obj );
-            writeRawData( filename, desbuf, dlen );
+            writeRawData( filename, desbuf, dlen );     // 如果 dlen 没有初始化足够大, 就会解压失败
+            printf("desbuf=%s\n", desbuf );
             
             free( srcbuf );
             free( desbuf );
@@ -637,8 +632,6 @@
 
         buf = fm_readLine( fm_p );
 
-printf("buf=%s pos=%08X\n", buf, fm_p->pos);
-
         if ( !buf || !strstr( buf, "xref" ) ) {     // 第一行没有"xref", 格式错误
             xref_p->retcode = -40421;
             if ( buf )
@@ -695,7 +688,6 @@ printf("buf=%s pos=%08X\n", buf, fm_p->pos);
         xref_p->retcode = -40424;       // 预设一个出错码
         buf = fm_readLine( fm_p );
     
-printf("procObjSumLT1() buf = %s\n", buf);
         if ( objSum == 1 ) {
             free( buf );
             buf = fm_readLine( fm_p );
@@ -1759,10 +1751,11 @@ printf("procObjSumLT1() buf = %s\n", buf);
 
         // 解压
         int     err;
-        uLong   dlen;
+        uLong   dlen = len * 6;
 
-        desbuf = (uchar *)malloc( len * 6 );
-        memset( desbuf, 0, len * 6 );
+        //desbuf = (uchar *)malloc( len * 6 );
+        //memset( desbuf, 0, len * 6 );
+        desbuf = (uchar *)calloc( dlen );
         err = uncompress( desbuf, &dlen, ubuf, len );
         CHECK_ERR(err, "uncompress");  
 

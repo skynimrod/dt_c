@@ -33,3 +33,38 @@ uncompress error: -3
       查看 srcbuf 中的字节流, 发现是完全正确的, 但是为啥提示数据格式不对。
 
       1202.pdf 也是可以正常打开的。 用别的pdf再试试。
+
+      增加调试程序, 发现是解码的时候循环了缓冲区2次, 可能与设置的缓冲区大小有关系
+
+       解码cmap的时候
+
+uncompress2() ----1
+uncompress2() ----3
+uncompress2() ----4
+
+       解码内容的时候
+
+uncompress2() ----1
+uncompress2() ----3
+uncompress2() ----4
+uncompress2() ----4
+uncompress error: -3
+
+      解码源码如下:
+
+do {
+        if (stream.avail_out == 0) {
+            stream.avail_out = left > (uLong)max ? max : (uInt)left;
+            left -= stream.avail_out;
+        }
+        if (stream.avail_in == 0) {
+            stream.avail_in = len > (uLong)max ? max : (uInt)len;
+            len -= stream.avail_in;
+        }
+        err = inflate(&stream, Z_NO_FLUSH);
+        printf( "uncompress2() ----4\n");
+    } while (err == Z_OK);
+
+   循环执行第一次的时候是正确的, err == Z_OK, 第二次就出错了
+
+   最关键的原因是, 解压的时候uncomprLen 必须初始化足够大, 最好是原数据长度的10倍, 保证解压后足够存放, 然后实际解压后会将实际解压的数据数量返回到该变量中.
