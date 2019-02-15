@@ -1,8 +1,6 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <malloc.h>
 #include <time.h>
-#include <math.h>
 #include "str_tools.h"
 
     typedef struct __contentMap__ {     // 记录每页中的内容页面对象
@@ -116,29 +114,9 @@ void main(void)
 
     r = (float)a/b;
 
-    printf("%d/%d=%.2f\n", a, b, r );
+    printf("%d/%d=%2.2f\n", a, b, r );
 
     tests( 5, &a);
-    
-    char	tmp[]="0 Tc 0 Tr 48.26 0 Td";
-    char    buf1[12], buf2[12], buf3[12];
-
-    int     i = 0,j = 0;
-    while ( i <= strlen(tmp) ) {  // 没到尾9
-        printf("i=%d, tmp[%d]=%c\n", i, i, tmp[i] );
-        if ( tmp[i] == ' ' || tmp[i] == 0 ) {  // 碰到空格或结尾
-            strcpy( buf1, buf2 );
-            strcpy( buf2, buf3 );
-            memset( buf3, 0, 12 );
-            memcpy( buf3, &tmp[j], i-j );
-            if ( strstr(buf3, "Td" ) )
-                break;
-            j = i+1;  // 空格后下一个字符
-        }
-        i ++;
-    }
-
-    printf("buf1=%s, buf2=%s, buf3=%s\n", buf1, buf2, buf3 );
 
 
     return;

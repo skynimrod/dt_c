@@ -83,10 +83,77 @@
         PAGES       * pages_p;
     } PDF;
 
+    // 解码相关数据信息
+    // 1. tm 信息表
+    typedef struct __tm__ {
+        // tm 信息
+        float       a;
+        float       b;
+        float       c;
+        float       d;
+        float       e;
+        float       f;
+    }TM;
+
+    // 2. cm 信息表
+    typedef struct __cm__ {
+        // tm 信息
+        float       a;
+        float       b;
+        float       c;
+        float       d;
+        float       e;
+        float       f;
+    }CM;
+
+    // 坐标信息
+    #define L_OPR       32
+    typedef struct __cur_xy__ {
+        float       x;          // 相对坐标x
+        float       y;          // 相对坐标y
+        float       ox;         // 原始x 坐标, 经过tm与x计算获得 
+        float       oy;         // 原始y 坐标, 经过tm与y计算获得 
+        char        opr[L_OPR];    // 操作符, 比如"Td", "TD"等
+        TM      *   tm_p;
+    }CUR_XY;
+
+    typedef struct __cellMap__ {
+        int         x;
+        // 单元格信息
+    }CELLMAP;
+
+    typedef struct __cellIndexMap__{
+        // 单元格索引信息
+        int         x;
+    }CELLINDEXMAP;
+
+    typedef struct __textMap__ {
+        // 文本映射表
+        int         x;
+    } TEXTMAP;
+
+    // 一直存放的是最新的tm数据
+    typedef struct __tf__ {
+        // tf 信息
+        int         x;
+    }TF;
+
+    typedef struct __decode__ {
+        CUR_XY          * cur_xy_p;
+        TM              * tm_p;
+        TF              * tf_p;
+        TEXTMAP         * textMap_p;
+        CELLMAP         * cellMap_p;        // 处理表格式需要re
+        CELLINDEXMAP    * cellIndexMap_p;
+
+        
+    }DECODE;
+
     int     parsePDF( char * desfile,  char * srcfile );
     PDF   * parsePDF1( char * srcfile );
     void  __declspec(dllexport)  freeALL2( PDF * pdf_p );
     uchar * getSpecPage( PDF *pdf_p, int pageno );
     
+    void processQ( MEMORYMAP * mm_p )
 
     #endif

@@ -54,6 +54,7 @@
     //      # 99. rlen()
     //      
     //  
+    #include <stdlib.h>
     #include "file_tools.h"
     #include "filemap.h"
     #include "memorymap.h"
@@ -156,6 +157,22 @@
     void    printPAGESContent( FILEMAP * fm_p, XREF * xref_p, PAGES *pages_p, char * filename );
     void    printXREFContent( FILEMAP * fm_p, XREF * xref_p, char * filename );
 
+    // 下面函数是内容解析部分
+    //void processTd( char *buf, CUR_XY * cur_xy_p, TM * tm_p );
+    //void processTD( char * buf, CUR_XY cur_xy_p, TM * tm_p ); 
+    //void getOriginXY( CUR_XY * cur_xy_p, TM * tm_p );
+    //void processTm( char *buf, CUR_XY * cur_xy_p, TM * tm_p );
+    //void processCm( char * buf, CM * cm_p );
+    //void processTstar( char * buf, CUR_XY * cur_xy_p );
+
+    //bool hasTxtPosition( char * buf );
+    //void processTxtPosition( char *buf, CUR_XY * cur_xy_p, TM * tm_p );
+
+    char * processBT( MEMORYMAP *mm_p, char * tmpbuf, DECODE * decode_p );
+    char * processBDC( MEMORYMAP *mm_p, char * tmpbuf, DECODE * decode_p );
+    char * processRE( MEMORYMAP *mm_p, char * tmpbuf, DECODE * decode_p );
+    char * processTf( MEMORYMAP *mm_p, char * tmpbuf, DECODE * decode_p );
+    
     #define CHECK_ERR(err, msg) { \
         if (err != Z_OK) { \
             fprintf(stderr, "%s error: %d\n", msg, err); \
@@ -363,7 +380,7 @@
             writeRawData( filename, srcbuf, len );
 
             dlen = len * 10;                    // 注意, dlen 必须初始化足够存放解压后的数据, 否则解压就失败 ***** 很重要 *****
-            desbuf = (uchar *)calloc( dlen );
+            desbuf = (uchar *)calloc( dlen, 1 );
             err = uncompress( desbuf, &dlen, srcbuf, len );
             // 写文件时调试代码， 方便查看， 最终可以删除或注释
             CHECK_ERR(err, "uncompress");    // 奇怪，明明解压成功了, 但是返回的确实data_error (-3), 只能屏蔽该检测了
@@ -373,8 +390,10 @@
             
             // 记录一下压缩率, 了解压缩成都
             pdf_p->pages_p->comprRatio_p[pageno-1][i] = (float)dlen/len;
-            printf(" 压缩率为:%2.2f\n", pdf_p->pages_p->comprRatio[pageno-1][i] );
+            printf(" 压缩率为:%2.2f\n", pdf_p->pages_p->comprRatio_p[pageno-1][i] );
 
+            sprintf( filename, "f:/F_t_tmp/tmp1/c_%d_decode.dat", obj );
+            //buf = decode( pdf_p, desbuf, filename )
             free( srcbuf );
             free( desbuf );
         }
@@ -1774,7 +1793,7 @@
 
         //desbuf = (uchar *)malloc( len * 6 );
         //memset( desbuf, 0, len * 6 );
-        desbuf = (uchar *)calloc( dlen );
+        desbuf = (uchar *)calloc( dlen, 1 );
         err = uncompress( desbuf, &dlen, ubuf, len );
         CHECK_ERR(err, "uncompress");  
 
@@ -1819,6 +1838,191 @@
         }
             
         return 0;
+    }
+
+
+
+    //###########################################################################
+    //#  以下部分为解析 解压后 页面内容部分
+    /*
+     * 15. decode()
+     *      对给定的字节流进行解码
+     * 思路:
+     *      1. 将每一部分的处理都模块化
+     *      2. 最高一级(I级)是 processBDC, processBT， 所有的处理都在这BDC/EMC, BT/ET 之间， 
+     *         这2中之间也会互相嵌套
+     *      3. II级 处理是: 
+     *          processTD, processTd, processTm, processT*        文本位置
+     *          processTJ, processTj, processQuote, processDblQuote         文本显示, 后两个是单引号, 双引号的处理
+     *          processTc, processTw, processTz, processTL, processTf,processTr, processTs  文本状态
+     *          表格处理？？？
+     *      2016.12.08:
+     *          采用虚拟纸张的技术来进行内容编排, 即 处理后的数据存放在一个虚拟纸张的内存中，然后输出这个数据即可.
+     *          virtual_Page={["Y坐标值": 文字内容],}
+     *          然后输出的时候只要对virtual_Page 按照关键字排序后进行输出即可.
+     *          坐标处理: 当前坐标如果与已有坐标中的某个坐标相差小于1, 则可视为同一行 。 因为最小的字体也会大于1个像素
+     *          {Y:["文字内容","长度", 单位长度]},
+     *               单位长度是文字的字体的长度, 用来判断下一文字是否需要与该文字之间有分隔符
+     *               如果下一段文字的起始x坐标与该文字的x+len 小于单位长度, 则不需要分隔符.
+     *      2016.12.21:
+     *          之前的处理, 还是有很多不完善的地方, 主要是没有按照pdf 的环境的设计思路. 下面完善设计思路, 增加 图形状态stack 实现.
+     *            用GraphStateStack 记录当前压栈的所有 图形状态, cur_graph_state 用来记录当前的图形状态. 考虑到只处理文本,
+     *            图形状态只记录 tm. 
+     * depends on:
+     *        file_tools.initStreamBuf(), .readLineST( streambuf)
+     *        self.processBT(), .processBDC()
+     */
+
+    /*
+     * # 坐标信息, 表格信息(初始化页眉是没有的, -1用于页眉编号), 文本信息, 转换坐标
+    // 坐标信息
+    typedef struct __cur_xy__ {
+        int     x;
+        int     y;
+    }CUR_XY;
+
+    typedef struct __cellMap__ {
+        // 单元格信息
+    }CELLMAP;
+
+    typedef struct __cellIndexMap__{
+        // 单元格索引信息
+    }CELLINDEXMAP;
+
+    typedef struct __textMap__ {
+        // 文本映射表
+    } TEXTMAP;
+
+    typedef struct __tm__ {
+        // tm 信息
+    }TM:
+
+    typedef struct __tf__ {
+        // tf 信息
+    }TF;
+    */
+
+    /*
+     * 15. decode()
+     *      对给定的字节流进行解码
+     * 思路:
+     *      1. 将每一部分的处理都模块化
+     *      2. 最高一级(I级)是 processBDC, processBT， 所有的处理都在这BDC/EMC, BT/ET 之间， 
+     *         这2中之间也会互相嵌套
+     *      3. II级 处理是: 
+     *          processTD, processTd, processTm, processT*        文本位置
+     *          processTJ, processTj, processQuote, processDblQuote         文本显示, 后两个是单引号, 双引号的处理
+     *          processTc, processTw, processTz, processTL, processTf,processTr, processTs  文本状态
+     *          表格处理？？？
+     *      2016.12.08:
+     *          采用虚拟纸张的技术来进行内容编排, 即 处理后的数据存放在一个虚拟纸张的内存中，然后输出这个数据即可.
+     *          virtual_Page={["Y坐标值": 文字内容],}
+     *          然后输出的时候只要对virtual_Page 按照关键字排序后进行输出即可.
+     *          坐标处理: 当前坐标如果与已有坐标中的某个坐标相差小于1, 则可视为同一行 。 因为最小的字体也会大于1个像素
+     *          {Y:["文字内容","长度", 单位长度]},
+     *               单位长度是文字的字体的长度, 用来判断下一文字是否需要与该文字之间有分隔符
+     *               如果下一段文字的起始x坐标与该文字的x+len 小于单位长度, 则不需要分隔符.
+     *      2016.12.21:
+     *          之前的处理, 还是有很多不完善的地方, 主要是没有按照pdf 的环境的设计思路. 下面完善设计思路, 增加 图形状态stack 实现.
+     *            用GraphStateStack 记录当前压栈的所有 图形状态, cur_graph_state 用来记录当前的图形状态. 考虑到只处理文本,
+     *            图形状态只记录 tm. 
+     * depends on:
+     *        file_tools.initStreamBuf(), .readLineST( streambuf)
+     *        self.processBT(), .processBDC()
+     */
+    char * decode( PAGES * pages_p, char * buf, uLong dlen, char * filename ) 
+    {
+        char        *   retbuf;
+        char            tmpbuf[dlen];       // 处理后的内容空间应该不会超过原始字节流空间
+        MEMORYMAP   *   mm_p;
+        DECODE      *   decode_p;
+
+        retbuf = (char *)calloc( dlen, 1 );
+        decode_p = (DECODE *)calloc( sizeof( DECODE ), 1 );
+        
+        mm_p = initMemoryMap( buf, dlen );
+
+        while( 1 ) {    // 注意: 下面的判断不是if else, 因为有可能一行包括多种操作符
+            tmpbuf = mm_readLine( mm_p );
+            if ( !tmpbuf )
+                break;
+            printf( "decode() : tmpbuf = %s\n", tmpbuf );
+            
+            if ( strstr( tmpbuf, "BT" ) ) {         // 如果是 包含"BT"/"ET"
+                sprintf(retbuf, "%s%s", retbuf, processBT( mm_p, tmpbuf, decode_p ) );
+            } 
+            if ( strstr( tmpbuf, "BDC" ) ) { // 如果包含"BDC"/"EMC"
+                sprintf(retbuf, "%s%s", retbuf, processBDC( mm_p, tmpbuf, decode_p ) );
+            } 
+            // re 的处理应该在BT/ET, BDC/EDC 之外, 也就是单元格.
+            if ( strstr( tmpbuf, "re" )  ) {   //包含"re"
+                processRE( mm_p, tmpbuf, decode_p );
+            }
+            if ( strstr( tmpbuf, "Tf") ) {
+                processTf( mm_p, tmpbuf, decode_p );
+            }
+            if ( strstr(tmpbuf, "q" ) || strstr( tmpbuf, "Q" ) ) {
+                memset( decode_p->tm_p, 0, sizeof(TM) );
+            }
+        }
+        // 下面来处理上面解析出来的内容, 包括表格的重新构建
+        //
+        return retbuf;
+    }
+
+
+    /*
+     * 16. processBT()
+     *      处理 BT/ET 内的内容
+     * 入口参数:
+     *      mm-p           字节流映射文件 哈希表, 读取内容的时候需要.
+     *      pages_p        pages_p里面包含字符映射表 哈希表
+     * 出口参数:
+     *      无
+     * 返回值:
+     *      无
+     * 说明:
+     *      处理过程基本同BDC 一致， 就是内部不包含BT的判断, 而是包含了BDC处理的嵌套
+     *      处理后的内容存放在哪儿？？？？？ 文件？？
+     * 2016.12.12:
+     *      Tm 的内容是转换坐标系. [a b c d e f], 定义一个list Tm, 存放最新的转换坐标
+     *      Td/TD 的坐标实际为
+     *           x' = a * x + c * y + e
+     *           y' = b * x + d * y + f
+     * depends on:
+     *       processBDC(), processRE(), //processQ()
+     *       self.hasTxtPosition(), .processTxtPosition(),  .hasText(), .processText(),
+     *       self.file_tools.readLineST()
+     *      
+    # cur_xy = {"cur_opr":,"x":x,"y":y,  "ox":ox,"oy":oy, "tm":{tm}}
+    # textMap = {编号:{"xy":{"x":x,"y":y, "ox":ox,"oy":oy,"tm":{tm}},'txt':txt} }
+    # cellMap = {编号:{'x':,'y':,'w':,'h':}}
+    # tm = {'a':a, 'b':b, 'c':c, 'd':d, 'e':e, 'f':f}    # 一直存放的是最新的tm数据
+     * 
+     */
+    char * processBT( MEMORYMAP *mm_p, char * tmpbuf, DECODE * decode_p )
+    {
+        char    * tmpbuf;
+        char    * retbuf;
+        CUR_XY  * cur_xy_p  = decode_p->cur_xy_p;
+        TM      * tm_p      =  decode_p->tm_p;
+
+        return NULL;
+    }
+    
+    char * processBDC( MEMORYMAP *mm_p, char * tmpbuf, DECODE * decode_p )
+    {
+        return NULL;
+    }
+
+    char * processRE( MEMORYMAP *mm_p, char * tmpbuf, DECODE * decode_p )
+    {
+        return NULL;
+    }
+
+    char * processTf( MEMORYMAP *mm_p, char * tmpbuf, DECODE * decode_p )
+    {
+        return NULL;
     }
 
 
