@@ -1,0 +1,1748 @@
+filemap->filename=F:/F_T_tmp/1202.PDF
+filemap->filelen=451945
+filemap->pos=0
+filemap->filename=F:/F_T_tmp/1202.PDF
+filemap->filelen=451945
+filemap->pos=0
+
+firstObj=0, objSum=97
+xref_p->objpos_p[0]=0000000000000000
+xref_p->objpos_p[1]=0000000000000016
+xref_p->objpos_p[2]=0000000000449529
+xref_p->objpos_p[3]=0000000000000103
+xref_p->objpos_p[4]=0000000000449802
+xref_p->objpos_p[5]=0000000000449831
+xref_p->objpos_p[6]=0000000000000381
+xref_p->objpos_p[7]=0000000000000506
+xref_p->objpos_p[8]=0000000000189858
+xref_p->objpos_p[9]=0000000000189995
+xref_p->objpos_p[10]=0000000000194928
+xref_p->objpos_p[11]=0000000000195116
+xref_p->objpos_p[12]=0000000000195425
+xref_p->objpos_p[13]=0000000000001142
+xref_p->objpos_p[14]=0000000000001295
+xref_p->objpos_p[15]=0000000000340936
+xref_p->objpos_p[16]=0000000000341086
+xref_p->objpos_p[17]=0000000000341457
+xref_p->objpos_p[18]=0000000000341683
+xref_p->objpos_p[19]=0000000000342015
+xref_p->objpos_p[20]=0000000000357003
+xref_p->objpos_p[21]=0000000000357148
+xref_p->objpos_p[22]=0000000000357508
+xref_p->objpos_p[23]=0000000000357719
+xref_p->objpos_p[24]=0000000000358039
+xref_p->objpos_p[25]=0000000000003129
+xref_p->objpos_p[26]=0000000000003282
+xref_p->objpos_p[27]=0000000000006928
+xref_p->objpos_p[28]=0000000000007068
+xref_p->objpos_p[29]=0000000000010297
+xref_p->objpos_p[30]=0000000000010450
+xref_p->objpos_p[31]=0000000000014038
+xref_p->objpos_p[32]=0000000000014191
+xref_p->objpos_p[33]=0000000000094521
+xref_p->objpos_p[34]=0000000000094700
+xref_p->objpos_p[35]=0000000000018025
+xref_p->objpos_p[36]=0000000000097041
+xref_p->objpos_p[37]=0000000000097194
+xref_p->objpos_p[38]=0000000000100123
+xref_p->objpos_p[39]=0000000000100276
+xref_p->objpos_p[40]=0000000000103188
+xref_p->objpos_p[41]=0000000000103341
+xref_p->objpos_p[42]=0000000000106928
+xref_p->objpos_p[43]=0000000000107081
+xref_p->objpos_p[44]=0000000000109995
+xref_p->objpos_p[45]=0000000000110148
+xref_p->objpos_p[46]=0000000000113871
+xref_p->objpos_p[47]=0000000000114024
+xref_p->objpos_p[48]=0000000000117982
+xref_p->objpos_p[49]=0000000000118135
+xref_p->objpos_p[50]=0000000000122227
+xref_p->objpos_p[51]=0000000000122380
+xref_p->objpos_p[52]=0000000000126604
+xref_p->objpos_p[53]=0000000000126744
+xref_p->objpos_p[54]=0000000000130488
+xref_p->objpos_p[55]=0000000000130641
+xref_p->objpos_p[56]=0000000000134833
+xref_p->objpos_p[57]=0000000000134986
+xref_p->objpos_p[58]=0000000000138469
+xref_p->objpos_p[59]=0000000000138622
+xref_p->objpos_p[60]=0000000000141529
+xref_p->objpos_p[61]=0000000000141695
+xref_p->objpos_p[62]=0000000000370277
+xref_p->objpos_p[63]=0000000000370432
+xref_p->objpos_p[64]=0000000000370773
+xref_p->objpos_p[65]=0000000000371019
+xref_p->objpos_p[66]=0000000000371356
+xref_p->objpos_p[67]=0000000000145916
+xref_p->objpos_p[68]=0000000000146069
+xref_p->objpos_p[69]=0000000000149382
+xref_p->objpos_p[70]=0000000000149535
+xref_p->objpos_p[71]=0000000000153285
+xref_p->objpos_p[72]=0000000000153438
+xref_p->objpos_p[73]=0000000000157741
+xref_p->objpos_p[74]=0000000000157894
+xref_p->objpos_p[75]=0000000000162537
+xref_p->objpos_p[76]=0000000000162690
+xref_p->objpos_p[77]=0000000000165849
+xref_p->objpos_p[78]=0000000000166002
+xref_p->objpos_p[79]=0000000000168779
+xref_p->objpos_p[80]=0000000000168932
+xref_p->objpos_p[81]=0000000000171990
+xref_p->objpos_p[82]=0000000000172143
+xref_p->objpos_p[83]=0000000000176068
+xref_p->objpos_p[84]=0000000000176221
+xref_p->objpos_p[85]=0000000000180045
+xref_p->objpos_p[86]=0000000000180211
+xref_p->objpos_p[87]=0000000000385135
+xref_p->objpos_p[88]=0000000000385282
+xref_p->objpos_p[89]=0000000000385635
+xref_p->objpos_p[90]=0000000000385837
+xref_p->objpos_p[91]=0000000000386165
+xref_p->objpos_p[92]=0000000000183696
+xref_p->objpos_p[93]=0000000000183849
+xref_p->objpos_p[94]=0000000000187640
+xref_p->objpos_p[95]=0000000000187793
+xref_p->objpos_p[96]=0000000000194855
+
+第1个项目:trailer<<
+
+第2个项目:Size
+Size 的值为:97
+
+第3个项目:Root
+Root 的值为:1
+
+第4个项目:Info
+Info 的值为:3
+
+第5个项目:0
+
+第6个项目:R
+
+第7个项目:ID
+ID 的值为:[<0899dcceaf9147be9780d97ff9687c11><a17f73e6d9da4f5f8fdac7893a57f6e4>]>>
+Size=97
+Root=1
+Info=3
+ID=[<0899dcceaf9147be9780d97ff9687c11><a17f73e6d9da4f5f8fdac7893a57f6e4>]
+Prev=0(00000000)
+xrefStm=0
+retcode=7
+pages obj = 2
+Pages content =<</Count 32 /Kids [6 0 R 13 0 R 25 0 R 27 0 R 29 0 R 31 0 R 33 0 R 36 0 R 38 0 R 40 0 R 42 0 R 44 0 R 46 0 R 48 0 R 50 0 R 52 0 R 54 0 R 56 0 R 58 0 R 60 0 R 67 0 R 69 0 R 71 0 R 73 0 R 75 0 R 77 0 R 79 0 R 81 0 R 83 0 R 85 0 R 92 0 R 94 0 R] /Type /Pages>>
+pages_p->total = 32
+pages_p->leafs_p[0]=6
+pages_p->leafs_p[1]=13
+pages_p->leafs_p[2]=25
+pages_p->leafs_p[3]=27
+pages_p->leafs_p[4]=29
+pages_p->leafs_p[5]=31
+pages_p->leafs_p[6]=33
+pages_p->leafs_p[7]=36
+pages_p->leafs_p[8]=38
+pages_p->leafs_p[9]=40
+pages_p->leafs_p[10]=42
+pages_p->leafs_p[11]=44
+pages_p->leafs_p[12]=46
+pages_p->leafs_p[13]=48
+pages_p->leafs_p[14]=50
+pages_p->leafs_p[15]=52
+pages_p->leafs_p[16]=54
+pages_p->leafs_p[17]=56
+pages_p->leafs_p[18]=58
+pages_p->leafs_p[19]=60
+pages_p->leafs_p[20]=67
+pages_p->leafs_p[21]=69
+pages_p->leafs_p[22]=71
+pages_p->leafs_p[23]=73
+pages_p->leafs_p[24]=75
+pages_p->leafs_p[25]=77
+pages_p->leafs_p[26]=79
+pages_p->leafs_p[27]=81
+pages_p->leafs_p[28]=83
+pages_p->leafs_p[29]=85
+pages_p->leafs_p[30]=92
+pages_p->leafs_p[31]=94
+叶子对象(第1页):6| 内容:Contents 7 0 R 
+就一个内容对象(buf=Contents 7 0 R )
+
+obj 6 的内容对象为:1|
+叶子对象(第2页):13| 内容:Contents 14 0 R 
+就一个内容对象(buf=Contents 14 0 R )
+
+obj 13 的内容对象为:1|
+叶子对象(第3页):25| 内容:Contents 26 0 R 
+就一个内容对象(buf=Contents 26 0 R )
+
+obj 25 的内容对象为:1|
+叶子对象(第4页):27| 内容:Contents 28 0 R 
+就一个内容对象(buf=Contents 28 0 R )
+
+obj 27 的内容对象为:1|
+叶子对象(第5页):29| 内容:Contents 30 0 R 
+就一个内容对象(buf=Contents 30 0 R )
+
+obj 29 的内容对象为:1|
+叶子对象(第6页):31| 内容:Contents 32 0 R 
+就一个内容对象(buf=Contents 32 0 R )
+
+obj 31 的内容对象为:1|
+叶子对象(第7页):33| 内容:Contents 34 0 R 
+就一个内容对象(buf=Contents 34 0 R )
+
+obj 33 的内容对象为:1|
+叶子对象(第8页):36| 内容:Contents 37 0 R 
+就一个内容对象(buf=Contents 37 0 R )
+
+obj 36 的内容对象为:1|
+叶子对象(第9页):38| 内容:Contents 39 0 R 
+就一个内容对象(buf=Contents 39 0 R )
+
+obj 38 的内容对象为:1|
+叶子对象(第10页):40| 内容:Contents 41 0 R 
+就一个内容对象(buf=Contents 41 0 R )
+
+obj 40 的内容对象为:1|
+叶子对象(第11页):42| 内容:Contents 43 0 R 
+就一个内容对象(buf=Contents 43 0 R )
+
+obj 42 的内容对象为:1|
+叶子对象(第12页):44| 内容:Contents 45 0 R 
+就一个内容对象(buf=Contents 45 0 R )
+
+obj 44 的内容对象为:1|
+叶子对象(第13页):46| 内容:Contents 47 0 R 
+就一个内容对象(buf=Contents 47 0 R )
+
+obj 46 的内容对象为:1|
+叶子对象(第14页):48| 内容:Contents 49 0 R 
+就一个内容对象(buf=Contents 49 0 R )
+
+obj 48 的内容对象为:1|
+叶子对象(第15页):50| 内容:Contents 51 0 R 
+就一个内容对象(buf=Contents 51 0 R )
+
+obj 50 的内容对象为:1|
+叶子对象(第16页):52| 内容:Contents 53 0 R 
+就一个内容对象(buf=Contents 53 0 R )
+
+obj 52 的内容对象为:1|
+叶子对象(第17页):54| 内容:Contents 55 0 R 
+就一个内容对象(buf=Contents 55 0 R )
+
+obj 54 的内容对象为:1|
+叶子对象(第18页):56| 内容:Contents 57 0 R 
+就一个内容对象(buf=Contents 57 0 R )
+
+obj 56 的内容对象为:1|
+叶子对象(第19页):58| 内容:Contents 59 0 R 
+就一个内容对象(buf=Contents 59 0 R )
+
+obj 58 的内容对象为:1|
+叶子对象(第20页):60| 内容:Contents 61 0 R 
+就一个内容对象(buf=Contents 61 0 R )
+
+obj 60 的内容对象为:1|
+叶子对象(第21页):67| 内容:Contents 68 0 R 
+就一个内容对象(buf=Contents 68 0 R )
+
+obj 67 的内容对象为:1|
+叶子对象(第22页):69| 内容:Contents 70 0 R 
+就一个内容对象(buf=Contents 70 0 R )
+
+obj 69 的内容对象为:1|
+叶子对象(第23页):71| 内容:Contents 72 0 R 
+就一个内容对象(buf=Contents 72 0 R )
+
+obj 71 的内容对象为:1|
+叶子对象(第24页):73| 内容:Contents 74 0 R 
+就一个内容对象(buf=Contents 74 0 R )
+
+obj 73 的内容对象为:1|
+叶子对象(第25页):75| 内容:Contents 76 0 R 
+就一个内容对象(buf=Contents 76 0 R )
+
+obj 75 的内容对象为:1|
+叶子对象(第26页):77| 内容:Contents 78 0 R 
+就一个内容对象(buf=Contents 78 0 R )
+
+obj 77 的内容对象为:1|
+叶子对象(第27页):79| 内容:Contents 80 0 R 
+就一个内容对象(buf=Contents 80 0 R )
+
+obj 79 的内容对象为:1|
+叶子对象(第28页):81| 内容:Contents 82 0 R 
+就一个内容对象(buf=Contents 82 0 R )
+
+obj 81 的内容对象为:1|
+叶子对象(第29页):83| 内容:Contents 84 0 R 
+就一个内容对象(buf=Contents 84 0 R )
+
+obj 83 的内容对象为:1|
+叶子对象(第30页):85| 内容:Contents 86 0 R 
+就一个内容对象(buf=Contents 86 0 R )
+
+obj 85 的内容对象为:1|
+叶子对象(第31页):92| 内容:Contents 93 0 R 
+就一个内容对象(buf=Contents 93 0 R )
+
+obj 92 的内容对象为:1|
+叶子对象(第32页):94| 内容:Contents 95 0 R 
+就一个内容对象(buf=Contents 95 0 R )
+
+obj 94 的内容对象为:1|
+叶子对象6| font:<</Contents 7 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 7 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 7 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT8 8 0 R>>>> 
+叶子对象13| font:<</Contents 14 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 14 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 14 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象25| font:<</Contents 26 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 26 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 26 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象27| font:<</Contents 28 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 28 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 28 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象29| font:<</Contents 30 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 30 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 30 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象31| font:<</Contents 32 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 32 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 32 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象33| font:<</Contents 34 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>> /XObject <</IM35 35 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 34 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>> /XObject <</IM35 35 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 34 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>> 
+叶子对象36| font:<</Contents 37 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 37 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 37 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象38| font:<</Contents 39 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 39 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 39 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象40| font:<</Contents 41 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 41 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 41 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象42| font:<</Contents 43 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 43 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 43 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象44| font:<</Contents 45 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 45 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 45 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象46| font:<</Contents 47 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 47 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 47 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象48| font:<</Contents 49 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 49 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 49 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象50| font:<</Contents 51 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 51 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 51 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象52| font:<</Contents 53 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 53 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 53 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象54| font:<</Contents 55 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 55 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 55 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象56| font:<</Contents 57 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 57 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 57 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象58| font:<</Contents 59 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 59 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 59 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象60| font:<</Contents 61 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT62 62 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 61 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT62 62 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 61 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT62 62 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象67| font:<</Contents 68 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 68 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 68 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象69| font:<</Contents 70 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 70 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 70 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象71| font:<</Contents 72 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 72 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 72 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象73| font:<</Contents 74 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 74 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 74 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象75| font:<</Contents 76 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 76 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 76 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象77| font:<</Contents 78 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 78 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 78 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象79| font:<</Contents 80 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 80 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 80 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象81| font:<</Contents 82 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 82 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 82 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象83| font:<</Contents 84 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 84 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 84 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象85| font:<</Contents 86 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R /FT87 87 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 86 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R /FT87 87 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 86 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R 
+Font 信息: FT87 87 0 R>>>> 
+叶子对象92| font:<</Contents 93 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 93 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 93 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+叶子对象94| font:<</Contents 95 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+
+获取Font 数据:<</Contents 95 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+item = <<
+item = Contents 95 0 R 
+item = MediaBox [0 0 595.3 841.9] 
+item = Parent 2 0 R 
+item = Resources <<
+item = Font <<
+Font 信息: FT15 15 0 R 
+Font 信息: FT20 20 0 R 
+Font 信息: FT8 8 0 R>>>> 
+type0 count=5, type0 list:{ FT8 8 FT15 15 FT20 20 FT62 62 FT87 87}
+0: n=1, 字体名称:FT8
+0: n=2 字体对象编号:8
+1: n=3, 字体名称:FT15
+1: n=4 字体对象编号:15
+2: n=5, 字体名称:FT20
+2: n=6 字体对象编号:20
+3: n=7, 字体名称:FT62
+3: n=8 字体对象编号:62
+4: n=9, 字体名称:FT87
+4: n=10 字体对象编号:87
+字节流长度为4786
+
+写成功次数:l=1, 应该写入 len=4786
+cmap_p->obj=9, 压缩率为=2.84
+写成功次数:l=1, 应该写入 len=13590
+dlen=13590, len=4786
+-----------------------------------------cmap total=931
+字节流长度为297
+
+写成功次数:l=1, 应该写入 len=297
+cmap_p->obj=16, 压缩率为=1.89
+写成功次数:l=1, 应该写入 len=560
+dlen=560, len=297
+-----------------------------------------cmap total=17
+字节流长度为286
+
+写成功次数:l=1, 应该写入 len=286
+cmap_p->obj=21, 压缩率为=1.81
+写成功次数:l=1, 应该写入 len=518
+dlen=518, len=286
+-----------------------------------------cmap total=14
+字节流长度为267
+
+写成功次数:l=1, 应该写入 len=267
+cmap_p->obj=63, 压缩率为=1.73
+写成功次数:l=1, 应该写入 len=462
+dlen=462, len=267
+-----------------------------------------cmap total=10
+字节流长度为279
+
+写成功次数:l=1, 应该写入 len=279
+cmap_p->obj=88, 压缩率为=1.66
+写成功次数:l=1, 应该写入 len=462
+dlen=462, len=279
+-----------------------------------------cmap total=10
+第1页的叶子对象有1个
+第1个叶子内容对象为: 7
+
+写成功次数:l=1, 应该写入 len=563
+
+写成功次数:l=1, 应该写入 len=2806
+ 压缩率为:4.98
+decode() : tmpbuf = 1 0 0 -1 0 841.9 cm
+decode() : tmpbuf = q
+decode() : tmpbuf = 0 0 595.3 841.9 re
+包含re-------------
+decode() : tmpbuf = W* n
+decode() : tmpbuf = 0 w
+decode() : tmpbuf = 2 M
+decode() : tmpbuf = 2 J
+decode() : tmpbuf = 2 j
+decode() : tmpbuf = 0 0 0 RG
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 0 0 0 rg
+
+hasTxtPosition():0 0 0 rg
+processBT() tmpbuf = /FT8 480 Tf
+----------------------------------------------tf=FT8----------------------
+
+hasTxtPosition():/FT8 480 Tf
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.6864 w
+
+hasTxtPosition():0.6864 w
+processBT() tmpbuf = 0.05 0 0 -0.05 81.24 158.57 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 81.24 158.57 Tm
+processTxtPosition(): 0.05 0 0 -0.05 81.24 158.57 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 81.24 158.57 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=81.240
+----------tm_p->f=158.570
+----------------cur_xy_p->x=81.240
+----------------cur_xy_p->y=158.570
+----------------cur_xy_p->ox=81.240
+----------------cur_xy_p->oy=158.570
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 81.24 158.57 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=81.240
+----------tm_p->f=158.570
+----------------cur_xy_p->x=81.240
+----------------cur_xy_p->y=158.570
+----------------cur_xy_p->ox=81.240
+----------------cur_xy_p->oy=158.570
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <547F>Tj 482.391 0 TD<097E>Tj 482.391 0 TD<0D2D>Tj 480 0 TD<41F1>Tj 482.391 0 TD<4AD2>Tj 482.391 0 TD<4AF1>Tj 482.391 0 TD<3E7C>Tj 480 0 TD<044A>Tj 482.391 0 TD<1937>Tj 482.391 0 TD<1BA0>Tj 482.391 0 TD<0836>Tj 482.391 0 TD<34D7>Tj 480 0 TD<41F1>Tj 482.391 0 TD<0868>Tj 482.391 0 TD<18C5>Tj 482.391 0 TD<4374>Tj 480 0 TD<0E2A>Tj
+
+hasTxtPosition():<547F>Tj 482.391 0 TD<097E>Tj 482.391 0 TD<0D2D>Tj 480 0 TD<41F1>Tj 482.391 0 TD<4AD2>Tj 482.391 0 TD<4AF1>Tj 482.391 0 TD<3E7C>Tj 480 0 TD<044A>Tj 482.391 0 TD<1937>Tj 482.391 0 TD<1BA0>Tj 482.391 0 TD<0836>Tj 482.391 0 TD<34D7>Tj 480 0 TD<41F1>Tj 482.391 0 TD<0868>Tj 482.391 0 TD<18C5>Tj 482.391 0 TD<4374>Tj 480 0 TD<0E2A>Tj
+processTxtPosition(): <547F>Tj 482.391 0 TD<097E>Tj 482.391 0 TD<0D2D>Tj 480 0 TD<41F1>Tj 482.391 0 TD<4AD2>Tj 482.391 0 TD<4AF1>Tj 482.391 0 TD<3E7C>Tj 480 0 TD<044A>Tj 482.391 0 TD<1937>Tj 482.391 0 TD<1BA0>Tj 482.391 0 TD<0836>Tj 482.391 0 TD<34D7>Tj 480 0 TD<41F1>Tj 482.391 0 TD<0868>Tj 482.391 0 TD<18C5>Tj 482.391 0 TD<4374>Tj 480 0 TD<0E2A>Tj
+processTD() buf=<547F>Tj 482.391 0 TD<097E>Tj 482.391 0 TD<0D2D>Tj 480 0 TD<41F1>Tj 482.391 0 TD<4AD2>Tj 482.391 0 TD<4AF1>Tj 482.391 0 TD<3E7C>Tj 480 0 TD<044A>Tj 482.391 0 TD<1937>Tj 482.391 0 TD<1BA0>Tj 482.391 0 TD<0836>Tj 482.391 0 TD<34D7>Tj 480 0 TD<41F1>Tj 482.391 0 TD<0868>Tj 482.391 0 TD<18C5>Tj 482.391 0 TD<4374>Tj 480 0 TD<0E2A>Tj
+buf1=480, buf2=0, buf3=TD<0E2A>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.6864 w
+
+hasTxtPosition():0.6864 w
+processBT() tmpbuf = 0.05 0 0 -0.05 490.8 158.57 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 490.8 158.57 Tm
+processTxtPosition(): 0.05 0 0 -0.05 490.8 158.57 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 490.8 158.57 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=490.800
+----------tm_p->f=158.570
+----------------cur_xy_p->x=490.800
+----------------cur_xy_p->y=158.570
+----------------cur_xy_p->ox=490.800
+----------------cur_xy_p->oy=158.570
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 490.8 158.57 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=490.800
+----------tm_p->f=158.570
+----------------cur_xy_p->x=490.800
+----------------cur_xy_p->y=158.570
+----------------cur_xy_p->ox=490.800
+----------------cur_xy_p->oy=158.570
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <4801>Tj
+
+hasTxtPosition():<4801>Tj
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.6864 w
+
+hasTxtPosition():0.6864 w
+processBT() tmpbuf = 0.05 0 0 -0.05 174.359 189.77 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 174.359 189.77 Tm
+processTxtPosition(): 0.05 0 0 -0.05 174.359 189.77 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 174.359 189.77 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=174.359
+----------tm_p->f=189.770
+----------------cur_xy_p->x=174.359
+----------------cur_xy_p->y=189.770
+----------------cur_xy_p->ox=174.359
+----------------cur_xy_p->oy=189.770
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 174.359 189.77 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=174.359
+----------tm_p->f=189.770
+----------------cur_xy_p->x=174.359
+----------------cur_xy_p->y=189.770
+----------------cur_xy_p->ox=174.359
+----------------cur_xy_p->oy=189.770
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <0015>Tj 242.391 0 TD<0013>Tj 242.391 0 TD<0014>Tj 242.391 0 TD<0019>Tj
+
+hasTxtPosition():<0015>Tj 242.391 0 TD<0013>Tj 242.391 0 TD<0014>Tj 242.391 0 TD<0019>Tj
+processTxtPosition(): <0015>Tj 242.391 0 TD<0013>Tj 242.391 0 TD<0014>Tj 242.391 0 TD<0019>Tj
+processTD() buf=<0015>Tj 242.391 0 TD<0013>Tj 242.391 0 TD<0014>Tj 242.391 0 TD<0019>Tj
+buf1=242.391, buf2=0, buf3=TD<0019>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.6864 w
+
+hasTxtPosition():0.6864 w
+processBT() tmpbuf = 0.05 0 0 -0.05 228.72 189.77 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 228.72 189.77 Tm
+processTxtPosition(): 0.05 0 0 -0.05 228.72 189.77 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 228.72 189.77 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=228.720
+----------tm_p->f=189.770
+----------------cur_xy_p->x=228.720
+----------------cur_xy_p->y=189.770
+----------------cur_xy_p->ox=228.720
+----------------cur_xy_p->oy=189.770
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 228.72 189.77 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=228.720
+----------tm_p->f=189.770
+----------------cur_xy_p->x=228.720
+----------------cur_xy_p->y=189.770
+----------------cur_xy_p->ox=228.720
+----------------cur_xy_p->oy=189.770
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <14A4>Tj 482.391 0 TD<097A>Tj 482.391 0 TD<14A4>Tj 480 0 TD<14D6>Tj 482.391 0 TD<18D5>Tj 482.391 0 TD<0A7A>Tj
+
+hasTxtPosition():<14A4>Tj 482.391 0 TD<097A>Tj 482.391 0 TD<14A4>Tj 480 0 TD<14D6>Tj 482.391 0 TD<18D5>Tj 482.391 0 TD<0A7A>Tj
+processTxtPosition(): <14A4>Tj 482.391 0 TD<097A>Tj 482.391 0 TD<14A4>Tj 480 0 TD<14D6>Tj 482.391 0 TD<18D5>Tj 482.391 0 TD<0A7A>Tj
+processTD() buf=<14A4>Tj 482.391 0 TD<097A>Tj 482.391 0 TD<14A4>Tj 480 0 TD<14D6>Tj 482.391 0 TD<18D5>Tj 482.391 0 TD<0A7A>Tj
+buf1=482.391, buf2=0, buf3=TD<0A7A>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.6864 w
+
+hasTxtPosition():0.6864 w
+processBT() tmpbuf = 0.05 0 0 -0.05 373.2 189.77 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 373.2 189.77 Tm
+processTxtPosition(): 0.05 0 0 -0.05 373.2 189.77 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 373.2 189.77 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=373.200
+----------tm_p->f=189.770
+----------------cur_xy_p->x=373.200
+----------------cur_xy_p->y=189.770
+----------------cur_xy_p->ox=373.200
+----------------cur_xy_p->oy=189.770
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 373.2 189.77 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=373.200
+----------tm_p->f=189.770
+----------------cur_xy_p->x=373.200
+----------------cur_xy_p->y=189.770
+----------------cur_xy_p->ox=373.200
+----------------cur_xy_p->oy=189.770
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <1A88>Tj 482.391 0 TD<3FB1>Tj
+
+hasTxtPosition():<1A88>Tj 482.391 0 TD<3FB1>Tj
+processTxtPosition(): <1A88>Tj 482.391 0 TD<3FB1>Tj
+processTD() buf=<1A88>Tj 482.391 0 TD<3FB1>Tj
+buf1=482.391, buf2=0, buf3=TD<3FB1>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = /FT8 281 Tf
+----------------------------------------------tf=FT8----------------------
+
+hasTxtPosition():/FT8 281 Tf
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.40183 w
+
+hasTxtPosition():0.40183 w
+processBT() tmpbuf = 0.05 0 0 -0.05 243.12 248.69 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 243.12 248.69 Tm
+processTxtPosition(): 0.05 0 0 -0.05 243.12 248.69 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 243.12 248.69 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=243.120
+----------tm_p->f=248.690
+----------------cur_xy_p->x=243.120
+----------------cur_xy_p->y=248.690
+----------------cur_xy_p->ox=243.120
+----------------cur_xy_p->oy=248.690
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 243.12 248.69 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=243.120
+----------tm_p->f=248.690
+----------------cur_xy_p->x=243.120
+----------------cur_xy_p->y=248.690
+----------------cur_xy_p->ox=243.120
+----------------cur_xy_p->oy=248.690
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj
+
+hasTxtPosition():<0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj
+processTxtPosition(): <0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj
+processTD() buf=<0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj
+buf1=141.594, buf2=0, buf3=TD<0019>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.40183 w
+
+hasTxtPosition():0.40183 w
+processBT() tmpbuf = 0.05 0 0 -0.05 274.8 248.69 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 274.8 248.69 Tm
+processTxtPosition(): 0.05 0 0 -0.05 274.8 248.69 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 274.8 248.69 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=274.800
+----------tm_p->f=248.690
+----------------cur_xy_p->x=274.800
+----------------cur_xy_p->y=248.690
+----------------cur_xy_p->ox=274.800
+----------------cur_xy_p->oy=248.690
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 274.8 248.69 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=274.800
+----------tm_p->f=248.690
+----------------cur_xy_p->x=274.800
+----------------cur_xy_p->y=248.690
+----------------cur_xy_p->ox=274.800
+----------------cur_xy_p->oy=248.690
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <14A4>Tj
+
+hasTxtPosition():<14A4>Tj
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.40183 w
+
+hasTxtPosition():0.40183 w
+processBT() tmpbuf = 0.05 0 0 -0.05 292.44 248.69 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 292.44 248.69 Tm
+processTxtPosition(): 0.05 0 0 -0.05 292.44 248.69 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 292.44 248.69 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=292.440
+----------tm_p->f=248.690
+----------------cur_xy_p->x=292.440
+----------------cur_xy_p->y=248.690
+----------------cur_xy_p->ox=292.440
+----------------cur_xy_p->oy=248.690
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 292.44 248.69 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=292.440
+----------tm_p->f=248.690
+----------------cur_xy_p->x=292.440
+----------------cur_xy_p->y=248.690
+----------------cur_xy_p->ox=292.440
+----------------cur_xy_p->oy=248.690
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <0019>Tj
+
+hasTxtPosition():<0019>Tj
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.40183 w
+
+hasTxtPosition():0.40183 w
+processBT() tmpbuf = 0.05 0 0 -0.05 303 248.69 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 303 248.69 Tm
+processTxtPosition(): 0.05 0 0 -0.05 303 248.69 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 303 248.69 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=303.000
+----------tm_p->f=248.690
+----------------cur_xy_p->x=303.000
+----------------cur_xy_p->y=248.690
+----------------cur_xy_p->ox=303.000
+----------------cur_xy_p->oy=248.690
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 303 248.69 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=303.000
+----------tm_p->f=248.690
+----------------cur_xy_p->x=303.000
+----------------cur_xy_p->y=248.690
+----------------cur_xy_p->ox=303.000
+----------------cur_xy_p->oy=248.690
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <1D38>Tj
+
+hasTxtPosition():<1D38>Tj
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.40183 w
+
+hasTxtPosition():0.40183 w
+processBT() tmpbuf = 0.05 0 0 -0.05 320.52 248.69 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 320.52 248.69 Tm
+processTxtPosition(): 0.05 0 0 -0.05 320.52 248.69 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 320.52 248.69 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=320.520
+----------tm_p->f=248.690
+----------------cur_xy_p->x=320.520
+----------------cur_xy_p->y=248.690
+----------------cur_xy_p->ox=320.520
+----------------cur_xy_p->oy=248.690
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 320.52 248.69 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=320.520
+----------tm_p->f=248.690
+----------------cur_xy_p->x=320.520
+----------------cur_xy_p->y=248.690
+----------------cur_xy_p->ox=320.520
+----------------cur_xy_p->oy=248.690
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <0016>Tj 141.594 0 TD<0013>Tj
+
+hasTxtPosition():<0016>Tj 141.594 0 TD<0013>Tj
+processTxtPosition(): <0016>Tj 141.594 0 TD<0013>Tj
+processTD() buf=<0016>Tj 141.594 0 TD<0013>Tj
+buf1=141.594, buf2=0, buf3=TD<0013>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.40183 w
+
+hasTxtPosition():0.40183 w
+processBT() tmpbuf = 0.05 0 0 -0.05 338.04 248.69 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 338.04 248.69 Tm
+processTxtPosition(): 0.05 0 0 -0.05 338.04 248.69 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 338.04 248.69 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=338.040
+----------tm_p->f=248.690
+----------------cur_xy_p->x=338.040
+----------------cur_xy_p->y=248.690
+----------------cur_xy_p->ox=338.040
+----------------cur_xy_p->oy=248.690
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 338.04 248.69 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=338.040
+----------tm_p->f=248.690
+----------------cur_xy_p->x=338.040
+----------------cur_xy_p->y=248.690
+----------------cur_xy_p->ox=338.040
+----------------cur_xy_p->oy=248.690
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <1C15>Tj
+
+hasTxtPosition():<1C15>Tj
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.40183 w
+
+hasTxtPosition():0.40183 w
+processBT() tmpbuf = 0.05 0 0 -0.05 160.559 591.89 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 160.559 591.89 Tm
+processTxtPosition(): 0.05 0 0 -0.05 160.559 591.89 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 160.559 591.89 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=160.559
+----------tm_p->f=591.890
+----------------cur_xy_p->x=160.559
+----------------cur_xy_p->y=591.890
+----------------cur_xy_p->ox=160.559
+----------------cur_xy_p->oy=591.890
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 160.559 591.89 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=160.559
+----------tm_p->f=591.890
+----------------cur_xy_p->x=160.559
+----------------cur_xy_p->y=591.890
+----------------cur_xy_p->ox=160.559
+----------------cur_xy_p->oy=591.890
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<2A36>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj
+
+hasTxtPosition():<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<2A36>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj
+processTxtPosition(): <0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<2A36>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj
+processTD() buf=<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<2A36>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj
+buf1=283.188, buf2=0, buf3=TD<02D6>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.40183 w
+
+hasTxtPosition():0.40183 w
+processBT() tmpbuf = 0.05 0 0 -0.05 244.8 591.89 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 244.8 591.89 Tm
+processTxtPosition(): 0.05 0 0 -0.05 244.8 591.89 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 244.8 591.89 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=244.800
+----------tm_p->f=591.890
+----------------cur_xy_p->x=244.800
+----------------cur_xy_p->y=591.890
+----------------cur_xy_p->ox=244.800
+----------------cur_xy_p->oy=591.890
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 244.8 591.89 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=244.800
+----------tm_p->f=591.890
+----------------cur_xy_p->x=244.800
+----------------cur_xy_p->y=591.890
+----------------cur_xy_p->ox=244.800
+----------------cur_xy_p->oy=591.890
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <547F>Tj 280.797 0 TD<097E>Tj 280.797 0 TD<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 283.188 0 TD<2A36>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj
+
+hasTxtPosition():<547F>Tj 280.797 0 TD<097E>Tj 280.797 0 TD<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 283.188 0 TD<2A36>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj
+processTxtPosition(): <547F>Tj 280.797 0 TD<097E>Tj 280.797 0 TD<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 283.188 0 TD<2A36>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj
+processTD() buf=<547F>Tj 280.797 0 TD<097E>Tj 280.797 0 TD<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 283.188 0 TD<2A36>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj
+buf1=280.797, buf2=0, buf3=TD<0A28>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.40183 w
+
+hasTxtPosition():0.40183 w
+processBT() tmpbuf = 0.05 0 0 -0.05 160.559 623.09 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 160.559 623.09 Tm
+processTxtPosition(): 0.05 0 0 -0.05 160.559 623.09 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 160.559 623.09 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=160.559
+----------tm_p->f=623.090
+----------------cur_xy_p->x=160.559
+----------------cur_xy_p->y=623.090
+----------------cur_xy_p->ox=160.559
+----------------cur_xy_p->oy=623.090
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 160.559 623.09 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=160.559
+----------tm_p->f=623.090
+----------------cur_xy_p->x=160.559
+----------------cur_xy_p->y=623.090
+----------------cur_xy_p->ox=160.559
+----------------cur_xy_p->oy=623.090
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<1888>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj
+
+hasTxtPosition():<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<1888>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj
+processTxtPosition(): <0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<1888>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj
+processTD() buf=<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<1888>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj
+buf1=283.188, buf2=0, buf3=TD<02D6>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.40183 w
+
+hasTxtPosition():0.40183 w
+processBT() tmpbuf = 0.05 0 0 -0.05 244.8 623.09 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 244.8 623.09 Tm
+processTxtPosition(): 0.05 0 0 -0.05 244.8 623.09 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 244.8 623.09 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=244.800
+----------tm_p->f=623.090
+----------------cur_xy_p->x=244.800
+----------------cur_xy_p->y=623.090
+----------------cur_xy_p->ox=244.800
+----------------cur_xy_p->oy=623.090
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 244.8 623.09 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=244.800
+----------tm_p->f=623.090
+----------------cur_xy_p->x=244.800
+----------------cur_xy_p->y=623.090
+----------------cur_xy_p->ox=244.800
+----------------cur_xy_p->oy=623.090
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <190B>Tj 280.797 0 TD<0B76>Tj 280.797 0 TD<4B26>Tj 280.797 0 TD<3E7C>Tj 280.797 0 TD<36D1>Tj 283.188 0 TD<052D>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj
+
+hasTxtPosition():<190B>Tj 280.797 0 TD<0B76>Tj 280.797 0 TD<4B26>Tj 280.797 0 TD<3E7C>Tj 280.797 0 TD<36D1>Tj 283.188 0 TD<052D>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj
+processTxtPosition(): <190B>Tj 280.797 0 TD<0B76>Tj 280.797 0 TD<4B26>Tj 280.797 0 TD<3E7C>Tj 280.797 0 TD<36D1>Tj 283.188 0 TD<052D>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj
+processTD() buf=<190B>Tj 280.797 0 TD<0B76>Tj 280.797 0 TD<4B26>Tj 280.797 0 TD<3E7C>Tj 280.797 0 TD<36D1>Tj 283.188 0 TD<052D>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj
+buf1=280.797, buf2=0, buf3=TD<0A28>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.40183 w
+
+hasTxtPosition():0.40183 w
+processBT() tmpbuf = 0.05 0 0 -0.05 160.559 654.29 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 160.559 654.29 Tm
+processTxtPosition(): 0.05 0 0 -0.05 160.559 654.29 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 160.559 654.29 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=160.559
+----------tm_p->f=654.290
+----------------cur_xy_p->x=160.559
+----------------cur_xy_p->y=654.290
+----------------cur_xy_p->ox=160.559
+----------------cur_xy_p->oy=654.290
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 160.559 654.29 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=160.559
+----------tm_p->f=654.290
+----------------cur_xy_p->x=160.559
+----------------cur_xy_p->y=654.290
+----------------cur_xy_p->ox=160.559
+----------------cur_xy_p->oy=654.290
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <4631>Tj 280.797 0 TD<082A>Tj 280.797 0 TD<1C15>Tj 280.797 0 TD<1D4F>Tj 280.797 0 TD<02D6>Tj
+
+hasTxtPosition():<4631>Tj 280.797 0 TD<082A>Tj 280.797 0 TD<1C15>Tj 280.797 0 TD<1D4F>Tj 280.797 0 TD<02D6>Tj
+processTxtPosition(): <4631>Tj 280.797 0 TD<082A>Tj 280.797 0 TD<1C15>Tj 280.797 0 TD<1D4F>Tj 280.797 0 TD<02D6>Tj
+processTD() buf=<4631>Tj 280.797 0 TD<082A>Tj 280.797 0 TD<1C15>Tj 280.797 0 TD<1D4F>Tj 280.797 0 TD<02D6>Tj
+buf1=280.797, buf2=0, buf3=TD<02D6>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.40183 w
+
+hasTxtPosition():0.40183 w
+processBT() tmpbuf = 0.05 0 0 -0.05 230.759 654.29 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 230.759 654.29 Tm
+processTxtPosition(): 0.05 0 0 -0.05 230.759 654.29 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 230.759 654.29 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=230.759
+----------tm_p->f=654.290
+----------------cur_xy_p->x=230.759
+----------------cur_xy_p->y=654.290
+----------------cur_xy_p->ox=230.759
+----------------cur_xy_p->oy=654.290
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 230.759 654.29 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=230.759
+----------tm_p->f=654.290
+----------------cur_xy_p->x=230.759
+----------------cur_xy_p->y=654.290
+----------------cur_xy_p->ox=230.759
+----------------cur_xy_p->oy=654.290
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj
+
+hasTxtPosition():<0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj
+processTxtPosition(): <0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj
+processTD() buf=<0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj
+buf1=141.594, buf2=0, buf3=TD<0019>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.40183 w
+
+hasTxtPosition():0.40183 w
+processBT() tmpbuf = 0.05 0 0 -0.05 262.44 654.29 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 262.44 654.29 Tm
+processTxtPosition(): 0.05 0 0 -0.05 262.44 654.29 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 262.44 654.29 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=262.440
+----------tm_p->f=654.290
+----------------cur_xy_p->x=262.440
+----------------cur_xy_p->y=654.290
+----------------cur_xy_p->ox=262.440
+----------------cur_xy_p->oy=654.290
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 262.44 654.29 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=262.440
+----------tm_p->f=654.290
+----------------cur_xy_p->x=262.440
+----------------cur_xy_p->y=654.290
+----------------cur_xy_p->ox=262.440
+----------------cur_xy_p->oy=654.290
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <14A4>Tj
+
+hasTxtPosition():<14A4>Tj
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.40183 w
+
+hasTxtPosition():0.40183 w
+processBT() tmpbuf = 0.05 0 0 -0.05 280.08 654.29 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 280.08 654.29 Tm
+processTxtPosition(): 0.05 0 0 -0.05 280.08 654.29 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 280.08 654.29 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=280.080
+----------tm_p->f=654.290
+----------------cur_xy_p->x=280.080
+----------------cur_xy_p->y=654.290
+----------------cur_xy_p->ox=280.080
+----------------cur_xy_p->oy=654.290
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 280.08 654.29 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=280.080
+----------tm_p->f=654.290
+----------------cur_xy_p->x=280.080
+----------------cur_xy_p->y=654.290
+----------------cur_xy_p->ox=280.080
+----------------cur_xy_p->oy=654.290
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <001B>Tj
+
+hasTxtPosition():<001B>Tj
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.40183 w
+
+hasTxtPosition():0.40183 w
+processBT() tmpbuf = 0.05 0 0 -0.05 290.64 654.29 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 290.64 654.29 Tm
+processTxtPosition(): 0.05 0 0 -0.05 290.64 654.29 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 290.64 654.29 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=290.640
+----------tm_p->f=654.290
+----------------cur_xy_p->x=290.640
+----------------cur_xy_p->y=654.290
+----------------cur_xy_p->ox=290.640
+----------------cur_xy_p->oy=654.290
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 290.64 654.29 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=290.640
+----------tm_p->f=654.290
+----------------cur_xy_p->x=290.640
+----------------cur_xy_p->y=654.290
+----------------cur_xy_p->ox=290.640
+----------------cur_xy_p->oy=654.290
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <1D38>Tj
+
+hasTxtPosition():<1D38>Tj
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.40183 w
+
+hasTxtPosition():0.40183 w
+processBT() tmpbuf = 0.05 0 0 -0.05 308.159 654.29 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 308.159 654.29 Tm
+processTxtPosition(): 0.05 0 0 -0.05 308.159 654.29 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 308.159 654.29 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=308.159
+----------tm_p->f=654.290
+----------------cur_xy_p->x=308.159
+----------------cur_xy_p->y=654.290
+----------------cur_xy_p->ox=308.159
+----------------cur_xy_p->oy=654.290
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 308.159 654.29 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=308.159
+----------tm_p->f=654.290
+----------------cur_xy_p->x=308.159
+----------------cur_xy_p->y=654.290
+----------------cur_xy_p->ox=308.159
+----------------cur_xy_p->oy=654.290
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <0015>Tj 141.594 0 TD<001C>Tj
+
+hasTxtPosition():<0015>Tj 141.594 0 TD<001C>Tj
+processTxtPosition(): <0015>Tj 141.594 0 TD<001C>Tj
+processTD() buf=<0015>Tj 141.594 0 TD<001C>Tj
+buf1=141.594, buf2=0, buf3=TD<001C>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 2 Tr
+
+hasTxtPosition():2 Tr
+processBT() tmpbuf = 0.40183 w
+
+hasTxtPosition():0.40183 w
+processBT() tmpbuf = 0.05 0 0 -0.05 325.8 654.29 Tm
+
+hasTxtPosition():0.05 0 0 -0.05 325.8 654.29 Tm
+processTxtPosition(): 0.05 0 0 -0.05 325.8 654.29 Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 325.8 654.29 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=325.800
+----------tm_p->f=654.290
+----------------cur_xy_p->x=325.800
+----------------cur_xy_p->y=654.290
+----------------cur_xy_p->ox=325.800
+----------------cur_xy_p->oy=654.290
+----------------cur_xy_p->opr=Tm
+==========================-----------------processTm(),buf=0.05 0 0 -0.05 325.8 654.29 Tm
+----------tm_p->a=0.050
+----------tm_p->b=0.000
+----------tm_p->c=0.000
+----------tm_p->d=-0.050
+----------tm_p->e=325.800
+----------tm_p->f=654.290
+----------------cur_xy_p->x=325.800
+----------------cur_xy_p->y=654.290
+----------------cur_xy_p->ox=325.800
+----------------cur_xy_p->oy=654.290
+----------------cur_xy_p->opr=Tm
+processBT() tmpbuf = <1C15>Tj
+
+hasTxtPosition():<1C15>Tj
+找到CMAP, fontname=FT8, 编码数量:931
+processBT() tmpbuf = ET
+
+hasTxtPosition():ET
+decode() : tmpbuf = Q

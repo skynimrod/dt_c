@@ -1,0 +1,128 @@
+参见:
+
+    http://www.unicode.org/ucd/
+
+    https://www.xuebuyuan.com/1799187.html   C99中的wchar_t
+
+    https://www.cnblogs.com/Jack47/p/unicode-utf8-character_set-encoding.html  
+    关于Unicode，字符集，字符编码，每个程序员都应该知道的事
+
+    https://blog.csdn.net/lovekatherine/article/details/1868724
+    浅谈C中的wprintf和宽字符显示    非常好
+
+    https://bbs.csdn.net/topics/391872735?locationNum=4&fps=1    可行的解决办法
+    C语言实现将unicode转为汉字并写入文件
+
+. wcstombs() - 将宽字符转换成多字符
+
+. /**
+ * 1. wchar_t定义在stddef.h中
+ * 2. 处理wchar_t类型字符或字符串的函数在wchar.h中
+ * 
+ * Platform and Compiler
+ * Ubuntu, gcc
+ * Note: Windows下CodeBlocks(gcc)也不能通过
+ */
+#include <locale.h>
+#include <wchar.h>	// wchar_t类型的字符或字符串处理函数
+#include <stddef.h>	// wchar_t
+int main(void)
+{
+        setlocale(LC_ALL, "en_US.UTF-8");	// Shell下输入locale命令查看
+        wchar_t wstr[] = L"输出中文真TMD难啊！！！";
+        wprintf(L"%ls\n",wstr);
+        return 0;
+}
+/*
+【参考文章】
+
+http://blog.csdn.net/lovekatherine/article/details/1868724
+
+
+http://www.thoughts-of.me/blog.php?id=197&c=0&fp=10&ft=2
+
+
+http://www.cnblogs.com/niuniu502/archive/2009/02/17/1392636.html
+
+Wide characters, http://uw714doc.sco.com/en/SDK_sysprog/_Wide_Characters.html
+Introduction to Extended Characters, http://www.gnu.org/software/libc/manual/html_node/Extended-Char-Intro.html#Extended-Char-Intro
+关于wchar_t类型字符或字符串处理函数可参考C99标准
+*/
+
+===========================下面的才是真正的解决方案====================
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <malloc.h>
+#include <time.h>
+#include <math.h>
+#include <stddef.h>         // wchar_t 
+#include <wchar.h>          // wchar_t 类型的字符或字符串处理函数
+#include <locale.h>
+#include "str_tools.h"
+
+
+int CharToInt(char hex); 
+int StringToInt(char *hex);
+
+//"547f" -> 7f, 54
+unsigned int hex2int( char * hex)
+{
+    if ( !hex )
+        return -1;
+
+    if ( strlen(hex) != 4 )
+        return -1;
+
+    int h, l;
+
+    l = StringToInt( &hex[2] );
+    hex[2] = 0;
+    h = StringToInt( hex );
+}
+
+// 2位hex
+int StringToInt(char *hex)
+{
+    if ( !hex )
+        return -1;
+
+    if ( strlen(hex) != 2 )
+        return -1;
+    
+    return ( CharToInt(hex[0]) << 4 ) + CharToInt(hex[1]);
+}
+
+
+int CharToInt(char hex) 
+{
+    if (hex>='0' && hex <='9')
+        return hex - '0';
+    if (hex>='A' && hex <= 'F')
+        return hex-'A'+10;
+    if(hex>='a' && hex <= 'f')
+        return hex-'a'+10;
+    return -1;
+}
+
+void main(void)
+{
+int ret = 0;
+char str[12];
+wchar_t wstr[] = {0x56fe,0x50cf, 0x30, 0x31, 0};
+
+printf("%s\n",setlocale(LC_ALL,""));
+
+ret = wcstombs(str,wstr,sizeof(str)/sizeof(char));
+printf("ret = %d\n",ret);
+printf("%s\n",str);
+    return;
+}
+
+运行结果:
+
+E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\1. utils>bin\
+tmp_test
+Chinese (Simplified)_People's Republic of China.936
+ret = 6
+图像01

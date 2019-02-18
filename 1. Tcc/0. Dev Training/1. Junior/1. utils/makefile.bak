@@ -10,7 +10,7 @@
 #!include "15.alib/alib.mak"
 #!include "17.filemap/filemap.mak"
 #!include "18.memorymap/memorymap.mak"
-#!include "16.pdf_tools/pdf_tools.mak"
+!include "16.pdf_tools/pdf_tools.mak"
 
 #!include "0.test/7.cJSONtest/cJSON_test.mak"
 #!include "0.test/file_tools_test.mak"

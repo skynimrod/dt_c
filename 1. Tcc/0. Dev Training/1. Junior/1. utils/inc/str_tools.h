@@ -78,5 +78,11 @@
     unsigned int  cstrcpy( char *pszDist, const char *pszSource, int nPos, int nSize );
     unsigned int  mstrcpy( char *pszDist, const char *pszSource, int nPos, int nSize );
     int  GetFirstWord( const char *pszSource, char *deststr );
+
+    unsigned int    Hex2Int2( char * hex );
+    int             Hex2Int( char * hex );
+    int             Char2Int( char hex ) ;
+    int             unicode2str( char * desbuf, int len, wchar_t * wstr );
+
         
     #endif

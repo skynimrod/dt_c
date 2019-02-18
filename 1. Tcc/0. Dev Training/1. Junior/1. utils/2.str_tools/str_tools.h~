@@ -82,7 +82,6 @@
     unsigned int    Hex2Int2( char * hex );
     int             Hex2Int( char * hex );
     int             Char2Int( char hex ) ;
-    int             unicode2str( char * desbuf, int len, wchar_t * wstr );
 
         
     #endif

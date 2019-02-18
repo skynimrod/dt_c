@@ -3,143 +3,131 @@
 #include <malloc.h>
 #include <time.h>
 #include <math.h>
+#include <stddef.h>         // wchar_t 
+#include <wchar.h>          // wchar_t 类型的字符或字符串处理函数
+#include <locale.h>
 #include "str_tools.h"
 
-    typedef struct __contentMap__ {     // 记录每页中的内容页面对象
-        int         obj;            // 内容对象编号
-        int         * objlist;      // 内容对象编号所含的对象列表
-    }CONTENTMAP;
 
-// 计算指定字符在字符串中出现的次数
-    int  test2( CONTENTMAP *cm ) 
+    int Thex2Int(char *hex);
+    int Char2Int( char hex ); 
+    //"547f" -> 7f, 54
+    unsigned int Fhex2int( char * hex)
     {
-        int     n = 5;
+        if ( !hex )
+            return -1;
 
-        CONTENTMAP *tt;
+        if ( strlen(hex) != 4 )
+            return -1;
 
-        tt = ( CONTENTMAP *)malloc( sizeof(CONTENTMAP) * n + 1);
-        memset( tt, 0, sizeof(CONTENTMAP*)+1);
+        int h, l;   
 
-        for ( int i = 0; i < n; i ++) {
-            //tt[i] = (CONTENTMAP *)malloc( sizeof( CONTENTMAP ) +1 );
-            //memset(tt[i], 0, sizeof(CONTENTMAP)+1);
+        l = Thex2Int( &hex[2] );
+        hex[2] = 0;
+        h = Thex2Int( hex ); 
 
-            tt[i].obj = i;
-            tt[i].objlist = &(tt[i].obj);
-        }
+        unsigned int  ret;
 
-        for ( int i = 0; i < n; i ++) {
-            //printf( "tt[%d]->obj=%d, tt[%d]->oblist address=%p\n", i, tt[i]->obj, i, tt[i]->objlist );
-            printf( "tt[%d].obj=%d, tt[%d].oblist address=%p\n", i, tt[i].obj, i, tt[i].objlist );
-        }
-
-        /*
-        for ( int i = 0; i < n; i ++) {
-            free( tt[i] );
-        }*/
-        free(tt);
-
-
-        return 0;
+        ret = (h << 8) + l;
+        return ret;
     }
-    // [5278 0 R 5279 0 R 5280 0]
-    char * strsplit( char * buf, char ch, int n ) 
+
+    // 2位hex字符串转整型数值 Two Hex To Int
+    int Thex2Int(char *hex)
+    {
+        if ( !hex )
+            return -1;
+
+        if ( strlen(hex) != 2 )
+            return -1;
+    
+        return ( Char2Int( hex[0] ) << 4 ) + Char2Int( hex[1] );
+    }
+
+    // 1位hex字符串转整型数值 A Hex To Int
+    int Char2Int( char hex ) 
+    {
+        if ( hex >= '0' && hex <= '9' )
+            return hex - '0';
+        if ( hex >= 'A' && hex <= 'F' )
+            return hex - 'A' + 10;
+        if ( hex >= 'a' && hex <= 'f' )
+            return hex - 'a' + 10;
+        return -1;
+    }
+
+    int unicode2str( char * desbuf, int len, wchar_t * wstr ) 
+    {
+        int ret = 0;
+        
+        printf("%s\n",setlocale(LC_ALL,""));
+
+        ret = wcstombs( desbuf, wstr, len );
+        printf("ret = %d\n",ret);
+        printf("%s\n",desbuf );
+
+        return ret;
+    }
+    char * strsplit2( char * buf, int len, char ch, int n ) 
     {
         int     i = 0 ;
-        int     len = strlen(buf);
         int     m=0;
-        char    * retbuf;
+        char    retbuf[len+1];
         int     k =0;       // 记录每一项的开始位置
 
-        printf("buf=%s!\n", buf);
-        
         while( i < len )  {
             if ( buf[i] == ch ) {
                 m ++;
                 printf("m=%d, n=%d\n", m, n);
                 if ( m == n ) {     // 找到第几个项的位置了
-                    retbuf = (char *)malloc( i-k+1);
-                    memset( retbuf, 0, i-k+1);   
-                    memcpy( retbuf, buf+k, i-k );  
+                    memset( retbuf, 0, len+1 );   
+                    memcpy( retbuf, buf+k, i-k );
+                    printf("retbuf=%s\n", retbuf);
                     return retbuf;
                 }
-                while( buf[i] == ch )       // 跳过连续的分隔符
+                while( buf[i] == ch )  {     // 跳过连续的分隔符
                     i ++;
+                }
                 k = i;  // 记录寻找项之前的最近的分隔符位置
                 continue;
             }
             i ++;
         }
 
-        
+        if ( i == len && m == n-1 ) {   // 最后一项
+            memset( retbuf, 0, len+1 );   
+            memcpy( retbuf, buf+k, i-k );
+            return retbuf;
+        }
         return NULL;
     }
 
-    void tests( int count, int * tat) 
-    {
-        char    buf[count];
-
-        sprintf(buf, "Hello world\n");
-        printf("buf=%s\n", buf);
-    }
-
-
 void main(void)
 {
-    char    buf[]="FT8 8 0 R>>>>";
+int ret = 0;
+char str[256];
+wchar_t wstr[] = {40527,0x50cf, 0x30, 0x31, 0};
 
-    CONTENTMAP  * contentMap;
+printf("%s\n",setlocale(LC_ALL,""));
 
-        test2( contentMap);
+ret = wcstombs(str,wstr,sizeof(str)/sizeof(char));
+printf("ret = %d\n",ret);
+printf("%s\n",str);
 
-    char *item;
+    unsigned int ui;
 
-    printf( "sizeof(int)=%d\n\n", sizeof(int));
-    item= (char*) strsplit( buf, ' ', 1 ) ;
+    ui = Fhex2int("9E4F");
+    printf("0x9E4F=%d-------\n", ui);
+    printf("%04X\n", ui);
 
-    printf("buf=%s, 第%d 项:item=%s", buf, 1, item );
-    free(item);
-
-    item= (char*) strsplit( buf, ' ', 2 ) ;
-
-    printf("buf=%s, 第%d 项:item=%s\n", buf, 2, item );
-    free(item);
-
-    printf("1/2+1%%2-1=%d\n", 1/2+1%2-1);
-    printf("3/2+3%%2-1=%d\n", 3/2+3%2-1);
-    printf("5/2+5%%2-1=%d\n", 5/2+5%2-1);
-    printf("7/2+7%%2-1=%d\n", 7/2+7%2-1);
-
-    float       r;
-    int     a, b;
-    a = 2806, b = 563;
-
-    r = (float)a/b;
-
-    printf("%d/%d=%.2f\n", a, b, r );
-
-    tests( 5, &a);
     
-    char	tmp[]="0 Tc 0 Tr 48.26 0 Td";
-    char    buf1[12], buf2[12], buf3[12];
+    ret = unicode2str( str, 256, wstr );
+    printf("str=%s, len=%d\n", str, ret );
 
-    int     i = 0,j = 0;
-    while ( i <= strlen(tmp) ) {  // 没到尾9
-        printf("i=%d, tmp[%d]=%c\n", i, i, tmp[i] );
-        if ( tmp[i] == ' ' || tmp[i] == 0 ) {  // 碰到空格或结尾
-            strcpy( buf1, buf2 );
-            strcpy( buf2, buf3 );
-            memset( buf3, 0, 12 );
-            memcpy( buf3, &tmp[j], i-j );
-            if ( strstr(buf3, "Td" ) )
-                break;
-            j = i+1;  // 空格后下一个字符
-        }
-        i ++;
-    }
+    sprintf( str, "100 beginbfchar");
+    printf( "str=%s\n", str);
+    printf("%s\n", strsplit2( str, 30, ' ', 1 ) );
 
-    printf("buf1=%s, buf2=%s, buf3=%s\n", buf1, buf2, buf3 );
-
-
+    
     return;
 }

@@ -48,7 +48,7 @@ void main(void)
 
     int     ret;
 
-    wchar_t wstr[]={0x9e4f, 0x534e, 0 };
+    wchar_t wstr[]={0x9e4f, 0x534e};
     ret = unicode2str( buf, 12, wstr );
 
     printf("buf=%s, len=%d\n", buf, ret);

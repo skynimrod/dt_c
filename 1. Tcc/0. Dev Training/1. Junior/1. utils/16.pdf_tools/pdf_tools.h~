@@ -51,8 +51,8 @@
     }FONTMAP;
 
     typedef struct __code_ {  
-        int         code;    
-        int         decode; 
+        unsigned int    code;    
+        unsigned int    decode; 
 
     } CODE;
 
@@ -114,7 +114,6 @@
         float       ox;         // 原始x 坐标, 经过tm与x计算获得 
         float       oy;         // 原始y 坐标, 经过tm与y计算获得 
         char        opr[L_OPR];    // 操作符, 比如"Td", "TD"等
-        TM      *   tm_p;
     }CUR_XY;
 
     typedef struct __cellMap__ {
@@ -139,14 +138,12 @@
     }TF;
 
     typedef struct __decode__ {
-        CUR_XY          * cur_xy_p;
-        TM              * tm_p;
-        TF              * tf_p;
-        TEXTMAP         * textMap_p;
+        CUR_XY          cur_xy;
+        TM              tm;
+        char            tf[L_FONTNAME];     // 当前使用的字体名称(对应cmap中的fontname)
+        TEXTMAP         * textMap;
         CELLMAP         * cellMap_p;        // 处理表格式需要re
         CELLINDEXMAP    * cellIndexMap_p;
-
-        
     }DECODE;
 
     int     parsePDF( char * desfile,  char * srcfile );
@@ -154,6 +151,5 @@
     void  __declspec(dllexport)  freeALL2( PDF * pdf_p );
     uchar * getSpecPage( PDF *pdf_p, int pageno );
     
-    void processQ( MEMORYMAP * mm_p )
 
     #endif
