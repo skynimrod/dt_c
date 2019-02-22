@@ -116,34 +116,46 @@
         char        opr[L_OPR];    // 操作符, 比如"Td", "TD"等
     }CUR_XY;
 
-    typedef struct __cellMap__ {
-        int         x;
-        // 单元格信息
-    }CELLMAP;
+    // 单元格信息
+    typedef struct __cell__ {
+        int                 id;             // 编号从1开始 , 自动产生
+        float               x;
+        float               y;
+        float               w;
+        float               h;
+        int                 maxlines;
+        int                 maxlen;         // 最长的文本长度
+        int                 rows;           // 行数
+        int                 cols;           // 列数
+        struct __cell__  *  last;
+        struct __cell__  *  prev;           // 前一个单元格 暂时无用
+        struct __cell__  *  next;           // 后一个单元格
+        int              *  txtIDs_p;       // 单元格中的文本编号(数组)
+        int                 txtTotal;       // 单元格中的文本编号数量
+    }CELL;
 
-    typedef struct __cellIndexMap__{
-        // 单元格索引信息
-        int         x;
-    }CELLINDEXMAP;
-
-    typedef struct __textMap__ {
-        // 文本映射表
-        int         x;
-    } TEXTMAP;
-
-    // 一直存放的是最新的tm数据
-    typedef struct __tf__ {
-        // tf 信息
-        int         x;
-    }TF;
+    // 文本信息
+    typedef struct __text__ {
+        int                 id;
+        float               ox;
+        float               oy;
+        char            *   buf;
+        int                 len;
+        struct __text__  *  last;
+        struct __text__  *  prev;       // 暂时无用
+        struct __text__  *  next;
+        int                 cellID;     // 该文本属于哪个CELL, 如果是0表示不在cell中
+    } TEXT;
 
     typedef struct __decode__ {
-        CUR_XY          cur_xy;
-        TM              tm;
-        char            tf[L_FONTNAME];     // 当前使用的字体名称(对应cmap中的fontname)
-        TEXTMAP         * textMap;
-        CELLMAP         * cellMap_p;        // 处理表格式需要re
-        CELLINDEXMAP    * cellIndexMap_p;
+        CUR_XY      cur_xy;
+        TM          tm;
+        char        tf[L_FONTNAME];     // 当前使用的字体名称(对应cmap中的fontname)
+        TEXT    *   firstText_p;
+        TEXT    *   lastText_p;
+        TEXT    *   textMap_p;
+        
+        CELL    *   cellMap_p;        // 处理表格式需要re
     }DECODE;
 
     int     parsePDF( char * desfile,  char * srcfile );

@@ -128,6 +128,10 @@ printf("%s\n",str);
     printf( "str=%s\n", str);
     printf("???%s???\n", strsplit2( str, 30, ' ', 1 ) );
 
+    ui = wstr[0];
+
+    printf("wstr[0]=%d, ui=%d\n", wstr[0], ui);
+
     
     return;
 }

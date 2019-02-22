@@ -2,4 +2,48 @@
 
    tgmath.h 包含  math.h  和 complex.h， 以及各种宏定义.
 
+<math.h> 	<complex.h> 	type-generic
+function 	function 	macro
+acos 		cacos 		acos
+asin 		casin 		asin
+atan 		catan 		atan
+acosh 		cacosh 		acosh
+asinh 		casinh 		asinh
+atanh 		catanh 		atanh
+cos 		ccos 		cos
+sin 		csin 		sin
+tan 		ctan 		tan
+cosh 		ccosh 		cosh
+sinh 		csinh 		sinh
+tanh 		ctanh 		tanh
+exp 		cexp 		exp
+log 		clog 		log
+pow 		cpow 		pow
+sqrt 		csqrt 		sqrt
+fabs 		cabs 		fabs
+
+==============
+
+macro use	 	invokes
+exp(n) 			exp(n), the function
+acosh(f) 		acoshf(f)
+sin(d) 			sin(d), the function
+atan(ld) 		atanl(ld)
+log(fc) 		clogf(fc)
+sqrt(dc) 		csqrt(dc)
+pow(ldc, f) 		cpowl(ldc, f)
+remainder(n, n) 	remainder(n, n), the function
+nextafter(d, f) 	nextafter(d, f), the function
+nexttoward(f, ld) 	nexttowardf(f, ld)
+copysign(n, ld) 	copysignl(n, ld)
+ceil(fc) 		undefined behavior
+rint(dc) 		undefined behavior
+fmax(ldc, ld) 		undefined behavior
+carg(n) 		carg(n), the function
+cproj(f) 		cprojf(f)
+creal(d) 		creal(d), the function
+cimag(ld) 		cimagl(ld)
+cabs(fc) 		cabsf(fc)
+carg(dc) 		carg(dc), the function
+cproj(ldc) 		cprojl(ldc)
    

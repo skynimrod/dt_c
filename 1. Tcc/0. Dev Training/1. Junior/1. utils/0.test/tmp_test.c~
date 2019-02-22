@@ -126,7 +126,7 @@ printf("%s\n",str);
 
     sprintf( str, "100 beginbfchar");
     printf( "str=%s\n", str);
-    printf("%s\n", strsplit2( str, 30, ' ', 1 ) );
+    printf("???%s???\n", strsplit2( str, 30, ' ', 1 ) );
 
     
     return;

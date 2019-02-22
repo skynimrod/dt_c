@@ -170,21 +170,25 @@
     bool hasTxtPosition( char * buf );
     void processTxtPosition( char *buf, CUR_XY * cur_xy_p, TM * tm_p );
 
-    char * processBT( MEMORYMAP *mm_p, char * tmpbuf, DECODE * decode_p, PAGES *pages_p );
-    char * processBDC( MEMORYMAP *mm_p, char * tmpbuf, DECODE * decode_p, PAGES *pages_p );
-    char * processRE( MEMORYMAP *mm_p, char * tmpbuf, DECODE * decode_p, PAGES *pages_p );
+    char * processBT( MEMORYMAP *mm_p, char *desbuf, char * srcbuf, DECODE * decode_p, PAGES *pages_p );
+    char * processBDC( MEMORYMAP *mm_p, char *desbuf, char * srcbuf, DECODE * decode_p, PAGES *pages_p );
+    char * processRE( MEMORYMAP *mm_p, char *desbuf, char * srcbuf, DECODE * decode_p, PAGES *pages_p );
     char * processTf( char * tmpbuf, DECODE * decode_p );
     
-    char * processTj( char *buf, CMAP * cmap_p );
-    char * processTJ( char *buf, CMAP * cmap_p );
+    char * processTj( char *desbuf, char *srcbuf, CMAP * cmap_p );
+    char * processTJ( char *desbuf, char *srcbuf, CMAP * cmap_p );
 
     bool   hasText( char * buf );
-    char * processText( char *buf, DECODE *decode_p, PAGES *pages_p );
+    char * processText( char *desbuf, char *srcbuf, DECODE *decode_p, PAGES *pages_p );
     
     char * decode( PAGES * pages_p, char * buf, uLong dlen, char * filename ) ;
 
     void    printTM( TM * tm_p );
     void    printCUR_XY( CUR_XY * cur_xy_p );
+
+    int     filterCell( CELL * cellMap_p, CELL cur_cell );
+    int     fillTextMap( char * buf, DECODE * decode_p );
+
 
 
     #define CHECK_ERR(err, msg) { \
@@ -193,6 +197,7 @@
             exit(1); \
         } \
     }
+    #define L_TMPBUF        256
         
     //**************************************************************************
     //  函数名称 : parsePDF()
@@ -363,6 +368,7 @@
         char        filename[128];
         int         err;
         uLong       dlen;
+        char      * tmpbuf;
         
 
 
@@ -380,7 +386,10 @@
                 return NULL;
 
             //cutTail( buf );                         // 去除 1117>> 后面的>>
-            len = atoi( strsplit1( buf, ' ', 2 ) );     //
+            tmpbuf = strsplit1( buf, ' ', 2 );
+            len = atoi( tmpbuf );     //
+            free( tmpbuf );
+            
             free( buf );
             buf = getObjContent( pdf_p->fm_p, pdf_p->xref_p, obj ); 
             if ( !strstr( buf, "stream" ) ) {   // 当前行没有stream的话, 
@@ -397,7 +406,7 @@
             desbuf = (uchar *)calloc( dlen, 1 );
             err = uncompress( desbuf, &dlen, srcbuf, len );
             // 写文件时调试代码， 方便查看， 最终可以删除或注释
-            CHECK_ERR(err, "uncompress");    // 奇怪，明明解压成功了, 但是返回的确实data_error (-3), 只能屏蔽该检测了
+            CHECK_ERR(err, "uncompress");    // 奇怪，明明解压成功了, 但是返回的确实data_error (-3), 只能屏蔽该检测了, 原因是dlen没有赋值或赋值太小
             sprintf( filename, "f:/F_t_tmp/tmp1/c_%d_stream.txt", obj );
             writeRawData( filename, desbuf, dlen );     // 如果 dlen 没有初始化足够大, 就会解压失败
             //printf("desbuf=%s\n", desbuf );
@@ -692,6 +701,7 @@
         char    *   buf;
         char    *   item;
         int         ret;
+        char    *   tmpbuf;
 
         buf = fm_readLine( fm_p);
 
@@ -707,9 +717,13 @@
         }
 
         // 开始解析xref数据区第二行 1 5267 之类的格式(起始对象编号 对象数量), 如果是 0 1 则说明后面要根据后面trailer的地址继续检索
+        tmpbuf = strsplit1( buf, ' ', 2 );
+        *objSum = atoi( tmpbuf );     // 起始对象编号
+        free( tmpbuf);
 
-        *objSum = atoi( strsplit1( buf, ' ', 2 ) );     // 起始对象编号
-        *firstObj = atoi( strsplit1( buf, ' ', 1 ) );   // 对象总数量
+        tmpbuf = strsplit1( buf, ' ', 1 );
+        *firstObj = atoi( tmpbuf );   // 对象总数量
+        free( tmpbuf );
 
         free( buf );            // 释放内存
 
@@ -1613,6 +1627,7 @@
         char    * buf;
         int     mapsum;
         int     total = 0;
+        char  * tmpbuf;
         
         while ( 1 ){
             buf = mm_readLine( mm_p );
@@ -1633,7 +1648,10 @@
             */
 
             if ( strstr( buf, "beginbfchar" ) ) {   // 单个编码映射  100 beginbfchar
-                mapsum = atoi( strsplit1( buf, ' ', 1 ) );
+                tmpbuf =  strsplit1( buf, ' ', 1 );
+                mapsum = atoi( tmpbuf );
+                free( tmpbuf );
+                
                 total += mapsum;
 
                 // <1440> <5E10> , 单行是6+1+6+1 = 14个字节  0A 结尾的
@@ -1645,7 +1663,10 @@
             }
             
             if ( strstr( buf, "beginbfrange" ) ) {   // 范围编码映射  2 beginbfrange
-                mapsum = atoi( strsplit1( buf, ' ', 1 ) );
+                tmpbuf =  strsplit1( buf, ' ', 1 );
+                mapsum = atoi( tmpbuf );
+                free( tmpbuf );
+                
                 total += mapsum;
                 for ( int i =0; i < mapsum; i ++ ) {        // 跳过 mapsum 行即可
                     buf = mm_readLine( mm_p );
@@ -1995,6 +2016,7 @@
         DECODE      *   decode_p;
 
         retbuf = (char *)calloc( dlen, 1 );
+        
         decode_p = (DECODE *)calloc( sizeof( DECODE ), 1 );
         
         mm_p = initMemoryMap( buf, dlen );
@@ -2006,15 +2028,14 @@
             printf( "decode() : tmpbuf = %s\n", tmpbuf );
             
             if ( strstr( tmpbuf, "BT" ) ) {         // 如果是 包含"BT"/"ET"
-                sprintf(retbuf, "%s%s", retbuf, processBT( mm_p, tmpbuf, decode_p, pages_p ) );
+                processBT( mm_p, &retbuf[strlen(retbuf)], tmpbuf, decode_p, pages_p );
             } 
             if ( strstr( tmpbuf, "BDC" ) ) { // 如果包含"BDC"/"EMC"
-                sprintf(retbuf, "%s%s", retbuf, processBDC( mm_p, tmpbuf, decode_p, pages_p ) );
+                processBDC( mm_p, &retbuf[strlen(retbuf)], tmpbuf, decode_p, pages_p );
             } 
             // re 的处理应该在BT/ET, BDC/EDC 之外, 也就是单元格.
             if ( strstr( tmpbuf, "re" )  ) {   //包含"re"
-                printf("包含re-------------\n");
-                processRE( mm_p, tmpbuf, decode_p, pages_p );
+                processRE( mm_p,  &retbuf[strlen(retbuf)], tmpbuf, decode_p, pages_p );
             }
             if ( strstr( tmpbuf, "Tf") ) {
                 processTf( tmpbuf, decode_p );
@@ -2059,14 +2080,13 @@
     # tm = {'a':a, 'b':b, 'c':c, 'd':d, 'e':e, 'f':f}    # 一直存放的是最新的tm数据
      * 
      */
-    char * processBT( MEMORYMAP *mm_p, char * buf, DECODE * decode_p, PAGES *pages_p )
+    char * processBT( MEMORYMAP *mm_p, char *desbuf, char * srcbuf, DECODE * decode_p, PAGES *pages_p )
     {
         char    * tmpbuf;
-        char    * retbuf;
         CUR_XY  * cur_xy_p  = & decode_p->cur_xy;
         TM      * tm_p      = & decode_p->tm;
 
-        printf("processBT() buf = %s\n", buf );
+        printf("processBT() buf = %s\n", srcbuf );
         while ( 1 ) {
             tmpbuf = mm_readLine( mm_p );
             if ( !tmpbuf )
@@ -2110,14 +2130,14 @@
             }
 
             else if ( strstr( tmpbuf, "BDC" ) ) {       // # 一段文字  处理 BDC/EMC  文字部分
-                sprintf( retbuf, "%s%s", retbuf, processBDC( mm_p, tmpbuf, decode_p, pages_p ) );
+                processBDC( mm_p, desbuf, tmpbuf, decode_p, pages_p );
             }
 
             else if ( strstr( tmpbuf, "re" ) ) {    // # 58.08 323.96 124.82 19.02 re
                 // # 如果 有 re 信息， 表示是表格, 获取cell 信息, 如果碰到Tm, 会置cur_cell=[:]
-                processRE( mm_p, tmpbuf, decode_p, pages_p );
+                processRE( mm_p, desbuf, tmpbuf, decode_p, pages_p );
             }
-             
+
             // # 如有有q 信息, 那么表示保存当前的图形状态信息, 包括坐标信息, 然后到Q 再恢复
             /* 暂时不处理q/Q, 因为re 使用的是绝对坐标
                 #if ( "q" in buf ) :    # q
@@ -2136,12 +2156,14 @@
                 # 2016.12.13:
                 #   不单独处理位置, 这儿只处理Tm 也就是转换坐标信息, 保证最新的转换坐标起作用. 文本的坐标在文本内部处理
             */
+        
             if ( hasTxtPosition( tmpbuf ) ) {
                 processTxtPosition( tmpbuf, cur_xy_p, tm_p );
             }
-
-            if ( strstr( tmpbuf, "Tm" ) )
-                processTm( tmpbuf, cur_xy_p, tm_p ); 
+            
+            //if ( strstr( tmpbuf, "Tm" ) )
+            //    processTm( tmpbuf, cur_xy_p, tm_p ); 
+            
 
             //#if ( "cm" in tmpbuf )  # cm 处理与tm 处理相同, 调用Tm的处理方法既可
             //#    self.processCm( tmpbuf, tm )
@@ -2149,28 +2171,323 @@
             if ( strstr( tmpbuf, "q" ) || strstr( tmpbuf, "Q" ) ) 
                 memset( tm_p, 0, sizeof(TM) );
 
-            //# 如果buf 有文本信息
-            if ( hasText( tmpbuf ) ) 
-                sprintf( retbuf, "%s%s", retbuf, processText( tmpbuf, decode_p, pages_p ) );
+            //# 如果buf 有文本信息 (这个时候应该没有BDC/BT, 否则下面的desbuf 应该替换为&desbuf[strlen(desbuf)])
+            if ( hasText( tmpbuf ) ) { 
+                processText(  desbuf, tmpbuf, decode_p, pages_p );
+            }
 
             if ( strstr(tmpbuf, "ET" ) ) {  // # 正文结束的标识
                 free( tmpbuf );
-                return retbuf;
+                return desbuf;
             }
             free( tmpbuf );
         }
-        return NULL;
+        return desbuf;
     }
     
-    char * processBDC( MEMORYMAP *mm_p, char * tmpbuf, DECODE * decode_p, PAGES *pages_p  )
+    /*
+     * 17. processBDC()
+     *      处理 BDC/EMC 内的内容
+     * 入口参数:
+     *      streambuf           字节流映射文件 哈希表, 读取内容的时候需要.
+     *      cmap                字符映射表 哈希表
+     * 出口参数:
+     *      无
+     * 返回值:
+     *      无
+     * 说明:
+     *      1. 过滤页眉/页脚, 如果有的话
+     *      2. 如果有Td/TD/Tm/T*, 就获取位置信息, 并与之前处理的位置信息进行比较, 来判断是否要换行
+     *      3. 如果有Tj,TJ, ', " , 表示文本内容, 摘取文本内容, 如果需要解码则进行解码
+     *      4. 如果有re, 一般会对应f*, 也就是画矩形操作  
+     *          x, y, width, height    re   // x,y 是左下角的坐标
+     * depends on:
+     *       self.processBT(), .processRE(), //processQ()
+     *       self.hasTxtPosition(), .processTxtPosition(),  .hasText(), .processText(),
+     *       self.file_tools.readLineST()
+     * 
+     */
+    char * processBDC( MEMORYMAP *mm_p, char * desbuf, char * srcbuf, DECODE * decode_p, PAGES *pages_p  )
     {
+        char    * tmpbuf;
+        CUR_XY  * cur_xy_p  = & decode_p->cur_xy;
+        TM      * tm_p      = & decode_p->tm;
+
+        printf("processBDC() buf = %s\n", srcbuf );
+        while ( 1 ) {
+            tmpbuf = mm_readLine( mm_p );
+            if ( !tmpbuf )
+                break;
+            printf("processBDC() tmpbuf = %s\n", tmpbuf );
+            
+            //# 1. 过滤 页眉，页脚， 水印
+            //#    判断是否包含  /Artifact && （/Top   /Bottom   /watermark）任一 
+            //#     如果包含， 则过滤后面的BDC, EMC 之间的内容
+            //# 2. 即便是页眉或页脚, 里面的坐标也要处理, 否则后面的坐标会出现错误.
+            if ( strstr( tmpbuf, "/Top" ) && strstr( tmpbuf, "/Pagination" ) ) {
+                // # 页眉  , BDC 是起始标识
+                while( tmpbuf ) {
+                    printf("页眉部分. tmpbuf=%s\n", tmpbuf );
+                    if ( strstr( tmpbuf, "EMC" ) )  //# 页眉结束的标识
+                        break;
+                    free( tmpbuf );
+                    tmpbuf = mm_readLine( mm_p );
+
+                    if ( hasTxtPosition( tmpbuf ) )
+                        processTxtPosition( tmpbuf, cur_xy_p, tm_p );
+                    else if ( strstr( tmpbuf, "Tm" )  )
+                        processTm( tmpbuf, cur_xy_p, tm_p );                        
+                }
+            }   
+
+            else if ( strstr( tmpbuf, "/Bottom" ) && strstr( tmpbuf, "/Pagination" ) ) {
+                // 页脚的处理
+                while ( 1 ) {       // # 下面的循环判断比上面的循环判断可读性要高一点
+                    free( tmpbuf );
+                    tmpbuf = mm_readLine( mm_p );
+                    if ( !tmpbuf )
+                        break;
+                    if ( strstr( tmpbuf, "EMC" ) )       //# 页脚结束的标识
+                        break;
+                    if ( hasTxtPosition( tmpbuf ) )
+                        processTxtPosition( tmpbuf, cur_xy_p, tm_p );
+                    if ( strstr( tmpbuf, "Tm" ) )
+                        processTm( tmpbuf, cur_xy_p, tm_p );
+                }
+            }
+
+            else if ( strstr( tmpbuf, "BT" ) ) {       // # 一段文字  处理 BT/ET  文字部分
+                processBT( mm_p, desbuf, tmpbuf, decode_p, pages_p );
+            }
+
+            else if ( strstr( tmpbuf, "re" ) ) {    // # 58.08 323.96 124.82 19.02 re
+                // # 如果 有 re 信息， 表示是表格, 获取cell 信息, 如果碰到Tm, 会置cur_cell=[:]
+                processRE( mm_p, desbuf, tmpbuf, decode_p, pages_p );
+            }
+
+            // # 如有有q 信息, 那么表示保存当前的图形状态信息, 包括坐标信息, 然后到Q 再恢复
+            /* 暂时不处理q/Q, 因为re 使用的是绝对坐标
+                #if ( "q" in buf ) :    # q
+                #    self.processQ( streambuf )
+                #}
+            */
+            if ( strstr( tmpbuf, "q" ) || strstr( tmpbuf, "Q" ) ) 
+                memset( tm_p, 0, sizeof(TM) );
+
+
+            //# 处理字体信息,这个字体就是当前解码需要的type0字体
+            if ( strstr( tmpbuf, "Tf" ) ) {
+                processTf( tmpbuf, decode_p );
+                printf("----------------------------------------------tf=%s----------------------\n", decode_p->tf );
+            }
+
+            /*
+                # 如果buf 有 文本位置信息, 则处理后获得当前的xy 坐标
+                # 2016.12.13:
+                #   不单独处理位置, 这儿只处理Tm 也就是转换坐标信息, 保证最新的转换坐标起作用. 文本的坐标在文本内部处理
+            */
+        
+            if ( hasTxtPosition( tmpbuf ) ) {
+                processTxtPosition( tmpbuf, cur_xy_p, tm_p );
+            }
+            
+            //if ( strstr( tmpbuf, "Tm" ) )
+            //    processTm( tmpbuf, cur_xy_p, tm_p ); 
+            
+
+            //#if ( "cm" in tmpbuf )  # cm 处理与tm 处理相同, 调用Tm的处理方法既可
+            //#    self.processCm( tmpbuf, tm )
+            
+            //# 如果buf 有文本信息 (这个时候应该没有BDC/BT, 否则下面的desbuf 应该替换为&desbuf[strlen(desbuf)])
+            if ( hasText( tmpbuf ) ) { 
+                processText(  desbuf, tmpbuf, decode_p, pages_p );
+            }
+
+            if ( strstr(tmpbuf, "EMC" ) ) {  // # 正文结束的标识
+                free( tmpbuf );
+                return desbuf;
+            }
+            free( tmpbuf );
+        }
+        return desbuf;
+    }
+
+    /*
+     * 23. processRE()
+     *      处理 re 内的内容
+     * 入口参数:
+     *      buf                 当前包含TD 的一行信息
+     * 出口参数:
+     *      cur_cell            哈希表, 记录单元格坐标 "x":x坐标值, "y":y坐标值, "w":width, "h":height
+     * 返回值:
+     *      无
+     * 说明:
+     *      如果有re, 则说明是表格, 记录Tj/TJ/'/" 之前的最新的re 的数据为最新的cell 信息。
+     *  如果连续有多个re, 那么处理最新的re信息后, cur_cell 也存放的是最新的re信息
+     *      如果碰到Tm, 会置cur_cell=[:], pre_cell=[:]
+     *      x, y, width, height  re   ,  画一个矩形. x,y 是左下角坐标.
+     *      RE 返回的是CELL 的词典, {'re1':[x,y,w,h],'re2',}
+     * 2016.12.10:
+     *      改变思路, 每次处理re的时候将获取的cell信息存放在一个cellMap中, 所有内容解析出来后,
+     *      再结合 textMap和cellMap来处理换行以及跨表格文字的换行问题.
+     *      1. 有些pdf文档中re 的x是负数, w 高达好几千, 例如:
+     *              -1638.4 72 3795.5 39.1 re
+     *      可能是用来控制的, 与内容无关, 可以过滤掉, 未来如果需要进行显示再处理
+     *      2. 如果高度小于1, 可能是用来分隔页眉的, 例如:
+     *          76.55 55.2 442.2 0.72 re
+     *        这种高度时不可能有字体放入的.
+     *      3. 获取所有的表格信息后, 还要进行一次过滤, 把包含表格的cell过滤掉, 目前发现只有一种情况会包含表格.
+     *        整个页面边框有个表格, 这个表格会包含其它所有的合法表格(控制类re除外).
+     *        目前简单处理, 第一个re 就是这种情况, 直接把第一个re过滤即可.
+     *          0 0 595.3 841.9 re
+     * 2016.12.21:
+     *      re 也需要根据Tm 来进行坐标转换, 否则文本位置与表格位置就无法判断正确了.  不需要转换, 每次都是绝对坐标, 似乎与q/Q有关. 会清除之前的坐标转换信息???
+     *      cellIndexMap[cellid] = {"maxlen":,"col":, "row":, "txtList":[]}
+     * 2016.12.22:
+     *      对一种极端情况进行容错. 当前cell完全在另一个有效cell之内, 则丢弃该cell
+     * 2017.01.15:
+     *      如果当前cell包含之前的某个有效cell, 则用当前cell 替代之前的有效cell
+     */
+    char * processRE( MEMORYMAP *mm_p, char *desbuf, char * srcbuf, DECODE * decode_p, PAGES *pages_p  )
+    {
+        CELL                cur_cell;
+        char            *   tmpbuf;
+        
+        if ( !srcbuf ) {
+            return NULL;
+        }
+
+        tmpbuf = (char *)strsplit1( srcbuf, ' ', 1 );        // 单元格的x坐标
+        cur_cell.x = atof( tmpbuf );
+        free( tmpbuf );
+
+        tmpbuf = (char *)strsplit1( srcbuf, ' ', 2 );        // 单元格的y坐标
+        cur_cell.y = atof( tmpbuf );
+        free( tmpbuf );
+
+        tmpbuf = (char *)strsplit1( srcbuf, ' ', 3 );        // 单元格的w 宽度
+        cur_cell.w = atof( tmpbuf );
+        free( tmpbuf );
+
+        tmpbuf = (char *)strsplit1( srcbuf, ' ', 4 );        // 单元格的h 高度
+        cur_cell.h = atof( tmpbuf );
+        free( tmpbuf );
+
+        //# x 坐标小于0可能是控制用的, h,w数值小于1可能是用来做分割线的, (x,y)=(0,0)从原点来时的表格也是控制用(页眉都不可能在原点)
+        //# 把页眉也保留, 用来判断页眉文本
+        if ( cur_cell.x < 0 || cur_cell.y < 0 || cur_cell.w < 1 || ( cur_cell.x ==0 && cur_cell.y == 0 ) )  //# (0,0)仍然过滤, 暂时没想到怎么处理
+            return NULL;
+        
+        //# 2017.01.15:  过滤或替代无效的cell
+        filterCell( decode_p->cellMap_p, cur_cell );
+        
         return NULL;
     }
 
-    char * processRE( MEMORYMAP *mm_p, char * tmpbuf, DECODE * decode_p, PAGES *pages_p  )
+    /*
+     * 23.1. filterCell()
+     *       过滤无效的cell
+     *  说明:
+     *      有些cell 是无效的, 自身就在另一个有效cell之内。 丢弃即可
+     *  2017.01.15:
+     *      1. 当前cell 已经在之前的有效cell 内部, 则丢弃
+     *      2. 如果当前cell 包含之前的 有效cell内部, 则用当前的cell 替代之前的有效cell   
+     */
+
+    int intsertCell( CELL * cellMap_p, CELL cur_cell ) 
     {
-        return NULL;
+        return 0;
     }
+
+    int insteadCell( CELL * cellMap_p, CELL cur_cell, int cellID)
+    {
+        CELL    *   cp;
+        cp = cellMap_p;
+        while( cp ) {
+            if ( cp->id == cellID ) {
+                
+                return 0;
+            }
+        }
+        return -1;
+    }
+
+    // 查找指定ID的单元格cell
+    CELL * findCell( CELL * cellMap_p, int cellID )
+    {
+        bool    flag = false;
+        CELL  * cp = cellMap_p;  // 从头开始遍历
+
+        while ( cp ) {
+            if ( cp->id == cellID )     // 找到了
+                return cp;
+            
+            cp = cp->next;
+        }
+
+        if ( !flag )  // 遍历完还没有找到就返回NULL
+            return NULL;
+    }
+
+    // 新建之前应该用findCell() 查找是否已经存在该cellID
+    // 新建的cell都放在尾部
+    int newCell( CELL * cellMap_p, CELL cell )
+    {
+        if ( !cellMap_p ) {     // 如果链表为空
+            cellMap_p = ( CELL * )calloc( CELL, 1 );
+            
+            cellMap_p->id   = 1;                // 编号从1开始
+            cellMap_p->x    = cell.x;
+            cellMap_p->y    = cell.y;
+            cellMap_p->w    = cell.w;
+            cellMap_p->h    = cell.h;
+
+            cellMap_p->last = cellMap_p;
+        } else {        // 添加到尾部
+            cellMap_p->last->next = ( CELL * )calloc( CELL, 1 );
+
+            cellMap_p->last->next->id   = cellMap_p->last->id + 1;
+            cellMap_p->last->next->x    = cell.x;
+            cellMap_p->last->next->y    = cell.y;
+            cellMap_p->last->next->w    = cell.w;
+            cellMap_p->last->next->h    = cell.h;
+    
+            cellMap_p->last = cellMap_p->last->next;    // last 指向刚才新建的cell
+        }
+
+    }
+
+    // 保存cell信息时不区分是否是页眉, 保证数据完整性
+    // 处理cell的时候, 判断出是页眉(h<1)页脚再处理或过滤即可
+    // 这儿只过滤一种cell:  误差不超过1的, 视作一个cell
+    int filterCell( CELL * cellMap_p, CELL cur_cell )
+    {
+        printf("-------------------fileterCell()---------\n");
+        //printfCellMap( cellMap_p );
+
+        float       cx, cy, ch, cw; 
+        float       px, py, ph, pw;     // 链表中的cell的x, y, w, h
+        int         count;
+        CELL    *   cp;     // 指向CELL链表的指针, 用来遍历cellMap
+
+        cx = cur_cell.x;
+        cy = cur_cell.y;
+        cw = cur_cell.w;
+        ch = cur_cell.h;
+
+        cp = cellMap_p->last;       
+        // 只与最后一个cell比较, 因为每一个新加入的cell都自己的前一个比较(最后一个), 相当于全比较了
+        // 因为当前坐标一直在变化, 如果与最后一个cell不一样, 也肯定不会与之前的cell一样了
+
+        px = cp->x,   py = cp->y, pw = cp->w, ph = cp->h;
+            
+        if ( !( abs( px - cx ) < 1 && abs( py - cy ) < 1 && abs( px+pw-cx-cw) < 1 && abs( py+ph-cy-ch) < 1 ) )    
+            // 该单元格被其他cell包含 或者 包含其他单元格, 并且误差小于1
+            newCell( cellMap_p, cur_cell );
+
+        return 0;
+    }
+
 
     char * processTf( char * buf, DECODE * decode_p )
     {
@@ -2233,14 +2550,12 @@
     //# textMap = {编号:{"xy":{"x":x,"y":y, "ox":ox,"oy":oy,"tm":{tm}},'txt':txt} }
     //# cellMap = {编号:{'x':,'y':,'w':,'h':}}
     //# tm = {'a':a, 'b':b, 'c':c, 'd':d, 'e':e, 'f':f}    # 一直存放的是最新的tm数据
-    #define L_TMPBUF        256
-    char * processText( char *buf, DECODE *decode_p, PAGES *pages_p ) 
+    char * processText( char *desbuf, char *srcbuf, DECODE *decode_p, PAGES *pages_p ) 
     {
         // cur_xy, textMap, cellMap, cellIndexMap, tm, tf
-        char    retbuf[L_TMPBUF];
         CMAP    * cmap_p;
 
-        if ( !buf || decode_p || !pages_p )
+        if ( !srcbuf || !decode_p || !pages_p )
             return NULL;
 
         // 找到字体对应的cmap
@@ -2250,90 +2565,88 @@
                 break;
             }
         }
-
         printf("找到CMAP, fontname=%s, 编码数量:%d\n", cmap_p->fontname, cmap_p->total );
         // 下面开始解码
-        memset( retbuf, 0, L_TMPBUF );
         
-        if ( strstr(buf, "Tj" ) )               // Tj
-            sprintf( retbuf, "%s%s", retbuf, processTj( buf, cmap_p ) );
-        else if ( strstr(buf, "TJ" ) )          // TJ
-            sprintf( retbuf, "%s%s", retbuf, processTJ( buf, cmap_p ) );
-        else if ( strstr(buf, "\'" ) )          // '  单引号, 等同于T*  Tj 也就是移到下一行起始位置输出文本
-            sprintf( retbuf, "\r\n%s%s", retbuf, processTj( buf, cmap_p ) );
-        else if ( strstr(buf, "\"" ) )          // "   双引号,  使用了字间隔与字符间隔, 内容而言与单引号一样
-            sprintf( retbuf, "\r\n%s%s", retbuf, processTj( buf, cmap_p ) );
+        if ( strstr( srcbuf, "Tj" ) )               // Tj
+            processTj( desbuf, srcbuf, cmap_p );
+
+        else if ( strstr( srcbuf, "TJ" ) )          // TJ
+            processTJ( desbuf, srcbuf, cmap_p );
+
+        else if ( strstr( srcbuf, "\'" ) )  {         // '  单引号, 等同于T*  Tj 也就是移到下一行起始位置输出文本
+            processTj( desbuf, srcbuf, cmap_p );
+            sprintf( desbuf, "\r\n%s", desbuf );
+        }
+        else if ( strstr( srcbuf, "\"" ) )  {         // "   双引号,  使用了字间隔与字符间隔, 内容而言与单引号一样
+            processTj( desbuf, srcbuf, cmap_p );
+            sprintf( desbuf, "\r\n%s", desbuf); 
+        }
         
-        printf( "解码前:%s\n" , buf );
-        printf( "processText() end: %s|\n", retbuf );
+        printf( "解码前:%s\n" , srcbuf );
+        printf( "解码后:%s|\n", desbuf );
         //printCUR_XY( cur_xy_p );
+        //
+        // 将文本信息填充到 textMap 中, 便于未来格式处理, 同时判断该文本属于哪个cell, 记录在CELL信息中
+        // 
+        fillTextMap( desbuf, decode_p );
         
         return NULL;
     }   
-/*
 
-            # 2. 解码
-            if ( "Tj" in buf ) :                        # Tj
-                retbuf += self.processTj( buf, cmap )
-            elif ( "TJ" in buf ) :                      # TJ
-                retbuf += self.processTJ( buf, cmap )
-            elif ( "\'" in buf ) :                      # '  单引号, 等同于T*  Tj 也就是移到下一行起始位置输出文本
-                retbuf += "\r\n" + self.processTj( buf, cmap )
-            elif ( "\"" in buf ) :                      # "   双引号,  使用了字间隔与字符间隔, 内容而言与单引号一样
-                retbuf += "\r\n" + self.processTj( buf, cmap )
+    // 将解码后的文本保存在 textMap 以及 cellMap 中
+    int fillTextMap( char * buf, DECODE * decode_p )
+    {
+        float       ox, oy;                   // 文本的x,y 坐标, 为了简化代码中的指针结构名称长度, 增加可读性
+        float       cx, cy, cw,ch;          // cell的x,y,w,h 为了简化代码中的指针结构名称长度, 增加可读性
+        TEXT    *   tp;                     // 存放新的文本映射单元， 并链接到文本映射表中
+        CELL    *   cp;                     // 指向 decode_p->cellMap_p->last
+        
+        if ( !buf || !decode_p )
+            return -1;
+    
+        tp = ( TEXT * )calloc( sizeof(TEXT), 1 );
 
-            print("解码前:%s" % buf )
-            #print( "processText() end:" + retbuf + ":" )
-            print(cur_xy)
+        if ( !decode_p->textMap_p ) {         // 如果 最后一个文本映射为空, 表示这是解析出来的第一个文本串
+            decode_p->textMap_p = tp;
+            tp->last = tp;                          // 对于新建的文本映射表而言, 最后一个也就是第一个
+        } else {
+            decode_p->textMap_p->last->next = tp;
+            decode_p->textMap_p->last = tp;         // 更新last 指针到新加的 TEXT 节点
+        }
 
-            #if ( cur_xy['oy'] < cellMap[-1]['h'] ):
-            # 如果是页眉, 则不添加到textMap 中, 也就是不处理, 但是返回数据, 为了调试方便
-            #  这个处理要在最后处理, 因为页眉的文本在页眉cell之前, 这儿无法判断.
-            #    return retbuf
+        ox = tp->ox = decode_p->cur_xy.ox;            // 文本 绝对坐标x
+        oy = tp->oy = decode_p->cur_xy.oy;            // 文本绝对坐标y
+
+        tp->len = strlen( buf );
+        tp->buf = (char *)calloc( sizeof(char), tp->len + 1);
+        memcpy( tp->buf, buf, tp->len );
+        printf("fillTextMap(), tp->buf=%s\n", tp->buf);
+
+        // 下面来比较文本与单元格的相对位置, 如果文本在单元格中, 则记录相关信息
+        // 只判断最后一个单元格, 因为这个坐标与当前的文本坐标最接近, 如果这个不包含, 之前的不可能包含
+        if ( !decode_p->cellMap_p ) {     // cell 映射表为空, 表示该文本不在cell中, 直接返回
+            return 0;
+        }
+        cp = decode_p->cellMap_p->last;
+
+        cx = cp->x,  cy = cp->y, cw = cp->w, ch = cp->h;    // cell 的坐标信息
+        
+        if ( ( ox >= cx ) && ( ox <= cx+cw ) && ( oy > cy ) && ( oy <= cy+ch ) ) {   // 该文本在cell里面
+            if ( tp->len > cp->maxlen )     // 更新cell的最大长度
+                cp->maxlen = tp->len; 
             
-            #key = str(len(textMap)+1)+":"+str(round( cur_xy['x']+cur_xy['ox'],3)) + ','+ str(round(cur_xy['y']+cur_xy['oy'] ,3) )
-            
-            key = len(textMap)+1
-            #value = {"xy":cur_xy.copy(), 'txt':retbuf,'cell':-1, "o_xy":{"ox":cur_xy['ox'],"oy":cur_xy['oy']},"length":self.rlen(retbuf)}
-            value = {'txt':retbuf,'cell':-1, "o_xy":{"ox":cur_xy['ox'],"oy":cur_xy['oy']},"length":self.rlen(retbuf), "pre":-1, "next":-1}
-            # "next" 是个指针, 用来指向后一个txt, 后续处理由于会进行合并处理, 造成编号会有删减, 放next指针, 便于链起来, -1 表示结束
-            if ( len(cellMap) > 1 ):   # >1 是为了跳过页眉
-                ox,oy = cur_xy['ox'], cur_xy['oy']
-                cellId = len(cellMap)-1
-                cell = cellMap[cellId]
-                cx,cy,cw,ch = cell['x'], cell['y'], cell['w'], cell['h']
-                if ( ox >= cx and ox <= cx+cw and oy > cy and oy <= cy+ch ):
-                    value['cell'] = len(cellMap)-1   # 减1 是因为cellMap 第一个是页眉的cell占用了,len()=2的时候才是编号为1的cell
-
-                    cellIndexMap[cellId]["txtlist"].append( key )
-
-                    maxlen = cellIndexMap[cellId]["maxlen"]     # cellIndexMap 项目的value是{"maxlen":,"col":,"row":,"txtlist":[]}
-                    if ( self.rlen(retbuf) > maxlen ):    # 给cell的maxlen赋值
-                        cellIndexMap[cellId]["maxlen"] = self.rlen(retbuf)         # 中文算2个字符长度的计算方法
-            
-            if ( key > 1): # 表示这不是第一个文本, 那么上一个next就是本文本， 本文本的上一个就是key-1
-                textMap[key-1]["next"] = key
-                value["pre"] = key-1
-            textMap[key] = value
-            # textMap = {编号:{"xy":{"x":x,"y":y, "ox":ox,"oy":oy,"tm":{tm}},'txt':txt} }
-            #textMap[key] = retbuf
-
-            #key1 = len(textIndexMap)+1
-            #textIndexMap[key1] = key
-
-            with open(self.tmpfile1, "a+") as fs:
-                fs.write("--------------------\r\n")
-                fs.write( buf+"\r\n")
-                fs.write( str(key) + ":"+retbuf+"\r\n")
-        except:
-            print("processText() Exception Error!")
-            traceback.print_exc()
-            
-        return retbuf
-*/
+            tp->cellID = cp->id;
+            cp->txtTotal ++;                // 这儿只是计数 cell 中的文本数量, 最后处理完所有文本后, 
+                                            // 根据该数字来申请cp->txtIDs_p空间, 再处理一次textMap_p
+                                            // 将该cell中的文本的id 填充到cp->txtIDs_p 数组中
+        }
+        
+        return 0;
+    }
 
     /*
-     * 20. processTj( buf, cmap )
+     * 20. processTj( desbuf, srcbuf, cmap )
      *      处理含有 Tj 标识 的文字部分
      * 入口参数:
      *      buf     待处理的包含Tj 的未解码文本
@@ -2357,19 +2670,44 @@
     {
         wchar_t     wstr[len/4+1];      // srcbuf 是 "547f"格式, 4字节对应的1个 unicode是2字节 0x547F， 
         char        buf[4+1];
+        int         min, max, mid;
+        int         count;              // 记录unicode 转换字符串的字节数
+
+        if ( !srcbuf || !cmap_p || len%4 != 0 )   // len除余4 不为0表示格式有问题. 
+            return -1;
+
+        min = 0;
+        max = cmap_p->total-1;      // 下标是从0开始的
 
         int     wlen = len/4;      // 
-        memset( wstr, 0, wlen+1 );
+        memset( wstr, 0, sizeof(wstr) );
+
         for ( int i = 0; i < wlen; i ++ ) {
             memset( buf, 0, 4+1);
-            memcpy( buf, srcbuf[i], (i+1) * 4 );
+            memcpy( buf, &srcbuf[i * 4], 4 );
+            printf("buf=%s\n", buf);
+            
             wstr[i] = Hex2Int2( buf );     // 这儿wstr[i] 是复用了,先存放编码, 比如<4C75> <9645> 中的0x4c75
+            
             // 找编码对应的解码  0x0645, 用折半查找法, 因为 cmap 是从小到大排序的
-        } 
-
-       
+            while( min + 1 != max ) {
+                mid = (min + max )/2;
+                if ( cmap_p->code_p[mid].code == wstr[i] ) {
+                    wstr[i] = cmap_p->code_p[mid].decode;
+                    break;
+                }
+                if ( wstr[i] > cmap_p->code_p[mid].code )
+                    min = mid;
+                else
+                    max = mid; 
+            }
+            
+        }
+        // wstr 中存放的是解码后的内容, 也就是最终的内容, 转换为单字节字符串
+        count = unicode2str( desbuf, wlen * 2, wstr );
+        printf( "\n---------------转换后的内容为:%s(len=%d)\n", desbuf, count );
         
-       return 0;     
+       return count;     
     }
 
 /*
@@ -2380,75 +2718,49 @@ processTj() 解码后:鹏华国证钢铁行业指数分级证券投资基:
   <097E> <534E>        534E  对应的是华的 unicode码
  * */
 
-    char * processTj( char *buf, CMAP * cmap_p )
+    char * processTj( char *desbuf, char *srcbuf, CMAP * cmap_p )
     {
-        char    retbuf[L_TMPBUF], tmpbuf[L_TMPBUF];
+        char    tmpbuf[L_TMPBUF];
         int     i, j, k, n;            // 用来标记下标，获取<> 或() 内的内容, n 用来记录目标缓冲区下标
         int     len;
 
-        if ( !buf )
-            return ;
+        if ( !srcbuf )
+            return NULL;
 
-        len = strlen( buf );
-        printf( "processTj() Begin:%s\n", buf );
-
-        memset( retbuf, 0, L_TMPBUF );
+        len = strlen( srcbuf );
+        printf( "processTj() Begin:%s, len=%d\n", srcbuf, len );
 
         j = k = n = 0;
         for ( i = 0; i < len; i ++ ) {
-            if ( buf[i] == '(' ) {          // ()不需要解码 
-                j = i;          // j 用来记录截取内容的起始位置
-                while( i < len && buf[i] != ')' )   // 找到')'
+            if ( srcbuf[i] == '(' ) {          // ()不需要解码 
+                j = i+1;          // j 用来记录截取内容的起始位置
+                while( i < len && srcbuf[i] != ')' )   // 找到')'
                     i ++;
-                if ( buf[i] != ')' )        // 容错处理
+                if ( srcbuf[i] != ')' )        // 容错处理
                     return NULL;
                             
-                memcpy( &retbuf[n], &buf[j], i-j ); // 复制() 里面的内容到目标缓冲区
+                memcpy( &desbuf[n], &srcbuf[j], i-j ); // 复制() 里面的内容到目标缓冲区
                 n += i-j;
-            } else if ( buf[i] == '<' ) {   // <>表示需要解码   
-                j = i;                      // j 用来记录截取内容的起始位置
-                while( i < len && buf[i] != '>' )   // 找到'>'
+            } else if ( srcbuf[i] == '<' ) {   // <>表示需要解码   
+                j = i+1;                      // j 用来记录截取内容的起始位置
+                while( i < len && srcbuf[i] != '>' )   // 找到'>'
                     i ++;
-                if ( buf[i] != '>' )        // 容错处理
+                if ( srcbuf[i] != '>' )        // 容错处理
                     return NULL;
                 memset( tmpbuf, 0, L_TMPBUF );            
-                memcpy( tmpbuf, &buf[j], i-j ); // 复制<> 里面的内容到目标缓冲区
+                memcpy( tmpbuf, &srcbuf[j], i-j ); // 复制<> 里面的内容到目标缓冲区
 
                 // 开始解码
-                k = decodeR( &retbuf[n], tmpbuf, i-j, cmap_p );
-                n += k;
+                printf("-------------tmpbuf=%s, %d-%d=%d, n=%d\n", tmpbuf, i, j, i-j, n );
+                k = decodeR( &desbuf[n], tmpbuf, i-j, cmap_p );
+                if ( k > 0 )
+                    n += k;
                 
             }       
         }
-        return NULL;
+        return desbuf;
     }
-/*
-        try:
-            if ( "(" in buf ):                              # 不需要解码
-                p1, p2 = buf.index('('),  buf.index(')')    # 获取'(' , ')' 的位置
-                retbuf = buf[ p1+1 : p2 ]           # 取小括号()中的内容
-            elif ( "<" in buf ) :                           # 表示需要解码
-                reg = re.compile(r'(<.+?>)')        # 需要解码的文本信息的正则表达式
-                l = re.findall( reg, buf )          # 返回结果是各List, 以下同
-                print(" processTj()需要解码的文本数量%d" % len(l) )
-                tmpbuf = ""
-                for item in l:                      #  逐条获取不需要解码的文本信息
-                    i = 0            # 有可能是<41F7086E>, 即多个Unicode编码
-                    while( i+4 < len(item) ):
-                        tmpbuf += item[i+1:i+5]
-                        i += 4
 
-                print( "processTj() <>内的内容为:%s:" % tmpbuf )
-                for i in range(0, len(tmpbuf) // 4 ):
-                    retbuf += chr( cmap[ tmpbuf[ i*4:(i+1) * 4 ] ] )
-
-            print( "processTj() 解码后:" + retbuf + ":" )
-        except:
-            print("processTj() Exception Error! 可能是txt 无法显示的utf8编码, 比如版权符号, 有对号的小方框等等. 不影响使用.")
-            traceback.print_exc()
-        return retbuf
-    
-*/
     /*
      * 21. processTJ( buf, cmap )
      *      处理含有 TJ 标识 的文字部分
@@ -2464,51 +2776,10 @@ processTj() 解码后:鹏华国证钢铁行业指数分级证券投资基:
      * 例子:
      *    1.  [<41F7086E>-3<05192E37>-3<03C6>]TJ
      */
-    char * processTJ( char *buf, CMAP * cmap_p )
+    char * processTJ( char * desbuf, char *srcbuf, CMAP * cmap_p )
     {
-        return NULL;
+        return processTj( desbuf, srcbuf, cmap_p );
     }
-    /*
-        retbuf = ""
-        print( "\r\nprocessTJ()" + buf )
-        try:
-            if ( "(" in buf and  "<" in buf ):        #  既包含非汉字， 也包含汉字编码
-                # 这种情况不知道有没有, 暂时列在这儿， 不处理, 目前没有发现这种情况出现
-                print( buf + "===============================既包含<>,有包含()的TJ \r\n" )
-            elif ( "(" in buf ) :                   # 不需要解码
-                reg = re.compile(r'(\(.+?\))')      # 不需要解码的文本信息的正则表达式
-                l = re.findall( reg, buf )          # 返回结果是各List, 以下同
-
-                #print(" processTJ() 不需要解码的文本数量%d" % len(l) )
-                retbuf = ""
-                for item in l:                      #  逐条获取不需要解码的文本信息
-                    retbuf += item[1:len(item)-1]
-            elif ( "<" in buf ) :                   # 包含 < > 表示需要解码成unicode
-                # 先将所有需要解码的编码合并在一起, 然后一起处理
-                reg = re.compile(r'(<.+?>)')        # 需要解码的文本信息的正则表达式
-                l = re.findall( reg, buf )          # 返回结果是各List, 以下同
-
-                print(" processTJ() 需要解码的文本数量%d" % len(l) )
-                print(l)
-                tmpbuf = ""
-                for item in l:                      #  逐条获取不需要解码的文本信息
-                    i = 0            # 有可能是<41F7086E>, 即多个Unicode编码
-                    while( i+4 < len(item) ):
-                        tmpbuf += item[i+1:i+5]
-                        i += 4
-
-                print( "processTJ() <>内的内容为:" + tmpbuf )
-                for i in range(0, len(tmpbuf) // 4 ):
-                    retbuf += chr( cmap[ tmpbuf[ i*4: (i+1) * 4 ] ] )
-                
-            
-            print( "processTJ() 解码后:" + retbuf + ":" )
-
-        except:
-            print("processTJ() Exception Error! 可能是txt 无法显示的utf8编码,print()绘出异常, 比如版权符号, 有对号的小方框等等. 不影响使用.")
-            traceback.print_exc()
-        return retbuf
-        */
 
     /*
      * 24. processQ( streambuf )
@@ -2559,11 +2830,12 @@ processTj() 解码后:鹏华国证钢铁行业指数分级证券投资基:
      */
     bool hasTxtPosition( char * buf )
     {    
-        printf("\nhasTxtPosition():%s\n", buf );
-        if ( strstr( buf, "Td" ) || strstr( buf, "TD" ) || strstr( buf, "\'" ) || strstr( buf, "\"" ) || strstr( buf, "Tm" ) || strstr( buf, "T*" ) )
+        if ( strstr( buf, "Td" ) || strstr( buf, "TD" ) || strstr( buf, "\'" ) || strstr( buf, "\"" ) || strstr( buf, "Tm" ) || strstr( buf, "T*" ) ) {
             return true;
-        else
+        }
+        else {
             return false;
+        }
     }
 
     /*
@@ -2579,10 +2851,6 @@ processTj() 解码后:鹏华国证钢铁行业指数分级证券投资基:
      */
     void processTxtPosition( char *buf, CUR_XY * cur_xy_p, TM * tm_p )
     { 
-        char    *tmpbuf;
-        printf("processTxtPosition(): %s\n", buf);
-        
-        tmpbuf = (char *)strstr( buf, "Td" );
         if ( strstr( buf, "Td" ) ) {
             processTd( buf, cur_xy_p, tm_p );
             return;
@@ -2681,7 +2949,6 @@ processTj() 解码后:鹏华国证钢铁行业指数分级证券投资基:
             i ++;
         }
 
-        printf("buf1=%s, buf2=%s, buf3=%s\n", buf1, buf2, buf3 );
         cur_xy_p->x = atof( buf1 );
         cur_xy_p->y = atof( buf2 );
 
@@ -2690,7 +2957,6 @@ processTj() 解码后:鹏华国证钢铁行业指数分级证券投资基:
 
     void processTd( char *buf, CUR_XY * cur_xy_p, TM * tm_p )
     {
-        printf("processTd() buf=%s\n", buf);
         getXYofTd( buf, cur_xy_p );     // 获取 Td 之前的xy坐标
         
         memset( cur_xy_p->opr, 0, L_OPR);
@@ -2733,7 +2999,6 @@ processTj() 解码后:鹏华国证钢铁行业指数分级证券投资基:
      */
     void processTD( char * buf, CUR_XY * cur_xy_p, TM * tm_p ) 
     {
-        printf("processTD() buf=%s\n", buf);
         getXYofTd( buf, cur_xy_p );     // 获取 Td 之前的xy坐标
         
         memset( cur_xy_p->opr, 0, L_OPR);
@@ -2803,23 +3068,44 @@ processTj() 解码后:鹏华国证钢铁行业指数分级证券投资基:
      */
     void processTm( char *buf, CUR_XY * cur_xy_p, TM * tm_p )
     {
-        printf("==========================-----------------processTm(),buf=%s\n",buf);
-        tm_p->a = atof( strsplit1( buf, ' ', 1 ) );         // 第1项是 tm_p->a 的值
-        tm_p->b = atof( strsplit1( buf, ' ', 2 ) );         // 第2项是 tm_p->b 的值
-        tm_p->c = atof( strsplit1( buf, ' ', 3 ) );         // 第3项是 tm_p->c 的值
-        tm_p->d = atof( strsplit1( buf, ' ', 4 ) );         // 第4项是 tm_p->d 的值
-        tm_p->e = atof( strsplit1( buf, ' ', 5 ) );         // 第5项是 tm_p->e 的值
-        tm_p->f = atof( strsplit1( buf, ' ', 6 ) );         // 第6项是 tm_p->f 的值
+        char    * tmpbuf;
 
+        printf("==========================-----------------processTm(),buf=%s\n",buf);
+
+        tmpbuf = strsplit1( buf, ' ', 1 );
+        tm_p->a = atof( tmpbuf );         // 第1项是 tm_p->a 的值
+        free( tmpbuf );
+        
+        tmpbuf = strsplit1( buf, ' ', 2 );
+        tm_p->b = atof( tmpbuf );         // 第2项是 tm_p->b 的值
+        free( tmpbuf );
+        
+        tmpbuf = strsplit1( buf, ' ', 3 );
+        tm_p->c = atof( tmpbuf );         // 第3项是 tm_p->c 的值
+        free( tmpbuf );
+        
+        tmpbuf = strsplit1( buf, ' ', 4 );
+        tm_p->d = atof( tmpbuf );         // 第4项是 tm_p->d 的值
+        free( tmpbuf );
+        
+        tmpbuf = strsplit1( buf, ' ', 5 );
+        tm_p->e = atof( tmpbuf );         // 第5项是 tm_p->e 的值
+        free( tmpbuf );
+        
+        tmpbuf = strsplit1( buf, ' ', 6 );
+        tm_p->f = atof( tmpbuf );         // 第6项是 tm_p->f 的值
+        free( tmpbuf );
+        
         cur_xy_p->x = cur_xy_p->ox = tm_p->e;       // 重置坐标值x
         cur_xy_p->y = cur_xy_p->oy = tm_p->f;       // 重置坐标值x
 
         memset( cur_xy_p->opr, 0, L_OPR );
         strcpy( cur_xy_p->opr, "Tm" );
 
-        printTM( tm_p );
-        printCUR_XY( cur_xy_p );
+        //printTM( tm_p );
+        //printCUR_XY( cur_xy_p );
 
+        printf("--------processTM() end !buf=%s\n", buf );
         return;
     }
 
