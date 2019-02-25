@@ -128,7 +128,7 @@
         int                 rows;           // 行数
         int                 cols;           // 列数
         struct __cell__  *  last;
-        struct __cell__  *  prev;           // 前一个单元格 暂时无用
+        struct __cell__  *  prev;           // 前一个单元格
         struct __cell__  *  next;           // 后一个单元格
         int              *  txtIDs_p;       // 单元格中的文本编号(数组)
         int                 txtTotal;       // 单元格中的文本编号数量
@@ -142,7 +142,7 @@
         char            *   buf;
         int                 len;
         struct __text__  *  last;
-        struct __text__  *  prev;       // 暂时无用
+        struct __text__  *  prev;       
         struct __text__  *  next;
         int                 cellID;     // 该文本属于哪个CELL, 如果是0表示不在cell中
     } TEXT;

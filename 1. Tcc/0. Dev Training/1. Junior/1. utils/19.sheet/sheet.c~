@@ -17,7 +17,8 @@
     #include    <stdio.h>
     #include    <stdbool.h>                     //  使用 true, false 值的定义
 
-    #include    "sheet.h"                 
+    #include    "sheet.h"                  // getFileSize()
+
     #define DLL_EXPORT __declspec(dllexport)
 
     //**************************************************************************

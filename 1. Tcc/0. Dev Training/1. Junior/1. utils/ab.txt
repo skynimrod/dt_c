@@ -6,103 +6,6 @@ filemap->filelen=451945
 filemap->pos=0
 
 firstObj=0, objSum=97
-xref_p->objpos_p[0]=0000000000000000
-xref_p->objpos_p[1]=0000000000000016
-xref_p->objpos_p[2]=0000000000449529
-xref_p->objpos_p[3]=0000000000000103
-xref_p->objpos_p[4]=0000000000449802
-xref_p->objpos_p[5]=0000000000449831
-xref_p->objpos_p[6]=0000000000000381
-xref_p->objpos_p[7]=0000000000000506
-xref_p->objpos_p[8]=0000000000189858
-xref_p->objpos_p[9]=0000000000189995
-xref_p->objpos_p[10]=0000000000194928
-xref_p->objpos_p[11]=0000000000195116
-xref_p->objpos_p[12]=0000000000195425
-xref_p->objpos_p[13]=0000000000001142
-xref_p->objpos_p[14]=0000000000001295
-xref_p->objpos_p[15]=0000000000340936
-xref_p->objpos_p[16]=0000000000341086
-xref_p->objpos_p[17]=0000000000341457
-xref_p->objpos_p[18]=0000000000341683
-xref_p->objpos_p[19]=0000000000342015
-xref_p->objpos_p[20]=0000000000357003
-xref_p->objpos_p[21]=0000000000357148
-xref_p->objpos_p[22]=0000000000357508
-xref_p->objpos_p[23]=0000000000357719
-xref_p->objpos_p[24]=0000000000358039
-xref_p->objpos_p[25]=0000000000003129
-xref_p->objpos_p[26]=0000000000003282
-xref_p->objpos_p[27]=0000000000006928
-xref_p->objpos_p[28]=0000000000007068
-xref_p->objpos_p[29]=0000000000010297
-xref_p->objpos_p[30]=0000000000010450
-xref_p->objpos_p[31]=0000000000014038
-xref_p->objpos_p[32]=0000000000014191
-xref_p->objpos_p[33]=0000000000094521
-xref_p->objpos_p[34]=0000000000094700
-xref_p->objpos_p[35]=0000000000018025
-xref_p->objpos_p[36]=0000000000097041
-xref_p->objpos_p[37]=0000000000097194
-xref_p->objpos_p[38]=0000000000100123
-xref_p->objpos_p[39]=0000000000100276
-xref_p->objpos_p[40]=0000000000103188
-xref_p->objpos_p[41]=0000000000103341
-xref_p->objpos_p[42]=0000000000106928
-xref_p->objpos_p[43]=0000000000107081
-xref_p->objpos_p[44]=0000000000109995
-xref_p->objpos_p[45]=0000000000110148
-xref_p->objpos_p[46]=0000000000113871
-xref_p->objpos_p[47]=0000000000114024
-xref_p->objpos_p[48]=0000000000117982
-xref_p->objpos_p[49]=0000000000118135
-xref_p->objpos_p[50]=0000000000122227
-xref_p->objpos_p[51]=0000000000122380
-xref_p->objpos_p[52]=0000000000126604
-xref_p->objpos_p[53]=0000000000126744
-xref_p->objpos_p[54]=0000000000130488
-xref_p->objpos_p[55]=0000000000130641
-xref_p->objpos_p[56]=0000000000134833
-xref_p->objpos_p[57]=0000000000134986
-xref_p->objpos_p[58]=0000000000138469
-xref_p->objpos_p[59]=0000000000138622
-xref_p->objpos_p[60]=0000000000141529
-xref_p->objpos_p[61]=0000000000141695
-xref_p->objpos_p[62]=0000000000370277
-xref_p->objpos_p[63]=0000000000370432
-xref_p->objpos_p[64]=0000000000370773
-xref_p->objpos_p[65]=0000000000371019
-xref_p->objpos_p[66]=0000000000371356
-xref_p->objpos_p[67]=0000000000145916
-xref_p->objpos_p[68]=0000000000146069
-xref_p->objpos_p[69]=0000000000149382
-xref_p->objpos_p[70]=0000000000149535
-xref_p->objpos_p[71]=0000000000153285
-xref_p->objpos_p[72]=0000000000153438
-xref_p->objpos_p[73]=0000000000157741
-xref_p->objpos_p[74]=0000000000157894
-xref_p->objpos_p[75]=0000000000162537
-xref_p->objpos_p[76]=0000000000162690
-xref_p->objpos_p[77]=0000000000165849
-xref_p->objpos_p[78]=0000000000166002
-xref_p->objpos_p[79]=0000000000168779
-xref_p->objpos_p[80]=0000000000168932
-xref_p->objpos_p[81]=0000000000171990
-xref_p->objpos_p[82]=0000000000172143
-xref_p->objpos_p[83]=0000000000176068
-xref_p->objpos_p[84]=0000000000176221
-xref_p->objpos_p[85]=0000000000180045
-xref_p->objpos_p[86]=0000000000180211
-xref_p->objpos_p[87]=0000000000385135
-xref_p->objpos_p[88]=0000000000385282
-xref_p->objpos_p[89]=0000000000385635
-xref_p->objpos_p[90]=0000000000385837
-xref_p->objpos_p[91]=0000000000386165
-xref_p->objpos_p[92]=0000000000183696
-xref_p->objpos_p[93]=0000000000183849
-xref_p->objpos_p[94]=0000000000187640
-xref_p->objpos_p[95]=0000000000187793
-xref_p->objpos_p[96]=0000000000194855
 
 第1个项目:trailer<<
 
@@ -130,39 +33,6 @@ xrefStm=0
 retcode=7
 pages obj = 2
 Pages content =<</Count 32 /Kids [6 0 R 13 0 R 25 0 R 27 0 R 29 0 R 31 0 R 33 0 R 36 0 R 38 0 R 40 0 R 42 0 R 44 0 R 46 0 R 48 0 R 50 0 R 52 0 R 54 0 R 56 0 R 58 0 R 60 0 R 67 0 R 69 0 R 71 0 R 73 0 R 75 0 R 77 0 R 79 0 R 81 0 R 83 0 R 85 0 R 92 0 R 94 0 R] /Type /Pages>>
-pages_p->total = 32
-pages_p->leafs_p[0]=6
-pages_p->leafs_p[1]=13
-pages_p->leafs_p[2]=25
-pages_p->leafs_p[3]=27
-pages_p->leafs_p[4]=29
-pages_p->leafs_p[5]=31
-pages_p->leafs_p[6]=33
-pages_p->leafs_p[7]=36
-pages_p->leafs_p[8]=38
-pages_p->leafs_p[9]=40
-pages_p->leafs_p[10]=42
-pages_p->leafs_p[11]=44
-pages_p->leafs_p[12]=46
-pages_p->leafs_p[13]=48
-pages_p->leafs_p[14]=50
-pages_p->leafs_p[15]=52
-pages_p->leafs_p[16]=54
-pages_p->leafs_p[17]=56
-pages_p->leafs_p[18]=58
-pages_p->leafs_p[19]=60
-pages_p->leafs_p[20]=67
-pages_p->leafs_p[21]=69
-pages_p->leafs_p[22]=71
-pages_p->leafs_p[23]=73
-pages_p->leafs_p[24]=75
-pages_p->leafs_p[25]=77
-pages_p->leafs_p[26]=79
-pages_p->leafs_p[27]=81
-pages_p->leafs_p[28]=83
-pages_p->leafs_p[29]=85
-pages_p->leafs_p[30]=92
-pages_p->leafs_p[31]=94
 叶子对象(第1页):6| 内容:Contents 7 0 R 
 就一个内容对象(buf=Contents 7 0 R )
 
@@ -725,11 +595,11 @@ dlen=462, len=279
 写成功次数:l=1, 应该写入 len=563
 
 写成功次数:l=1, 应该写入 len=2806
+=====================解压后的内容存放在文件:f:/F_t_tmp/tmp1/c_7_stream.txt
  压缩率为:4.98
 decode() : tmpbuf = 1 0 0 -1 0 841.9 cm
 decode() : tmpbuf = q
 decode() : tmpbuf = 0 0 595.3 841.9 re
-包含re-------------
 decode() : tmpbuf = W* n
 decode() : tmpbuf = 0 w
 decode() : tmpbuf = 2 M
@@ -739,1010 +609,900 @@ decode() : tmpbuf = 0 0 0 RG
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 0 0 0 rg
-
-hasTxtPosition():0 0 0 rg
 processBT() tmpbuf = /FT8 480 Tf
 ----------------------------------------------tf=FT8----------------------
-
-hasTxtPosition():/FT8 480 Tf
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.6864 w
-
-hasTxtPosition():0.6864 w
 processBT() tmpbuf = 0.05 0 0 -0.05 81.24 158.57 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 81.24 158.57 Tm
-processTxtPosition(): 0.05 0 0 -0.05 81.24 158.57 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 81.24 158.57 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=81.240
-----------tm_p->f=158.570
-----------------cur_xy_p->x=81.240
-----------------cur_xy_p->y=158.570
-----------------cur_xy_p->ox=81.240
-----------------cur_xy_p->oy=158.570
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 81.24 158.57 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=81.240
-----------tm_p->f=158.570
-----------------cur_xy_p->x=81.240
-----------------cur_xy_p->y=158.570
-----------------cur_xy_p->ox=81.240
-----------------cur_xy_p->oy=158.570
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 81.24 158.57 Tm
 processBT() tmpbuf = <547F>Tj 482.391 0 TD<097E>Tj 482.391 0 TD<0D2D>Tj 480 0 TD<41F1>Tj 482.391 0 TD<4AD2>Tj 482.391 0 TD<4AF1>Tj 482.391 0 TD<3E7C>Tj 480 0 TD<044A>Tj 482.391 0 TD<1937>Tj 482.391 0 TD<1BA0>Tj 482.391 0 TD<0836>Tj 482.391 0 TD<34D7>Tj 480 0 TD<41F1>Tj 482.391 0 TD<0868>Tj 482.391 0 TD<18C5>Tj 482.391 0 TD<4374>Tj 480 0 TD<0E2A>Tj
-
-hasTxtPosition():<547F>Tj 482.391 0 TD<097E>Tj 482.391 0 TD<0D2D>Tj 480 0 TD<41F1>Tj 482.391 0 TD<4AD2>Tj 482.391 0 TD<4AF1>Tj 482.391 0 TD<3E7C>Tj 480 0 TD<044A>Tj 482.391 0 TD<1937>Tj 482.391 0 TD<1BA0>Tj 482.391 0 TD<0836>Tj 482.391 0 TD<34D7>Tj 480 0 TD<41F1>Tj 482.391 0 TD<0868>Tj 482.391 0 TD<18C5>Tj 482.391 0 TD<4374>Tj 480 0 TD<0E2A>Tj
-processTxtPosition(): <547F>Tj 482.391 0 TD<097E>Tj 482.391 0 TD<0D2D>Tj 480 0 TD<41F1>Tj 482.391 0 TD<4AD2>Tj 482.391 0 TD<4AF1>Tj 482.391 0 TD<3E7C>Tj 480 0 TD<044A>Tj 482.391 0 TD<1937>Tj 482.391 0 TD<1BA0>Tj 482.391 0 TD<0836>Tj 482.391 0 TD<34D7>Tj 480 0 TD<41F1>Tj 482.391 0 TD<0868>Tj 482.391 0 TD<18C5>Tj 482.391 0 TD<4374>Tj 480 0 TD<0E2A>Tj
-processTD() buf=<547F>Tj 482.391 0 TD<097E>Tj 482.391 0 TD<0D2D>Tj 480 0 TD<41F1>Tj 482.391 0 TD<4AD2>Tj 482.391 0 TD<4AF1>Tj 482.391 0 TD<3E7C>Tj 480 0 TD<044A>Tj 482.391 0 TD<1937>Tj 482.391 0 TD<1BA0>Tj 482.391 0 TD<0836>Tj 482.391 0 TD<34D7>Tj 480 0 TD<41F1>Tj 482.391 0 TD<0868>Tj 482.391 0 TD<18C5>Tj 482.391 0 TD<4374>Tj 480 0 TD<0E2A>Tj
-buf1=480, buf2=0, buf3=TD<0E2A>Tj
 getOriginXY():-------------======================================
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<547F>Tj 482.391 0 TD<097E>Tj 482.391 0 TD<0D2D>Tj 480 0 TD<41F1>Tj 482.391 0 TD<4AD2>Tj 482.391 0 TD<4AF1>Tj 482.391 0 TD<3E7C>Tj 480 0 TD<044A>Tj 482.391 0 TD<1937>Tj 482.391 0 TD<1BA0>Tj 482.391 0 TD<0836>Tj 482.391 0 TD<34D7>Tj 480 0 TD<41F1>Tj 482.391 0 TD<0868>Tj 482.391 0 TD<18C5>Tj 482.391 0 TD<4374>Tj 480 0 TD<0E2A>Tj, len=328
+-------------tmpbuf=547F, 5-1=4, n=0
+buf=547F
 
-hasTxtPosition():ET
+---------------转换后的内容为:鹏(len=2)
+-------------tmpbuf=097E, 26-22=4, n=2
+buf=097E
+
+---------------转换后的内容为:华(len=2)
+-------------tmpbuf=0D2D, 47-43=4, n=4
+buf=0D2D
+
+---------------转换后的内容为:国(len=2)
+-------------tmpbuf=41F1, 64-60=4, n=6
+buf=41F1
+
+---------------转换后的内容为:证(len=2)
+-------------tmpbuf=4AD2, 85-81=4, n=8
+buf=4AD2
+
+---------------转换后的内容为:钢(len=2)
+-------------tmpbuf=4AF1, 106-102=4, n=10
+buf=4AF1
+
+---------------转换后的内容为:铁(len=2)
+-------------tmpbuf=3E7C, 127-123=4, n=12
+buf=3E7C
+
+---------------转换后的内容为:行(len=2)
+-------------tmpbuf=044A, 144-140=4, n=14
+buf=044A
+
+---------------转换后的内容为:业(len=2)
+-------------tmpbuf=1937, 165-161=4, n=16
+buf=1937
+
+---------------转换后的内容为:指(len=2)
+-------------tmpbuf=1BA0, 186-182=4, n=18
+buf=1BA0
+
+---------------转换后的内容为:数(len=2)
+-------------tmpbuf=0836, 207-203=4, n=20
+buf=0836
+
+---------------转换后的内容为:分(len=2)
+-------------tmpbuf=34D7, 228-224=4, n=22
+buf=34D7
+
+---------------转换后的内容为:级(len=2)
+-------------tmpbuf=41F1, 245-241=4, n=24
+buf=41F1
+
+---------------转换后的内容为:证(len=2)
+-------------tmpbuf=0868, 266-262=4, n=26
+buf=0868
+
+---------------转换后的内容为:券(len=2)
+-------------tmpbuf=18C5, 287-283=4, n=28
+buf=18C5
+
+---------------转换后的内容为:投(len=2)
+-------------tmpbuf=4374, 308-304=4, n=30
+buf=4374
+
+---------------转换后的内容为:资(len=2)
+-------------tmpbuf=0E2A, 325-321=4, n=32
+buf=0E2A
+
+---------------转换后的内容为:基(len=2)
+解码前:<547F>Tj 482.391 0 TD<097E>Tj 482.391 0 TD<0D2D>Tj 480 0 TD<41F1>Tj 482.391 0 TD<4AD2>Tj 482.391 0 TD<4AF1>Tj 482.391 0 TD<3E7C>Tj 480 0 TD<044A>Tj 482.391 0 TD<1937>Tj 482.391 0 TD<1BA0>Tj 482.391 0 TD<0836>Tj 482.391 0 TD<34D7>Tj 480 0 TD<41F1>Tj 482.391 0 TD<0868>Tj 482.391 0 TD<18C5>Tj 482.391 0 TD<4374>Tj 480 0 TD<0E2A>Tj
+解码后:鹏华国证钢铁行业指数分级证券投资基|
+fillTextMap(), tp->buf=鹏华国证钢铁行业指数分级证券投资基, tp->id=1
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.6864 w
-
-hasTxtPosition():0.6864 w
 processBT() tmpbuf = 0.05 0 0 -0.05 490.8 158.57 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 490.8 158.57 Tm
-processTxtPosition(): 0.05 0 0 -0.05 490.8 158.57 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 490.8 158.57 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=490.800
-----------tm_p->f=158.570
-----------------cur_xy_p->x=490.800
-----------------cur_xy_p->y=158.570
-----------------cur_xy_p->ox=490.800
-----------------cur_xy_p->oy=158.570
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 490.8 158.57 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=490.800
-----------tm_p->f=158.570
-----------------cur_xy_p->x=490.800
-----------------cur_xy_p->y=158.570
-----------------cur_xy_p->ox=490.800
-----------------cur_xy_p->oy=158.570
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 490.8 158.57 Tm
 processBT() tmpbuf = <4801>Tj
-
-hasTxtPosition():<4801>Tj
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<4801>Tj, len=8
+-------------tmpbuf=4801, 5-1=4, n=0
+buf=4801
 
-hasTxtPosition():ET
+---------------转换后的内容为:金(len=2)
+解码前:<4801>Tj
+解码后:金|
+fillTextMap(), tp->buf=金, tp->id=2
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.6864 w
-
-hasTxtPosition():0.6864 w
 processBT() tmpbuf = 0.05 0 0 -0.05 174.359 189.77 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 174.359 189.77 Tm
-processTxtPosition(): 0.05 0 0 -0.05 174.359 189.77 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 174.359 189.77 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=174.359
-----------tm_p->f=189.770
-----------------cur_xy_p->x=174.359
-----------------cur_xy_p->y=189.770
-----------------cur_xy_p->ox=174.359
-----------------cur_xy_p->oy=189.770
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 174.359 189.77 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=174.359
-----------tm_p->f=189.770
-----------------cur_xy_p->x=174.359
-----------------cur_xy_p->y=189.770
-----------------cur_xy_p->ox=174.359
-----------------cur_xy_p->oy=189.770
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 174.359 189.77 Tm
 processBT() tmpbuf = <0015>Tj 242.391 0 TD<0013>Tj 242.391 0 TD<0014>Tj 242.391 0 TD<0019>Tj
-
-hasTxtPosition():<0015>Tj 242.391 0 TD<0013>Tj 242.391 0 TD<0014>Tj 242.391 0 TD<0019>Tj
-processTxtPosition(): <0015>Tj 242.391 0 TD<0013>Tj 242.391 0 TD<0014>Tj 242.391 0 TD<0019>Tj
-processTD() buf=<0015>Tj 242.391 0 TD<0013>Tj 242.391 0 TD<0014>Tj 242.391 0 TD<0019>Tj
-buf1=242.391, buf2=0, buf3=TD<0019>Tj
 getOriginXY():-------------======================================
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<0015>Tj 242.391 0 TD<0013>Tj 242.391 0 TD<0014>Tj 242.391 0 TD<0019>Tj, len=71
+-------------tmpbuf=0015, 5-1=4, n=0
+buf=0015
 
-hasTxtPosition():ET
+---------------转换后的内容为:2(len=1)
+-------------tmpbuf=0013, 26-22=4, n=1
+buf=0013
+
+---------------转换后的内容为:0(len=1)
+-------------tmpbuf=0014, 47-43=4, n=2
+buf=0014
+
+---------------转换后的内容为:1(len=1)
+-------------tmpbuf=0019, 68-64=4, n=3
+buf=0019
+
+---------------转换后的内容为:6(len=1)
+解码前:<0015>Tj 242.391 0 TD<0013>Tj 242.391 0 TD<0014>Tj 242.391 0 TD<0019>Tj
+解码后:2016|
+fillTextMap(), tp->buf=2016, tp->id=3
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.6864 w
-
-hasTxtPosition():0.6864 w
 processBT() tmpbuf = 0.05 0 0 -0.05 228.72 189.77 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 228.72 189.77 Tm
-processTxtPosition(): 0.05 0 0 -0.05 228.72 189.77 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 228.72 189.77 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=228.720
-----------tm_p->f=189.770
-----------------cur_xy_p->x=228.720
-----------------cur_xy_p->y=189.770
-----------------cur_xy_p->ox=228.720
-----------------cur_xy_p->oy=189.770
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 228.72 189.77 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=228.720
-----------tm_p->f=189.770
-----------------cur_xy_p->x=228.720
-----------------cur_xy_p->y=189.770
-----------------cur_xy_p->ox=228.720
-----------------cur_xy_p->oy=189.770
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 228.72 189.77 Tm
 processBT() tmpbuf = <14A4>Tj 482.391 0 TD<097A>Tj 482.391 0 TD<14A4>Tj 480 0 TD<14D6>Tj 482.391 0 TD<18D5>Tj 482.391 0 TD<0A7A>Tj
-
-hasTxtPosition():<14A4>Tj 482.391 0 TD<097A>Tj 482.391 0 TD<14A4>Tj 480 0 TD<14D6>Tj 482.391 0 TD<18D5>Tj 482.391 0 TD<0A7A>Tj
-processTxtPosition(): <14A4>Tj 482.391 0 TD<097A>Tj 482.391 0 TD<14A4>Tj 480 0 TD<14D6>Tj 482.391 0 TD<18D5>Tj 482.391 0 TD<0A7A>Tj
-processTD() buf=<14A4>Tj 482.391 0 TD<097A>Tj 482.391 0 TD<14A4>Tj 480 0 TD<14D6>Tj 482.391 0 TD<18D5>Tj 482.391 0 TD<0A7A>Tj
-buf1=482.391, buf2=0, buf3=TD<0A7A>Tj
 getOriginXY():-------------======================================
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<14A4>Tj 482.391 0 TD<097A>Tj 482.391 0 TD<14A4>Tj 480 0 TD<14D6>Tj 482.391 0 TD<18D5>Tj 482.391 0 TD<0A7A>Tj, len=109
+-------------tmpbuf=14A4, 5-1=4, n=0
+buf=14A4
 
-hasTxtPosition():ET
+---------------转换后的内容为:年(len=2)
+-------------tmpbuf=097A, 26-22=4, n=2
+buf=097A
+
+---------------转换后的内容为:半(len=2)
+-------------tmpbuf=14A4, 47-43=4, n=4
+buf=14A4
+
+---------------转换后的内容为:年(len=2)
+-------------tmpbuf=14D6, 64-60=4, n=6
+buf=14D6
+
+---------------转换后的内容为:度(len=2)
+-------------tmpbuf=18D5, 85-81=4, n=8
+buf=18D5
+
+---------------转换后的内容为:报(len=2)
+-------------tmpbuf=0A7A, 106-102=4, n=10
+buf=0A7A
+
+---------------转换后的内容为:告(len=2)
+解码前:<14A4>Tj 482.391 0 TD<097A>Tj 482.391 0 TD<14A4>Tj 480 0 TD<14D6>Tj 482.391 0 TD<18D5>Tj 482.391 0 TD<0A7A>Tj
+解码后:年半年度报告|
+fillTextMap(), tp->buf=年半年度报告, tp->id=4
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.6864 w
-
-hasTxtPosition():0.6864 w
 processBT() tmpbuf = 0.05 0 0 -0.05 373.2 189.77 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 373.2 189.77 Tm
-processTxtPosition(): 0.05 0 0 -0.05 373.2 189.77 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 373.2 189.77 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=373.200
-----------tm_p->f=189.770
-----------------cur_xy_p->x=373.200
-----------------cur_xy_p->y=189.770
-----------------cur_xy_p->ox=373.200
-----------------cur_xy_p->oy=189.770
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 373.2 189.77 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=373.200
-----------tm_p->f=189.770
-----------------cur_xy_p->x=373.200
-----------------cur_xy_p->y=189.770
-----------------cur_xy_p->ox=373.200
-----------------cur_xy_p->oy=189.770
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 373.2 189.77 Tm
 processBT() tmpbuf = <1A88>Tj 482.391 0 TD<3FB1>Tj
-
-hasTxtPosition():<1A88>Tj 482.391 0 TD<3FB1>Tj
-processTxtPosition(): <1A88>Tj 482.391 0 TD<3FB1>Tj
-processTD() buf=<1A88>Tj 482.391 0 TD<3FB1>Tj
-buf1=482.391, buf2=0, buf3=TD<3FB1>Tj
 getOriginXY():-------------======================================
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<1A88>Tj 482.391 0 TD<3FB1>Tj, len=29
+-------------tmpbuf=1A88, 5-1=4, n=0
+buf=1A88
 
-hasTxtPosition():ET
+---------------转换后的内容为:摘(len=2)
+-------------tmpbuf=3FB1, 26-22=4, n=2
+buf=3FB1
+
+---------------转换后的内容为:要(len=2)
+解码前:<1A88>Tj 482.391 0 TD<3FB1>Tj
+解码后:摘要|
+fillTextMap(), tp->buf=摘要, tp->id=5
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = /FT8 281 Tf
 ----------------------------------------------tf=FT8----------------------
-
-hasTxtPosition():/FT8 281 Tf
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.40183 w
-
-hasTxtPosition():0.40183 w
 processBT() tmpbuf = 0.05 0 0 -0.05 243.12 248.69 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 243.12 248.69 Tm
-processTxtPosition(): 0.05 0 0 -0.05 243.12 248.69 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 243.12 248.69 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=243.120
-----------tm_p->f=248.690
-----------------cur_xy_p->x=243.120
-----------------cur_xy_p->y=248.690
-----------------cur_xy_p->ox=243.120
-----------------cur_xy_p->oy=248.690
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 243.12 248.69 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=243.120
-----------tm_p->f=248.690
-----------------cur_xy_p->x=243.120
-----------------cur_xy_p->y=248.690
-----------------cur_xy_p->ox=243.120
-----------------cur_xy_p->oy=248.690
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 243.12 248.69 Tm
 processBT() tmpbuf = <0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj
-
-hasTxtPosition():<0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj
-processTxtPosition(): <0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj
-processTD() buf=<0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj
-buf1=141.594, buf2=0, buf3=TD<0019>Tj
 getOriginXY():-------------======================================
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj, len=71
+-------------tmpbuf=0015, 5-1=4, n=0
+buf=0015
 
-hasTxtPosition():ET
+---------------转换后的内容为:2(len=1)
+-------------tmpbuf=0013, 26-22=4, n=1
+buf=0013
+
+---------------转换后的内容为:0(len=1)
+-------------tmpbuf=0014, 47-43=4, n=2
+buf=0014
+
+---------------转换后的内容为:1(len=1)
+-------------tmpbuf=0019, 68-64=4, n=3
+buf=0019
+
+---------------转换后的内容为:6(len=1)
+解码前:<0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj
+解码后:2016|
+fillTextMap(), tp->buf=2016, tp->id=6
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.40183 w
-
-hasTxtPosition():0.40183 w
 processBT() tmpbuf = 0.05 0 0 -0.05 274.8 248.69 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 274.8 248.69 Tm
-processTxtPosition(): 0.05 0 0 -0.05 274.8 248.69 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 274.8 248.69 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=274.800
-----------tm_p->f=248.690
-----------------cur_xy_p->x=274.800
-----------------cur_xy_p->y=248.690
-----------------cur_xy_p->ox=274.800
-----------------cur_xy_p->oy=248.690
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 274.8 248.69 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=274.800
-----------tm_p->f=248.690
-----------------cur_xy_p->x=274.800
-----------------cur_xy_p->y=248.690
-----------------cur_xy_p->ox=274.800
-----------------cur_xy_p->oy=248.690
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 274.8 248.69 Tm
 processBT() tmpbuf = <14A4>Tj
-
-hasTxtPosition():<14A4>Tj
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<14A4>Tj, len=8
+-------------tmpbuf=14A4, 5-1=4, n=0
+buf=14A4
 
-hasTxtPosition():ET
+---------------转换后的内容为:年(len=2)
+解码前:<14A4>Tj
+解码后:年|
+fillTextMap(), tp->buf=年, tp->id=7
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.40183 w
-
-hasTxtPosition():0.40183 w
 processBT() tmpbuf = 0.05 0 0 -0.05 292.44 248.69 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 292.44 248.69 Tm
-processTxtPosition(): 0.05 0 0 -0.05 292.44 248.69 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 292.44 248.69 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=292.440
-----------tm_p->f=248.690
-----------------cur_xy_p->x=292.440
-----------------cur_xy_p->y=248.690
-----------------cur_xy_p->ox=292.440
-----------------cur_xy_p->oy=248.690
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 292.44 248.69 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=292.440
-----------tm_p->f=248.690
-----------------cur_xy_p->x=292.440
-----------------cur_xy_p->y=248.690
-----------------cur_xy_p->ox=292.440
-----------------cur_xy_p->oy=248.690
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 292.44 248.69 Tm
 processBT() tmpbuf = <0019>Tj
-
-hasTxtPosition():<0019>Tj
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<0019>Tj, len=8
+-------------tmpbuf=0019, 5-1=4, n=0
+buf=0019
 
-hasTxtPosition():ET
+---------------转换后的内容为:6(len=1)
+解码前:<0019>Tj
+解码后:6|
+fillTextMap(), tp->buf=6, tp->id=8
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.40183 w
-
-hasTxtPosition():0.40183 w
 processBT() tmpbuf = 0.05 0 0 -0.05 303 248.69 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 303 248.69 Tm
-processTxtPosition(): 0.05 0 0 -0.05 303 248.69 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 303 248.69 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=303.000
-----------tm_p->f=248.690
-----------------cur_xy_p->x=303.000
-----------------cur_xy_p->y=248.690
-----------------cur_xy_p->ox=303.000
-----------------cur_xy_p->oy=248.690
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 303 248.69 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=303.000
-----------tm_p->f=248.690
-----------------cur_xy_p->x=303.000
-----------------cur_xy_p->y=248.690
-----------------cur_xy_p->ox=303.000
-----------------cur_xy_p->oy=248.690
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 303 248.69 Tm
 processBT() tmpbuf = <1D38>Tj
-
-hasTxtPosition():<1D38>Tj
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<1D38>Tj, len=8
+-------------tmpbuf=1D38, 5-1=4, n=0
+buf=1D38
 
-hasTxtPosition():ET
+---------------转换后的内容为:月(len=2)
+解码前:<1D38>Tj
+解码后:月|
+fillTextMap(), tp->buf=月, tp->id=9
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.40183 w
-
-hasTxtPosition():0.40183 w
 processBT() tmpbuf = 0.05 0 0 -0.05 320.52 248.69 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 320.52 248.69 Tm
-processTxtPosition(): 0.05 0 0 -0.05 320.52 248.69 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 320.52 248.69 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=320.520
-----------tm_p->f=248.690
-----------------cur_xy_p->x=320.520
-----------------cur_xy_p->y=248.690
-----------------cur_xy_p->ox=320.520
-----------------cur_xy_p->oy=248.690
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 320.52 248.69 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=320.520
-----------tm_p->f=248.690
-----------------cur_xy_p->x=320.520
-----------------cur_xy_p->y=248.690
-----------------cur_xy_p->ox=320.520
-----------------cur_xy_p->oy=248.690
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 320.52 248.69 Tm
 processBT() tmpbuf = <0016>Tj 141.594 0 TD<0013>Tj
-
-hasTxtPosition():<0016>Tj 141.594 0 TD<0013>Tj
-processTxtPosition(): <0016>Tj 141.594 0 TD<0013>Tj
-processTD() buf=<0016>Tj 141.594 0 TD<0013>Tj
-buf1=141.594, buf2=0, buf3=TD<0013>Tj
 getOriginXY():-------------======================================
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<0016>Tj 141.594 0 TD<0013>Tj, len=29
+-------------tmpbuf=0016, 5-1=4, n=0
+buf=0016
 
-hasTxtPosition():ET
+---------------转换后的内容为:3(len=1)
+-------------tmpbuf=0013, 26-22=4, n=1
+buf=0013
+
+---------------转换后的内容为:0(len=1)
+解码前:<0016>Tj 141.594 0 TD<0013>Tj
+解码后:30|
+fillTextMap(), tp->buf=30, tp->id=10
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.40183 w
-
-hasTxtPosition():0.40183 w
 processBT() tmpbuf = 0.05 0 0 -0.05 338.04 248.69 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 338.04 248.69 Tm
-processTxtPosition(): 0.05 0 0 -0.05 338.04 248.69 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 338.04 248.69 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=338.040
-----------tm_p->f=248.690
-----------------cur_xy_p->x=338.040
-----------------cur_xy_p->y=248.690
-----------------cur_xy_p->ox=338.040
-----------------cur_xy_p->oy=248.690
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 338.04 248.69 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=338.040
-----------tm_p->f=248.690
-----------------cur_xy_p->x=338.040
-----------------cur_xy_p->y=248.690
-----------------cur_xy_p->ox=338.040
-----------------cur_xy_p->oy=248.690
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 338.04 248.69 Tm
 processBT() tmpbuf = <1C15>Tj
-
-hasTxtPosition():<1C15>Tj
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<1C15>Tj, len=8
+-------------tmpbuf=1C15, 5-1=4, n=0
+buf=1C15
 
-hasTxtPosition():ET
+---------------转换后的内容为:日(len=2)
+解码前:<1C15>Tj
+解码后:日|
+fillTextMap(), tp->buf=日, tp->id=11
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.40183 w
-
-hasTxtPosition():0.40183 w
 processBT() tmpbuf = 0.05 0 0 -0.05 160.559 591.89 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 160.559 591.89 Tm
-processTxtPosition(): 0.05 0 0 -0.05 160.559 591.89 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 160.559 591.89 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=160.559
-----------tm_p->f=591.890
-----------------cur_xy_p->x=160.559
-----------------cur_xy_p->y=591.890
-----------------cur_xy_p->ox=160.559
-----------------cur_xy_p->oy=591.890
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 160.559 591.89 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=160.559
-----------tm_p->f=591.890
-----------------cur_xy_p->x=160.559
-----------------cur_xy_p->y=591.890
-----------------cur_xy_p->ox=160.559
-----------------cur_xy_p->oy=591.890
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 160.559 591.89 Tm
 processBT() tmpbuf = <0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<2A36>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj
-
-hasTxtPosition():<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<2A36>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj
-processTxtPosition(): <0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<2A36>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj
-processTD() buf=<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<2A36>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj
-buf1=283.188, buf2=0, buf3=TD<02D6>Tj
 getOriginXY():-------------======================================
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<2A36>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj, len=113
+-------------tmpbuf=0E2A, 5-1=4, n=0
+buf=0E2A
 
-hasTxtPosition():ET
+---------------转换后的内容为:基(len=2)
+-------------tmpbuf=4801, 26-22=4, n=2
+buf=4801
+
+---------------转换后的内容为:金(len=2)
+-------------tmpbuf=31D1, 47-43=4, n=4
+buf=31D1
+
+---------------转换后的内容为:管(len=2)
+-------------tmpbuf=2A36, 68-64=4, n=6
+buf=2A36
+
+---------------转换后的内容为:理(len=2)
+-------------tmpbuf=04EA, 89-85=4, n=8
+buf=04EA
+
+---------------转换后的内容为:人(len=2)
+-------------tmpbuf=02D6, 110-106=4, n=10
+buf=02D6
+
+---------------转换后的内容为:：(len=2)
+解码前:<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<2A36>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj
+解码后:基金管理人：|
+fillTextMap(), tp->buf=基金管理人：, tp->id=12
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.40183 w
-
-hasTxtPosition():0.40183 w
 processBT() tmpbuf = 0.05 0 0 -0.05 244.8 591.89 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 244.8 591.89 Tm
-processTxtPosition(): 0.05 0 0 -0.05 244.8 591.89 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 244.8 591.89 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=244.800
-----------tm_p->f=591.890
-----------------cur_xy_p->x=244.800
-----------------cur_xy_p->y=591.890
-----------------cur_xy_p->ox=244.800
-----------------cur_xy_p->oy=591.890
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 244.8 591.89 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=244.800
-----------tm_p->f=591.890
-----------------cur_xy_p->x=244.800
-----------------cur_xy_p->y=591.890
-----------------cur_xy_p->ox=244.800
-----------------cur_xy_p->oy=591.890
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 244.8 591.89 Tm
 processBT() tmpbuf = <547F>Tj 280.797 0 TD<097E>Tj 280.797 0 TD<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 283.188 0 TD<2A36>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj
-
-hasTxtPosition():<547F>Tj 280.797 0 TD<097E>Tj 280.797 0 TD<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 283.188 0 TD<2A36>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj
-processTxtPosition(): <547F>Tj 280.797 0 TD<097E>Tj 280.797 0 TD<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 283.188 0 TD<2A36>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj
-processTD() buf=<547F>Tj 280.797 0 TD<097E>Tj 280.797 0 TD<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 283.188 0 TD<2A36>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj
-buf1=280.797, buf2=0, buf3=TD<0A28>Tj
 getOriginXY():-------------======================================
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<547F>Tj 280.797 0 TD<097E>Tj 280.797 0 TD<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 283.188 0 TD<2A36>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj, len=197
+-------------tmpbuf=547F, 5-1=4, n=0
+buf=547F
 
-hasTxtPosition():ET
+---------------转换后的内容为:鹏(len=2)
+-------------tmpbuf=097E, 26-22=4, n=2
+buf=097E
+
+---------------转换后的内容为:华(len=2)
+-------------tmpbuf=0E2A, 47-43=4, n=4
+buf=0E2A
+
+---------------转换后的内容为:基(len=2)
+-------------tmpbuf=4801, 68-64=4, n=6
+buf=4801
+
+---------------转换后的内容为:金(len=2)
+-------------tmpbuf=31D1, 89-85=4, n=8
+buf=31D1
+
+---------------转换后的内容为:管(len=2)
+-------------tmpbuf=2A36, 110-106=4, n=10
+buf=2A36
+
+---------------转换后的内容为:理(len=2)
+-------------tmpbuf=1D39, 131-127=4, n=12
+buf=1D39
+
+---------------转换后的内容为:有(len=2)
+-------------tmpbuf=4C80, 152-148=4, n=14
+buf=4C80
+
+---------------转换后的内容为:限(len=2)
+-------------tmpbuf=079C, 173-169=4, n=16
+buf=079C
+
+---------------转换后的内容为:公(len=2)
+-------------tmpbuf=0A28, 194-190=4, n=18
+buf=0A28
+
+---------------转换后的内容为:司(len=2)
+解码前:<547F>Tj 280.797 0 TD<097E>Tj 280.797 0 TD<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31D1>Tj 283.188 0 TD<2A36>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj
+解码后:鹏华基金管理有限公司|
+fillTextMap(), tp->buf=鹏华基金管理有限公司, tp->id=13
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.40183 w
-
-hasTxtPosition():0.40183 w
 processBT() tmpbuf = 0.05 0 0 -0.05 160.559 623.09 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 160.559 623.09 Tm
-processTxtPosition(): 0.05 0 0 -0.05 160.559 623.09 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 160.559 623.09 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=160.559
-----------tm_p->f=623.090
-----------------cur_xy_p->x=160.559
-----------------cur_xy_p->y=623.090
-----------------cur_xy_p->ox=160.559
-----------------cur_xy_p->oy=623.090
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 160.559 623.09 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=160.559
-----------tm_p->f=623.090
-----------------cur_xy_p->x=160.559
-----------------cur_xy_p->y=623.090
-----------------cur_xy_p->ox=160.559
-----------------cur_xy_p->oy=623.090
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 160.559 623.09 Tm
 processBT() tmpbuf = <0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<1888>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj
-
-hasTxtPosition():<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<1888>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj
-processTxtPosition(): <0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<1888>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj
-processTD() buf=<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<1888>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj
-buf1=283.188, buf2=0, buf3=TD<02D6>Tj
 getOriginXY():-------------======================================
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<1888>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj, len=113
+-------------tmpbuf=0E2A, 5-1=4, n=0
+buf=0E2A
 
-hasTxtPosition():ET
+---------------转换后的内容为:基(len=2)
+-------------tmpbuf=4801, 26-22=4, n=2
+buf=4801
+
+---------------转换后的内容为:金(len=2)
+-------------tmpbuf=1888, 47-43=4, n=4
+buf=1888
+
+---------------转换后的内容为:托(len=2)
+-------------tmpbuf=31D1, 68-64=4, n=6
+buf=31D1
+
+---------------转换后的内容为:管(len=2)
+-------------tmpbuf=04EA, 89-85=4, n=8
+buf=04EA
+
+---------------转换后的内容为:人(len=2)
+-------------tmpbuf=02D6, 110-106=4, n=10
+buf=02D6
+
+---------------转换后的内容为:：(len=2)
+解码前:<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<1888>Tj 280.797 0 TD<31D1>Tj 280.797 0 TD<04EA>Tj 283.188 0 TD<02D6>Tj
+解码后:基金托管人：|
+fillTextMap(), tp->buf=基金托管人：, tp->id=14
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.40183 w
-
-hasTxtPosition():0.40183 w
 processBT() tmpbuf = 0.05 0 0 -0.05 244.8 623.09 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 244.8 623.09 Tm
-processTxtPosition(): 0.05 0 0 -0.05 244.8 623.09 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 244.8 623.09 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=244.800
-----------tm_p->f=623.090
-----------------cur_xy_p->x=244.800
-----------------cur_xy_p->y=623.090
-----------------cur_xy_p->ox=244.800
-----------------cur_xy_p->oy=623.090
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 244.8 623.09 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=244.800
-----------tm_p->f=623.090
-----------------cur_xy_p->x=244.800
-----------------cur_xy_p->y=623.090
-----------------cur_xy_p->ox=244.800
-----------------cur_xy_p->oy=623.090
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 244.8 623.09 Tm
 processBT() tmpbuf = <190B>Tj 280.797 0 TD<0B76>Tj 280.797 0 TD<4B26>Tj 280.797 0 TD<3E7C>Tj 280.797 0 TD<36D1>Tj 283.188 0 TD<052D>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj
-
-hasTxtPosition():<190B>Tj 280.797 0 TD<0B76>Tj 280.797 0 TD<4B26>Tj 280.797 0 TD<3E7C>Tj 280.797 0 TD<36D1>Tj 283.188 0 TD<052D>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj
-processTxtPosition(): <190B>Tj 280.797 0 TD<0B76>Tj 280.797 0 TD<4B26>Tj 280.797 0 TD<3E7C>Tj 280.797 0 TD<36D1>Tj 283.188 0 TD<052D>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj
-processTD() buf=<190B>Tj 280.797 0 TD<0B76>Tj 280.797 0 TD<4B26>Tj 280.797 0 TD<3E7C>Tj 280.797 0 TD<36D1>Tj 283.188 0 TD<052D>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj
-buf1=280.797, buf2=0, buf3=TD<0A28>Tj
 getOriginXY():-------------======================================
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<190B>Tj 280.797 0 TD<0B76>Tj 280.797 0 TD<4B26>Tj 280.797 0 TD<3E7C>Tj 280.797 0 TD<36D1>Tj 283.188 0 TD<052D>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj, len=197
+-------------tmpbuf=190B, 5-1=4, n=0
+buf=190B
 
-hasTxtPosition():ET
+---------------转换后的内容为:招(len=2)
+-------------tmpbuf=0B76, 26-22=4, n=2
+buf=0B76
+
+---------------转换后的内容为:商(len=2)
+-------------tmpbuf=4B26, 47-43=4, n=4
+buf=4B26
+
+---------------转换后的内容为:银(len=2)
+-------------tmpbuf=3E7C, 68-64=4, n=6
+buf=3E7C
+
+---------------转换后的内容为:行(len=2)
+-------------tmpbuf=36D1, 89-85=4, n=8
+buf=36D1
+
+---------------转换后的内容为:股(len=2)
+-------------tmpbuf=052D, 110-106=4, n=10
+buf=052D
+
+---------------转换后的内容为:份(len=2)
+-------------tmpbuf=1D39, 131-127=4, n=12
+buf=1D39
+
+---------------转换后的内容为:有(len=2)
+-------------tmpbuf=4C80, 152-148=4, n=14
+buf=4C80
+
+---------------转换后的内容为:限(len=2)
+-------------tmpbuf=079C, 173-169=4, n=16
+buf=079C
+
+---------------转换后的内容为:公(len=2)
+-------------tmpbuf=0A28, 194-190=4, n=18
+buf=0A28
+
+---------------转换后的内容为:司(len=2)
+解码前:<190B>Tj 280.797 0 TD<0B76>Tj 280.797 0 TD<4B26>Tj 280.797 0 TD<3E7C>Tj 280.797 0 TD<36D1>Tj 283.188 0 TD<052D>Tj 280.797 0 TD<1D39>Tj 280.797 0 TD<4C80>Tj 280.797 0 TD<079C>Tj 280.797 0 TD<0A28>Tj
+解码后:招商银行股份有限公司|
+fillTextMap(), tp->buf=招商银行股份有限公司, tp->id=15
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.40183 w
-
-hasTxtPosition():0.40183 w
 processBT() tmpbuf = 0.05 0 0 -0.05 160.559 654.29 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 160.559 654.29 Tm
-processTxtPosition(): 0.05 0 0 -0.05 160.559 654.29 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 160.559 654.29 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=160.559
-----------tm_p->f=654.290
-----------------cur_xy_p->x=160.559
-----------------cur_xy_p->y=654.290
-----------------cur_xy_p->ox=160.559
-----------------cur_xy_p->oy=654.290
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 160.559 654.29 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=160.559
-----------tm_p->f=654.290
-----------------cur_xy_p->x=160.559
-----------------cur_xy_p->y=654.290
-----------------cur_xy_p->ox=160.559
-----------------cur_xy_p->oy=654.290
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 160.559 654.29 Tm
 processBT() tmpbuf = <4631>Tj 280.797 0 TD<082A>Tj 280.797 0 TD<1C15>Tj 280.797 0 TD<1D4F>Tj 280.797 0 TD<02D6>Tj
-
-hasTxtPosition():<4631>Tj 280.797 0 TD<082A>Tj 280.797 0 TD<1C15>Tj 280.797 0 TD<1D4F>Tj 280.797 0 TD<02D6>Tj
-processTxtPosition(): <4631>Tj 280.797 0 TD<082A>Tj 280.797 0 TD<1C15>Tj 280.797 0 TD<1D4F>Tj 280.797 0 TD<02D6>Tj
-processTD() buf=<4631>Tj 280.797 0 TD<082A>Tj 280.797 0 TD<1C15>Tj 280.797 0 TD<1D4F>Tj 280.797 0 TD<02D6>Tj
-buf1=280.797, buf2=0, buf3=TD<02D6>Tj
 getOriginXY():-------------======================================
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<4631>Tj 280.797 0 TD<082A>Tj 280.797 0 TD<1C15>Tj 280.797 0 TD<1D4F>Tj 280.797 0 TD<02D6>Tj, len=92
+-------------tmpbuf=4631, 5-1=4, n=0
+buf=4631
 
-hasTxtPosition():ET
+---------------转换后的内容为:送(len=2)
+-------------tmpbuf=082A, 26-22=4, n=2
+buf=082A
+
+---------------转换后的内容为:出(len=2)
+-------------tmpbuf=1C15, 47-43=4, n=4
+buf=1C15
+
+---------------转换后的内容为:日(len=2)
+-------------tmpbuf=1D4F, 68-64=4, n=6
+buf=1D4F
+
+---------------转换后的内容为:期(len=2)
+-------------tmpbuf=02D6, 89-85=4, n=8
+buf=02D6
+
+---------------转换后的内容为:：(len=2)
+解码前:<4631>Tj 280.797 0 TD<082A>Tj 280.797 0 TD<1C15>Tj 280.797 0 TD<1D4F>Tj 280.797 0 TD<02D6>Tj
+解码后:送出日期：|
+fillTextMap(), tp->buf=送出日期：, tp->id=16
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.40183 w
-
-hasTxtPosition():0.40183 w
 processBT() tmpbuf = 0.05 0 0 -0.05 230.759 654.29 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 230.759 654.29 Tm
-processTxtPosition(): 0.05 0 0 -0.05 230.759 654.29 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 230.759 654.29 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=230.759
-----------tm_p->f=654.290
-----------------cur_xy_p->x=230.759
-----------------cur_xy_p->y=654.290
-----------------cur_xy_p->ox=230.759
-----------------cur_xy_p->oy=654.290
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 230.759 654.29 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=230.759
-----------tm_p->f=654.290
-----------------cur_xy_p->x=230.759
-----------------cur_xy_p->y=654.290
-----------------cur_xy_p->ox=230.759
-----------------cur_xy_p->oy=654.290
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 230.759 654.29 Tm
 processBT() tmpbuf = <0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj
-
-hasTxtPosition():<0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj
-processTxtPosition(): <0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj
-processTD() buf=<0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj
-buf1=141.594, buf2=0, buf3=TD<0019>Tj
 getOriginXY():-------------======================================
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj, len=71
+-------------tmpbuf=0015, 5-1=4, n=0
+buf=0015
 
-hasTxtPosition():ET
+---------------转换后的内容为:2(len=1)
+-------------tmpbuf=0013, 26-22=4, n=1
+buf=0013
+
+---------------转换后的内容为:0(len=1)
+-------------tmpbuf=0014, 47-43=4, n=2
+buf=0014
+
+---------------转换后的内容为:1(len=1)
+-------------tmpbuf=0019, 68-64=4, n=3
+buf=0019
+
+---------------转换后的内容为:6(len=1)
+解码前:<0015>Tj 141.594 0 TD<0013>Tj 141.594 0 TD<0014>Tj 141.594 0 TD<0019>Tj
+解码后:2016|
+fillTextMap(), tp->buf=2016, tp->id=17
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.40183 w
-
-hasTxtPosition():0.40183 w
 processBT() tmpbuf = 0.05 0 0 -0.05 262.44 654.29 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 262.44 654.29 Tm
-processTxtPosition(): 0.05 0 0 -0.05 262.44 654.29 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 262.44 654.29 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=262.440
-----------tm_p->f=654.290
-----------------cur_xy_p->x=262.440
-----------------cur_xy_p->y=654.290
-----------------cur_xy_p->ox=262.440
-----------------cur_xy_p->oy=654.290
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 262.44 654.29 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=262.440
-----------tm_p->f=654.290
-----------------cur_xy_p->x=262.440
-----------------cur_xy_p->y=654.290
-----------------cur_xy_p->ox=262.440
-----------------cur_xy_p->oy=654.290
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 262.44 654.29 Tm
 processBT() tmpbuf = <14A4>Tj
-
-hasTxtPosition():<14A4>Tj
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<14A4>Tj, len=8
+-------------tmpbuf=14A4, 5-1=4, n=0
+buf=14A4
 
-hasTxtPosition():ET
+---------------转换后的内容为:年(len=2)
+解码前:<14A4>Tj
+解码后:年|
+fillTextMap(), tp->buf=年, tp->id=18
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.40183 w
-
-hasTxtPosition():0.40183 w
 processBT() tmpbuf = 0.05 0 0 -0.05 280.08 654.29 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 280.08 654.29 Tm
-processTxtPosition(): 0.05 0 0 -0.05 280.08 654.29 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 280.08 654.29 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=280.080
-----------tm_p->f=654.290
-----------------cur_xy_p->x=280.080
-----------------cur_xy_p->y=654.290
-----------------cur_xy_p->ox=280.080
-----------------cur_xy_p->oy=654.290
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 280.08 654.29 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=280.080
-----------tm_p->f=654.290
-----------------cur_xy_p->x=280.080
-----------------cur_xy_p->y=654.290
-----------------cur_xy_p->ox=280.080
-----------------cur_xy_p->oy=654.290
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 280.08 654.29 Tm
 processBT() tmpbuf = <001B>Tj
-
-hasTxtPosition():<001B>Tj
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<001B>Tj, len=8
+-------------tmpbuf=001B, 5-1=4, n=0
+buf=001B
 
-hasTxtPosition():ET
+---------------转换后的内容为:8(len=1)
+解码前:<001B>Tj
+解码后:8|
+fillTextMap(), tp->buf=8, tp->id=19
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.40183 w
-
-hasTxtPosition():0.40183 w
 processBT() tmpbuf = 0.05 0 0 -0.05 290.64 654.29 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 290.64 654.29 Tm
-processTxtPosition(): 0.05 0 0 -0.05 290.64 654.29 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 290.64 654.29 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=290.640
-----------tm_p->f=654.290
-----------------cur_xy_p->x=290.640
-----------------cur_xy_p->y=654.290
-----------------cur_xy_p->ox=290.640
-----------------cur_xy_p->oy=654.290
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 290.64 654.29 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=290.640
-----------tm_p->f=654.290
-----------------cur_xy_p->x=290.640
-----------------cur_xy_p->y=654.290
-----------------cur_xy_p->ox=290.640
-----------------cur_xy_p->oy=654.290
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 290.64 654.29 Tm
 processBT() tmpbuf = <1D38>Tj
-
-hasTxtPosition():<1D38>Tj
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<1D38>Tj, len=8
+-------------tmpbuf=1D38, 5-1=4, n=0
+buf=1D38
 
-hasTxtPosition():ET
+---------------转换后的内容为:月(len=2)
+解码前:<1D38>Tj
+解码后:月|
+fillTextMap(), tp->buf=月, tp->id=20
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.40183 w
-
-hasTxtPosition():0.40183 w
 processBT() tmpbuf = 0.05 0 0 -0.05 308.159 654.29 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 308.159 654.29 Tm
-processTxtPosition(): 0.05 0 0 -0.05 308.159 654.29 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 308.159 654.29 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=308.159
-----------tm_p->f=654.290
-----------------cur_xy_p->x=308.159
-----------------cur_xy_p->y=654.290
-----------------cur_xy_p->ox=308.159
-----------------cur_xy_p->oy=654.290
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 308.159 654.29 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=308.159
-----------tm_p->f=654.290
-----------------cur_xy_p->x=308.159
-----------------cur_xy_p->y=654.290
-----------------cur_xy_p->ox=308.159
-----------------cur_xy_p->oy=654.290
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 308.159 654.29 Tm
 processBT() tmpbuf = <0015>Tj 141.594 0 TD<001C>Tj
-
-hasTxtPosition():<0015>Tj 141.594 0 TD<001C>Tj
-processTxtPosition(): <0015>Tj 141.594 0 TD<001C>Tj
-processTD() buf=<0015>Tj 141.594 0 TD<001C>Tj
-buf1=141.594, buf2=0, buf3=TD<001C>Tj
 getOriginXY():-------------======================================
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<0015>Tj 141.594 0 TD<001C>Tj, len=29
+-------------tmpbuf=0015, 5-1=4, n=0
+buf=0015
 
-hasTxtPosition():ET
+---------------转换后的内容为:2(len=1)
+-------------tmpbuf=001C, 26-22=4, n=1
+buf=001C
+
+---------------转换后的内容为:9(len=1)
+解码前:<0015>Tj 141.594 0 TD<001C>Tj
+解码后:29|
+fillTextMap(), tp->buf=29, tp->id=21
+processBT() tmpbuf = ET
 decode() : tmpbuf = BT
 processBT() buf = BT
 processBT() tmpbuf = 2 Tr
-
-hasTxtPosition():2 Tr
 processBT() tmpbuf = 0.40183 w
-
-hasTxtPosition():0.40183 w
 processBT() tmpbuf = 0.05 0 0 -0.05 325.8 654.29 Tm
-
-hasTxtPosition():0.05 0 0 -0.05 325.8 654.29 Tm
-processTxtPosition(): 0.05 0 0 -0.05 325.8 654.29 Tm
 ==========================-----------------processTm(),buf=0.05 0 0 -0.05 325.8 654.29 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=325.800
-----------tm_p->f=654.290
-----------------cur_xy_p->x=325.800
-----------------cur_xy_p->y=654.290
-----------------cur_xy_p->ox=325.800
-----------------cur_xy_p->oy=654.290
-----------------cur_xy_p->opr=Tm
-==========================-----------------processTm(),buf=0.05 0 0 -0.05 325.8 654.29 Tm
-----------tm_p->a=0.050
-----------tm_p->b=0.000
-----------tm_p->c=0.000
-----------tm_p->d=-0.050
-----------tm_p->e=325.800
-----------tm_p->f=654.290
-----------------cur_xy_p->x=325.800
-----------------cur_xy_p->y=654.290
-----------------cur_xy_p->ox=325.800
-----------------cur_xy_p->oy=654.290
-----------------cur_xy_p->opr=Tm
+--------processTM() end !buf=0.05 0 0 -0.05 325.8 654.29 Tm
 processBT() tmpbuf = <1C15>Tj
-
-hasTxtPosition():<1C15>Tj
 找到CMAP, fontname=FT8, 编码数量:931
-processBT() tmpbuf = ET
+processTj() Begin:<1C15>Tj, len=8
+-------------tmpbuf=1C15, 5-1=4, n=0
+buf=1C15
 
-hasTxtPosition():ET
+---------------转换后的内容为:日(len=2)
+解码前:<1C15>Tj
+解码后:日|
+fillTextMap(), tp->buf=日, tp->id=22
+processBT() tmpbuf = ET
 decode() : tmpbuf = Q
+----------------Hello decode()--------------------------
+--------printCellMap()------------------
+-------------text id=1-----------
+ox=105.24, oy=158.57, cellID=0
+len=34, buf=鹏华国证钢铁行业指数分级证券投资基
+tp->prev=0000000000000000, tp=000000000034C9F0,tp->next=000000000034CA40
+------
+-------------text id=2-----------
+ox=490.80, oy=158.57, cellID=0
+len=2, buf=金
+tp->prev=000000000034C9F0, tp=000000000034CA40,tp->next=000000000034C110
+------
+-------------text id=3-----------
+ox=186.48, oy=189.77, cellID=0
+len=4, buf=2016
+tp->prev=000000000034CA40, tp=000000000034C110,tp->next=000000000034C0C0
+------
+-------------text id=4-----------
+ox=252.84, oy=189.77, cellID=0
+len=12, buf=年半年度报告
+tp->prev=000000000034C110, tp=000000000034C0C0,tp->next=000000000034C190
+------
+-------------text id=5-----------
+ox=397.32, oy=189.77, cellID=0
+len=4, buf=摘要
+tp->prev=000000000034C0C0, tp=000000000034C190,tp->next=000000000034C6D0
+------
+-------------text id=6-----------
+ox=250.20, oy=248.69, cellID=0
+len=4, buf=2016
+tp->prev=000000000034C190, tp=000000000034C6D0,tp->next=000000000034C680
+------
+-------------text id=7-----------
+ox=274.80, oy=248.69, cellID=0
+len=2, buf=年
+tp->prev=000000000034C6D0, tp=000000000034C680,tp->next=000000000034C720
+------
+-------------text id=8-----------
+ox=292.44, oy=248.69, cellID=0
+len=1, buf=6
+tp->prev=000000000034C680, tp=000000000034C720,tp->next=000000000034C8E0
+------
+-------------text id=9-----------
+ox=303.00, oy=248.69, cellID=0
+len=2, buf=月
+tp->prev=000000000034C720, tp=000000000034C8E0,tp->next=000000000034BF50
+------
+-------------text id=10-----------
+ox=327.60, oy=248.69, cellID=0
+len=2, buf=30
+tp->prev=000000000034C8E0, tp=000000000034BF50,tp->next=000000000034BFA0
+------
+-------------text id=11-----------
+ox=338.04, oy=248.69, cellID=0
+len=2, buf=日
+tp->prev=000000000034BF50, tp=000000000034BFA0,tp->next=000000000034C070
+------
+-------------text id=12-----------
+ox=174.72, oy=591.89, cellID=0
+len=12, buf=基金管理人：
+tp->prev=000000000034BFA0, tp=000000000034C070,tp->next=000000000034BFF0
+------
+-------------text id=13-----------
+ox=258.84, oy=591.89, cellID=0
+len=20, buf=鹏华基金管理有限公司
+tp->prev=000000000034C070, tp=000000000034BFF0,tp->next=000000000034C7F0
+------
+-------------text id=14-----------
+ox=174.72, oy=623.09, cellID=0
+len=12, buf=基金托管人：
+tp->prev=000000000034BFF0, tp=000000000034C7F0,tp->next=000000000034C770
+------
+-------------text id=15-----------
+ox=258.84, oy=623.09, cellID=0
+len=20, buf=招商银行股份有限公司
+tp->prev=000000000034C7F0, tp=000000000034C770,tp->next=00000000004B8C80
+------
+-------------text id=16-----------
+ox=174.60, oy=654.29, cellID=0
+len=10, buf=送出日期：
+tp->prev=000000000034C770, tp=00000000004B8C80,tp->next=00000000004B8FE0
+------
+-------------text id=17-----------
+ox=237.84, oy=654.29, cellID=0
+len=4, buf=2016
+tp->prev=00000000004B8C80, tp=00000000004B8FE0,tp->next=00000000004B8F90
+------
+-------------text id=18-----------
+ox=262.44, oy=654.29, cellID=0
+len=2, buf=年
+tp->prev=00000000004B8FE0, tp=00000000004B8F90,tp->next=00000000004B9030
+------
+-------------text id=19-----------
+ox=280.08, oy=654.29, cellID=0
+len=1, buf=8
+tp->prev=00000000004B8F90, tp=00000000004B9030,tp->next=00000000004B9080
+------
+-------------text id=20-----------
+ox=290.64, oy=654.29, cellID=0
+len=2, buf=月
+tp->prev=00000000004B9030, tp=00000000004B9080,tp->next=00000000004B90D0
+------
+-------------text id=21-----------
+ox=315.24, oy=654.29, cellID=0
+len=2, buf=29
+tp->prev=00000000004B9080, tp=00000000004B90D0,tp->next=00000000004B9120
+------
+-------------text id=22-----------
+ox=325.80, oy=654.29, cellID=0
+len=2, buf=日
+tp->prev=00000000004B90D0, tp=00000000004B9120,tp->next=0000000000000000
+------
+printTextMap() End
+--------address  tp->prev=0000000000000000, tp=000000000034C9F0, tp->next=000000000034CA40
+--------address  tp->prev=000000000034C9F0, tp=000000000034CA40, tp->next=000000000034C110
+ox=490.80, oy=158.57, px=105.24, py=158.57
+合并前, tp1->buf=鹏华国证钢铁行业指数分级证券投资基, tp1->len=34, tp2->buf=金, tp2->len=2
+合并后的内容为:鹏华国证钢铁行业指数分级证券投资基金(000000000034C7C0), len=36
+--------address  tp->prev=000000000034C9F0, tp=000000000034C110, tp->next=000000000034C0C0
+ox=186.48, oy=189.77, px=105.24, py=158.57
+不用合并！
+--------address  tp->prev=000000000034C110, tp=000000000034C0C0, tp->next=000000000034C190
+ox=252.84, oy=189.77, px=186.48, py=189.77
+合并前, tp1->buf=2016, tp1->len=4, tp2->buf=年半年度报告, tp2->len=12
+合并后的内容为:2016年半年度报告(0000000000347F50), len=16
+--------address  tp->prev=000000000034C110, tp=000000000034C190, tp->next=000000000034C6D0
+ox=397.32, oy=189.77, px=186.48, py=189.77
+合并前, tp1->buf=2016年半年度报告, tp1->len=16, tp2->buf=摘要, tp2->len=4
+合并后的内容为:2016年半年度报告摘要(0000000000347E90), len=20
+--------address  tp->prev=000000000034C110, tp=000000000034C6D0, tp->next=000000000034C680
+ox=250.20, oy=248.69, px=186.48, py=189.77
+不用合并！
+--------address  tp->prev=000000000034C6D0, tp=000000000034C680, tp->next=000000000034C720
+ox=274.80, oy=248.69, px=250.20, py=248.69
+合并前, tp1->buf=2016, tp1->len=4, tp2->buf=年, tp2->len=2
+合并后的内容为:2016年(00000000004B8BD0), len=6
+--------address  tp->prev=000000000034C6D0, tp=000000000034C720, tp->next=000000000034C8E0
+ox=292.44, oy=248.69, px=250.20, py=248.69
+合并前, tp1->buf=2016年, tp1->len=6, tp2->buf=6, tp2->len=1
+合并后的内容为:2016年6(00000000004B8BF0), len=7
+--------address  tp->prev=000000000034C6D0, tp=000000000034C8E0, tp->next=000000000034BF50
+ox=303.00, oy=248.69, px=250.20, py=248.69
+合并前, tp1->buf=2016年6, tp1->len=7, tp2->buf=月, tp2->len=2
+合并后的内容为:2016年6月(0000000000347F50), len=9
+--------address  tp->prev=000000000034C6D0, tp=000000000034BF50, tp->next=000000000034BFA0
+ox=327.60, oy=248.69, px=250.20, py=248.69
+合并前, tp1->buf=2016年6月, tp1->len=9, tp2->buf=30, tp2->len=2
+合并后的内容为:2016年6月30(0000000000347F70), len=11
+--------address  tp->prev=000000000034C6D0, tp=000000000034BFA0, tp->next=000000000034C070
+ox=338.04, oy=248.69, px=250.20, py=248.69
+合并前, tp1->buf=2016年6月30, tp1->len=11, tp2->buf=日, tp2->len=2
+合并后的内容为:2016年6月30日(0000000000347F50), len=13
+--------address  tp->prev=000000000034C6D0, tp=000000000034C070, tp->next=000000000034BFF0
+ox=174.72, oy=591.89, px=250.20, py=248.69
+不用合并！
+--------address  tp->prev=000000000034C070, tp=000000000034BFF0, tp->next=000000000034C7F0
+ox=258.84, oy=591.89, px=174.72, py=591.89
+合并前, tp1->buf=基金管理人：, tp1->len=12, tp2->buf=鹏华基金管理有限公司, tp2->len=20
+合并后的内容为:基金管理人：鹏华基金管理有限公司(000000000034C320), len=32
+--------address  tp->prev=000000000034C070, tp=000000000034C7F0, tp->next=000000000034C770
+ox=174.72, oy=623.09, px=174.72, py=591.89
+不用合并！
+--------address  tp->prev=000000000034C7F0, tp=000000000034C770, tp->next=00000000004B8C80
+ox=258.84, oy=623.09, px=174.72, py=623.09
+合并前, tp1->buf=基金托管人：, tp1->len=12, tp2->buf=招商银行股份有限公司, tp2->len=20
+合并后的内容为:基金托管人：招商银行股份有限公司(000000000034C720), len=32
+--------address  tp->prev=000000000034C7F0, tp=00000000004B8C80, tp->next=00000000004B8FE0
+ox=174.60, oy=654.29, px=174.72, py=623.09
+不用合并！
+--------address  tp->prev=00000000004B8C80, tp=00000000004B8FE0, tp->next=00000000004B8F90
+ox=237.84, oy=654.29, px=174.60, py=654.29
+合并前, tp1->buf=送出日期：, tp1->len=10, tp2->buf=2016, tp2->len=4
+合并后的内容为:送出日期：2016(0000000000347F10), len=14
+--------address  tp->prev=00000000004B8C80, tp=00000000004B8F90, tp->next=00000000004B9030
+ox=262.44, oy=654.29, px=174.60, py=654.29
+合并前, tp1->buf=送出日期：2016, tp1->len=14, tp2->buf=年, tp2->len=2
+合并后的内容为:送出日期：2016年(0000000000347F30), len=16
+--------address  tp->prev=00000000004B8C80, tp=00000000004B9030, tp->next=00000000004B9080
+ox=280.08, oy=654.29, px=174.60, py=654.29
+合并前, tp1->buf=送出日期：2016年, tp1->len=16, tp2->buf=8, tp2->len=1
+合并后的内容为:送出日期：2016年8(0000000000347F10), len=17
+--------address  tp->prev=00000000004B8C80, tp=00000000004B9080, tp->next=00000000004B90D0
+ox=290.64, oy=654.29, px=174.60, py=654.29
+合并前, tp1->buf=送出日期：2016年8, tp1->len=17, tp2->buf=月, tp2->len=2
+合并后的内容为:送出日期：2016年8月(0000000000347F30), len=19
+--------address  tp->prev=00000000004B8C80, tp=00000000004B90D0, tp->next=00000000004B9120
+ox=315.24, oy=654.29, px=174.60, py=654.29
+合并前, tp1->buf=送出日期：2016年8月, tp1->len=19, tp2->buf=29, tp2->len=2
+合并后的内容为:送出日期：2016年8月29(0000000000347F10), len=21
+--------address  tp->prev=00000000004B8C80, tp=00000000004B9120, tp->next=0000000000000000
+ox=325.80, oy=654.29, px=174.60, py=654.29
+合并前, tp1->buf=送出日期：2016年8月29, tp1->len=21, tp2->buf=日, tp2->len=2
+合并后的内容为:送出日期：2016年8月29日(0000000000347F30), len=23
+--------printCellMap()------------------
+-------------text id=1-----------
+ox=105.24, oy=158.57, cellID=0
+len=36, buf=鹏华国证钢铁行业指数分级证券投资基金
+tp->prev=0000000000000000, tp=000000000034C9F0,tp->next=000000000034C110
+------
+-------------text id=3-----------
+ox=186.48, oy=189.77, cellID=0
+len=20, buf=2016年半年度报告摘要
+tp->prev=000000000034C9F0, tp=000000000034C110,tp->next=000000000034C6D0
+------
+-------------text id=6-----------
+ox=250.20, oy=248.69, cellID=0
+len=13, buf=2016年6月30日
+tp->prev=000000000034C110, tp=000000000034C6D0,tp->next=000000000034C070
+------
+-------------text id=12-----------
+ox=174.72, oy=591.89, cellID=0
+len=32, buf=基金管理人：鹏华基金管理有限公司
+tp->prev=000000000034C6D0, tp=000000000034C070,tp->next=000000000034C7F0
+------
+-------------text id=14-----------
+ox=174.72, oy=623.09, cellID=0
+len=32, buf=基金托管人：招商银行股份有限公司
+tp->prev=000000000034C070, tp=000000000034C7F0,tp->next=00000000004B8C80
+------
+-------------text id=16-----------
+ox=174.60, oy=654.29, cellID=0
+len=23, buf=送出日期：2016年8月29日
+tp->prev=000000000034C7F0, tp=00000000004B8C80,tp->next=0000000000000000
+------
+printTextMap() End

@@ -142,9 +142,9 @@
         char            *   buf;
         int                 len;
         struct __text__  *  last;
-        struct __text__  *  prev;       // 暂时无用
+        struct __text__  *  prev;       
         struct __text__  *  next;
-        int                 cellID;     // 该文本属于哪个CELL
+        int                 cellID;     // 该文本属于哪个CELL, 如果是0表示不在cell中
     } TEXT;
 
     typedef struct __decode__ {

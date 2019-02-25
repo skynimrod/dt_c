@@ -186,9 +186,15 @@
     void    printTM( TM * tm_p );
     void    printCUR_XY( CUR_XY * cur_xy_p );
 
+    CELL * getCELLbyID( CELL * cellMap_p, int id );
+
     int     filterCell( CELL * cellMap_p, CELL cur_cell );
     int     fillTextMap( char * buf, DECODE * decode_p );
 
+    char *  procText4Table( TEXT * textMap_p, CELL * cellMap_p );
+    
+    void    printTextMap( TEXT * textMap_p );
+    void    printCellMap( CELL * cellMap_p );
 
 
     #define CHECK_ERR(err, msg) { \
@@ -409,7 +415,7 @@
             CHECK_ERR(err, "uncompress");    // 奇怪，明明解压成功了, 但是返回的确实data_error (-3), 只能屏蔽该检测了, 原因是dlen没有赋值或赋值太小
             sprintf( filename, "f:/F_t_tmp/tmp1/c_%d_stream.txt", obj );
             writeRawData( filename, desbuf, dlen );     // 如果 dlen 没有初始化足够大, 就会解压失败
-            //printf("desbuf=%s\n", desbuf );
+            printf("=====================解压后的内容存放在文件:%s\n", filename );
             
             // 记录一下压缩率, 了解压缩成都
             pdf_p->pages_p->comprRatio_p[pageno-1][i] = (float)dlen/len;
@@ -894,10 +900,11 @@
             return -1;
         }
 
-        
+        /*
         for ( int i=0; i < xref_p->objTotal; i ++ ) {
             printf("xref_p->objpos_p[%d]=%016d\n",i, xref_p->objpos_p[i] );
         }
+        */
         
         // 5. 获取完 对象位置数据后, 处理trailer 部分数据
         ret = procTrailer( fm_p, xref_p, posmap_p, trailer_p );
@@ -1219,7 +1226,7 @@
             if ( ret < 0 ) 
                 return ret;
         }
-        printPages( pages_p );
+        //printPages( pages_p );
 
         return ret;
     }
@@ -1800,7 +1807,7 @@
             free( buf );
         }
 
-        printCMAP( cmap_p );
+        //printCMAP( cmap_p );
         freeMemoryMap( mm_p);
 
         return 0;
@@ -2015,7 +2022,7 @@
         MEMORYMAP   *   mm_p;
         DECODE      *   decode_p;
 
-        retbuf = (char *)calloc( dlen, 1 );
+        retbuf = (char *)calloc( dlen, 1 ); // 确保申请的内存足够用
         
         decode_p = (DECODE *)calloc( sizeof( DECODE ), 1 );
         
@@ -2047,6 +2054,16 @@
         }
         // 下面来处理上面解析出来的内容, 包括表格的重新构建
         //
+        //
+        printf("----------------Hello decode()--------------------------\n");
+        printCellMap( decode_p->cellMap_p );
+        printTextMap( decode_p->textMap_p );
+        
+        retbuf = procText4Table( decode_p->textMap_p, decode_p->cellMap_p );
+
+        printCellMap( decode_p->cellMap_p );
+        printTextMap( decode_p->textMap_p );
+        
         return retbuf;
     }
 
@@ -2433,28 +2450,54 @@
     // 新建的cell都放在尾部
     int newCell( CELL * cellMap_p, CELL cell )
     {
+        CELL        * cp;
+        
+        cp = ( CELL * )calloc( CELL, 1 );
+
         if ( !cellMap_p ) {     // 如果链表为空
-            cellMap_p = ( CELL * )calloc( CELL, 1 );
+            cellMap_p = cp;
             
-            cellMap_p->id   = 1;                // 编号从1开始
-            cellMap_p->x    = cell.x;
-            cellMap_p->y    = cell.y;
-            cellMap_p->w    = cell.w;
-            cellMap_p->h    = cell.h;
-
-            cellMap_p->last = cellMap_p;
+            cp->id   = 1;                   // 编号从1开始
+            cp->x    = cell.x;
+            cp->y    = cell.y;
+            cp->w    = cell.w;
+            cp->h    = cell.h;
+            
+            cp->last = cp;
+            cp->prev = NULL;                // 第一个CELL的前一个CELL(prev) 为NULL
+            
         } else {        // 添加到尾部
-            cellMap_p->last->next = ( CELL * )calloc( CELL, 1 );
+            cellMap_p->last->next = cp;
+            cp->prev = cellMap_p->last;
 
-            cellMap_p->last->next->id   = cellMap_p->last->id + 1;
-            cellMap_p->last->next->x    = cell.x;
-            cellMap_p->last->next->y    = cell.y;
-            cellMap_p->last->next->w    = cell.w;
-            cellMap_p->last->next->h    = cell.h;
+            cp->id   = cp->prev->id + 1;    // 前一个cell的id +1
+            cp->x    = cell.x;
+            cp->y    = cell.y;
+            cp->w    = cell.w;
+            cp->h    = cell.h;
     
-            cellMap_p->last = cellMap_p->last->next;    // last 指向刚才新建的cell
+            cellMap_p->last = cp;           // last 指向刚才新建的cell
         }
 
+    }
+
+    // 根据cellID 找到cellMap中的对应Cell(单元格)
+    CELL * getCELLbyID( CELL * cellMap_p, int id )
+    {
+        CELL        * cp;
+        
+        if ( !cellMap_p )
+            return NULL;
+
+        cp = cellMap_p;
+
+        while ( cp ) {
+            if ( cp->id == id )     // 找到了
+                return cp;
+            cp = cp->next;          // 没找到, 继续查找后面的节点
+        }
+
+        return NULL;                // 遍历完没有找到
     }
 
     // 保存cell信息时不区分是否是页眉, 保证数据完整性
@@ -2601,18 +2644,25 @@
         float       cx, cy, cw,ch;          // cell的x,y,w,h 为了简化代码中的指针结构名称长度, 增加可读性
         TEXT    *   tp;                     // 存放新的文本映射单元， 并链接到文本映射表中
         CELL    *   cp;                     // 指向 decode_p->cellMap_p->last
+        int         id;
         
         if ( !buf || !decode_p )
             return -1;
     
-        tp = ( TEXT * )calloc( sizeof(TEXT), 1 );
+        //tp = ( TEXT * )calloc( sizeof(TEXT), 1 );
+        tp = ( TEXT * )malloc( sizeof(TEXT) );
+        memset( tp, 0, sizeof(TEXT) );
 
         if ( !decode_p->textMap_p ) {         // 如果 最后一个文本映射为空, 表示这是解析出来的第一个文本串
+            tp->id      = 1;
+            tp->last    = tp;                          // 对于新建的文本映射表而言, 最后一个也就是第一个
+            tp->prev    = NULL;                // 首个节点的prev (前一个节点) 为空NULL
             decode_p->textMap_p = tp;
-            tp->last = tp;                          // 对于新建的文本映射表而言, 最后一个也就是第一个
         } else {
             decode_p->textMap_p->last->next = tp;
-            decode_p->textMap_p->last = tp;         // 更新last 指针到新加的 TEXT 节点
+            tp->prev = decode_p->textMap_p->last;   // 新建text的前一个text就是之前的last text
+            tp->id = tp->prev->id + 1;
+            decode_p->textMap_p->last = tp;         // 更新last 指针到新建的 TEXT 节点
         }
 
         ox = tp->ox = decode_p->cur_xy.ox;            // 文本 绝对坐标x
@@ -2621,7 +2671,7 @@
         tp->len = strlen( buf );
         tp->buf = (char *)calloc( sizeof(char), tp->len + 1);
         memcpy( tp->buf, buf, tp->len );
-        printf("fillTextMap(), tp->buf=%s\n", tp->buf);
+        printf("fillTextMap(), tp->buf=%s, tp->id=%d\n", tp->buf, tp->id );
 
         // 下面来比较文本与单元格的相对位置, 如果文本在单元格中, 则记录相关信息
         // 只判断最后一个单元格, 因为这个坐标与当前的文本坐标最接近, 如果这个不包含, 之前的不可能包含
@@ -2709,14 +2759,6 @@
         
        return count;     
     }
-
-/*
- *  processTj()需要解码的文本数量17
-processTj() <>内的内容为:547F097E0D2D41F14AD24AF13E7C044A19371BA0083634D741F1086818C543740E2A:
-processTj() 解码后:鹏华国证钢铁行业指数分级证券投资基:
-  <547F> <9E4F>        9E4F  对应的就是鹏的unicode码, 
-  <097E> <534E>        534E  对应的是华的 unicode码
- * */
 
     char * processTj( char *desbuf, char *srcbuf, CMAP * cmap_p )
     {
@@ -3176,3 +3218,246 @@ processTj() 解码后:鹏华国证钢铁行业指数分级证券投资基:
         printf( "----------------cur_xy_p->opr=%s\n", cur_xy_p->opr );
     }
 
+    //====================================================================
+    // 下面的部分是对文本及表格的后续处理， 还原格式
+    //
+    //
+    void printCellMap( CELL * cellMap_p )
+    {
+        CELL    * cp = cellMap_p;
+        
+        printf("--------printCellMap()------------------\n");
+
+        if ( !cp ) 
+            return;
+
+        while ( cp ) {
+            printf( "-------------cell id=%d-----------\n", cp->id );
+            printf( "x=%.2f,y=%.2f,w=%.2f, h=%.2f\n", cp->x, cp->y, cp->w, cp->h );
+            printf( "rows=%d, cols=%d\n",  cp->rows, cp->cols );
+            printf( "maxlines=%d, maxlen=%d, txtTotal=%d\n", cp->maxlines, cp->maxlen, cp->txtTotal );
+            for ( int i = 0; i < cp->txtTotal; i ++ )
+                printf( "%d ", cp->txtIDs_p[i] ); 
+
+            printf("\n");
+            cp = cp->next;
+        }
+    }
+
+    void printTextMap( TEXT * textMap_p )
+    {
+        TEXT    * tp = textMap_p;
+        
+        if ( !tp ) 
+            return;
+
+        while ( tp ) {
+            printf( "-------------text id=%d-----------\n", tp->id );
+            printf( "ox=%.2f, oy=%.2f, cellID=%d\n", tp->ox, tp->oy, tp->cellID );
+            printf( "len=%d, buf=%s\n",  tp->len, tp->buf );
+            printf( "tp->prev=%p, tp=%p,tp->next=%p\n", tp->prev, tp, tp->next );
+            tp = tp->next;
+            printf("------\n");
+        }
+
+        printf("printTextMap() End\n");
+    }
+
+    //
+    void preProcTxtMap( TEXT * textMap_p, CELL * cellMap_p );
+    /*
+    void preProcTxtMap4Cell( textMap, cellMap, cellIndexMap );
+    void preProcColRow( cellMap, cellIndexMap, colMap, colIndexMap, rowMap, rowIndexMap );
+    void buildTableMap( textMap, cellMap, cellIndexMap, tableMap, colIndexMap, rowIndexMap );
+    char * buildPageTxt( textMap, cellMap, cellIndexMap, tableMap, colIndexMap, rowIndexMap );
+    */
+    char * procText4Table( TEXT * textMap_p, CELL * cellMap_p )
+    {
+        // # 1. 处理textMap, 将不在表格中的文本进行处理, 如果是同一行的就进行合并, 同时将cell中的txtIDs_p 补充完整
+        preProcTxtMap( textMap_p, cellMap_p );
+     /*           
+        // # 2. 预处理 表格中的文本, 将原本一行的多个文本拼接为一个文本, 删除多余的文本. 同时修正cell中的txtIDs_p 中的文本编号信息
+        preProcTxtMap4Cell( textMap, cellMap, cellIndexMap )
+            
+        // # 3. 预处理 表格, 根据坐标关系归类到列与行, 相关信息存放在 colMap, colIndexMap, rowMap, rowIndexMap
+        //colMap, colIndexMap, rowMap, rowIndexMap = {}, {}, {}, {}  # 字典不能作为key, 只能再建立一个colIndexMap来记录每个col对应的cell集合
+        self.preProcColRow( cellMap, cellIndexMap, colMap, colIndexMap, rowMap, rowIndexMap )
+        
+        // # 4. 解析文本与cell的关系, 拆分出table 出来, 创建tableMap={1:[cellid_list]}， 同时在cellMap 中添加tableid 属性
+        tableMap = {}
+        self.buildTableMap( textMap, cellMap, cellIndexMap, tableMap, colIndexMap, rowIndexMap )
+        print("--after buildTableMap()---cellIndexMap-----------")
+        print(cellIndexMap)
+        print(tableMap)
+
+        // # 5. 输出文本. 已经处理过同行多文本的拼接, 不再cell中的文本就是单独一行文本
+        retbuf = self.buildPageTxt( textMap, cellMap, cellIndexMap, tableMap, colIndexMap, rowIndexMap )
+        print(retbuf)
+        
+        return retbuf
+        */
+        return NULL;
+    }
+
+    // # 1. 预处理textMap, 将不再表格中的文本进行处理, 如果是同一行的就进行合并
+    //# 15.3 preProcTxtMap()
+    //#     预处理textMap, 仅限于不在单元格里面的文本进行处理,  将原本在一行的拼接在一行, 删除多余的文本编号, 修正链表
+    //#     页眉内的文本也进行拼接处理
+    //# depends on:
+    //#       delTxt( item, textMap, cellIndexMap )
+    //# 2017.01.10:
+    //#     更改实现方式, 循环按照 oy 坐标从上往下处理
+    //# 2019.02.24
+    //      对于C语言版本， 增加cellMap_p 的预处理, 也就是为由文本的cell的txtIds_p 申请空间
+    
+    // 删除当前的节点
+    void delCurTxt( TEXT * tp )
+    {
+        TEXT    * tpp, * tpn;    // 当前节点的前一个节点和后一个节点
+        
+        if ( !tp ) 
+            return;
+        
+        tpp = tp->prev;
+        tpn = tp->next;
+
+        free( tp->buf );
+        free( tp );
+
+        if ( !tpp ) {       // tpp 为空, 说明要删除的tp是第一个节点, 则后一个节点变成第一个
+            tp = tpn;
+            tp->prev = NULL;
+            return;
+        }
+        
+        if ( !tpn ) {       // 如果tpn为空, 说明要删除的tp 是最后一个节点
+            tpp->next = NULL;
+            return;
+        }
+
+        tpp->next = tpn;
+        tpn->prev = tpp;
+
+    }    
+
+    // 合并2个文本节点中的文本内容到第一个文本节点的buf中, 
+    // 只是为了简化代码，增加可读性而剥离出来的函数
+    void combineBuf( TEXT * tp1, TEXT * tp2 )
+    {
+        char        * buf;      // 用来申请空间并存放合并后的文本信息
+
+        if ( ! tp1 || !tp2 ) {
+            printf("有空指针！！！\n");
+            return ;
+        }
+
+        printf("合并前, tp1->buf=%s, tp1->len=%d, tp2->buf=%s, tp2->len=%d\n", 
+                        tp1->buf, tp1->len, tp2->buf, tp2->len );
+
+        // 先为合并后的文本重新申请空间并保存合并后的文本, 然后释放之前的2个文本内存空间
+        buf = ( char * )calloc( tp1->len + tp2->len + 1, 1 );   // +1 是为了存放尾0
+        memcpy( buf, tp1->buf, tp1->len );
+        memcpy( buf+tp1->len, tp2->buf, tp2->len );
+
+        free( tp1->buf );
+        
+        tp1->buf = buf;
+        tp1->len += tp2->len;
+        
+        printf("合并后的内容为:%s(%p), len=%d\n", tp1->buf,tp1->buf, tp1->len);
+    }
+
+
+    void preProcTxtMap( TEXT * textMap_p, CELL * cellMap_p )
+    {
+        TEXT        * tp, * tpp;    // tp 存放当前节点指针, tpp 是当前节点的前一个节点
+        CELL        * cp;
+
+        float       ox, oy, px, py;     // 记录当前文本的坐标和前一个文本的坐标
+
+        if ( !textMap_p )
+            return ;
+
+        tp = textMap_p;
+
+        while ( tp ) {
+            printf("--------address  tp->prev=%p, tp=%p, tp->next=%p\n", tp->prev, tp, tp->next );
+            if ( tp->cellID != 0 ) {   // 不等于0, 表示该文本在cell中, 先跳过不处理
+                tp = tp->next;
+                continue;        
+            }
+            
+            if ( !tp->prev )  {          // 如果没有前一个文本，就不处理, 也就是第一个文本
+                tp = tp->next;
+                continue;
+            }
+
+            tpp = tp->prev;             // 用tpp 是为了提高代码可读性, 不然多级指针看起来费劲
+
+            ox = tp->ox,        oy = tp->oy;
+            px = tpp->ox,       py = tpp->oy;
+
+            printf("ox=%.2f, oy=%.2f, px=%.2f, py=%.2f\n", ox, oy, px, py );
+            
+            if ( abs( py - oy ) < 1 ) {     //  # 两个Y坐标小于1视为同一行
+
+                
+                if ( px <= ox ) {        // 留小不留大, 小的在前面
+                    // tpp 小, 保留tp->prev
+                    combineBuf( tpp, tp );
+
+                    delCurTxt( tp );                    // 删除tp 节点
+                    tp = tpp->next;                     // tp 重新定位到下一个需要处理的节点
+                } else {
+                    // tp 小，保留 tp
+                    combineBuf( tp, tpp );
+
+                    delCurTxt( tpp );                    // 删除tpp 节点
+                    
+                    tp = tp->next;                      // tp 重新定位到下一个需要处理的节点 
+                }
+            } else {
+                printf("不用合并！\n");
+                tp = tp->next;
+            }
+        }     
+
+        // 2. 下面为单元格 的文本编号记录申请空间(txtIDs_p)
+        if ( !cellMap_p )
+            return;
+
+        cp = cellMap_p;
+        while ( cp ) {
+            if ( cp->txtTotal != 0 )
+                cp->txtIDs_p = (int *)calloc( sizeof(int), cp->txtTotal );   // 为存放记录cell中的文本编号申请空间
+            cp = cp->next;
+        }
+
+        printf("preProcTxtMap() end \n");
+    }
+
+    // # 2. 预处理 表格中的文本, 将原本一行的多个文本拼接为一个文本, 删除多余的文本. 同时修正cell中的txtIDs_p 中的文本编号信息
+    void preProcTxtMap4Cell( TEXT *textMap_p, CELL * cellMap_p, CELL * cellIndexMap )
+    {
+        return;
+    }
+    /*
+    // # 3. 预处理 表格, 根据坐标关系归类到列与行, 相关信息存放在 colMap, colIndexMap, rowMap, rowIndexMap
+    colMap, colIndexMap, rowMap, rowIndexMap = {}, {}, {}, {}  # 字典不能作为key, 只能再建立一个colIndexMap来记录每个col对应的cell集合
+    void preProcColRow( cellMap, cellIndexMap, colMap, colIndexMap, rowMap, rowIndexMap )
+    {
+        return;
+    }
+    
+    // # 4. 解析文本与cell的关系, 拆分出table 出来, 创建tableMap={1:[cellid_list]}， 同时在cellMap 中添加tableid 属性
+    void buildTableMap( textMap, cellMap, cellIndexMap, tableMap, colIndexMap, rowIndexMap )
+    {
+        return;
+    }
+
+    // # 5. 输出文本. 已经处理过同行多文本的拼接, 不再cell中的文本就是单独一行文本
+    char * buildPageTxt( textMap, cellMap, cellIndexMap, tableMap, colIndexMap, rowIndexMap )
+    {
+        return;
+    }
+*/

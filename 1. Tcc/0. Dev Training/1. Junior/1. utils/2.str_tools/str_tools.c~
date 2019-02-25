@@ -2217,11 +2217,12 @@ bool  HexIP2Str(unsigned int uiIPAddress, char * sIPAddress)
     {
         int ret = 0;
         
-        printf("%s\n",setlocale(LC_ALL,"") );       // 返回的就是当前的语言设置
+        //printf("%s\n",setlocale(LC_ALL,"") );       // 返回的就是当前的语言设置
+        setlocale(LC_ALL,"");
 
         ret = wcstombs( desbuf, wstr, len );
-        printf("ret = %d\n",ret);
-        printf("%s\n",desbuf );
+        //printf("ret = %d\n",ret);
+        //printf("%s\n",desbuf );
 
         return ret;
     }
