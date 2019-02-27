@@ -127,7 +127,7 @@
         int                 maxlen;         // 最长的文本长度
         int                 rows;           // 行数
         int                 cols;           // 列数
-        struct __cell__  *  last;
+        struct __cell__  *  last;           // 总是指向最后一个cell
         struct __cell__  *  prev;           // 前一个单元格
         struct __cell__  *  next;           // 后一个单元格
         int              *  txtIDs_p;       // 单元格中的文本编号(数组)

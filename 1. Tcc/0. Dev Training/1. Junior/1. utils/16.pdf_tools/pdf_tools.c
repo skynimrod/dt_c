@@ -55,6 +55,7 @@
     //      
     //  
     #include <stdlib.h>
+    #include <time.h>
     #include "file_tools.h"
     #include "filemap.h"
     #include "memorymap.h"
@@ -186,9 +187,9 @@
     void    printTM( TM * tm_p );
     void    printCUR_XY( CUR_XY * cur_xy_p );
 
-    CELL * getCELLbyID( CELL * cellMap_p, int id );
+    CELL *  getCELLbyID( CELL * cellMap_p, int id );
 
-    int     filterCell( CELL * cellMap_p, CELL cur_cell );
+    int     fillCellMap( DECODE * decode_p, CELL * cp );
     int     fillTextMap( char * buf, DECODE * decode_p );
 
     char *  procText4Table( TEXT * textMap_p, CELL * cellMap_p );
@@ -1390,7 +1391,7 @@
 
         for ( int i=0; i < pages_p->total; i ++ ) {
             buf = (char *)getItemOfObj( fm_p, xref_p, leafs_p[i], "Contents" );
-            printf( "叶子对象(第%d页):%d| 内容:%s\n", i+1, leafs_p[i], buf );
+            //printf( "叶子对象(第%d页):%d| 内容:%s\n", i+1, leafs_p[i], buf );
 
             if ( strchr(buf, '[' ) ) { // 如果有中括号, 表示包含多个内容对象,  Contents[5278 0 R 5279 0 R]
                 count = countChrInStr( rtrim(buf), ' ' );  // 先计算字符串中出现的空格数
@@ -1409,7 +1410,7 @@
             }
             else {
                 count =1;                   // 没有中括号, 就1个内容对象。 Contents 7 0 R
-                printf("就一个内容对象(buf=%s)\n", buf);
+                //printf("就一个内容对象(buf=%s)\n", buf);
                 
                 pages_p->c_objlist_p[i] = (int *)malloc( sizeof(int ) * (count + 1) );
                 memset( pages_p->c_objlist_p[i], 0, sizeof(int ) * (count + 1) );
@@ -1423,12 +1424,12 @@
                 pages_p->comprRatio_p[i][0] = 1;                                     // 数字第1项(下标为0)就是叶子内容对象数量
             }
 
-            
+            /* 
             printf("\nobj %d 的内容对象为:", leafs_p[i] );
             for( int j=0; j < count; j ++) 
                 printf("%d|", pages_p->c_objlist_p[i][j]);
             printf("\n");
-            
+            */
             free( buf );
         }
         return 0;
@@ -1495,6 +1496,41 @@
             memset( retbuf, 0, i-k+1);   
             memcpy( retbuf, buf+k, i-k );
             return retbuf;
+        }
+        return NULL;
+    }
+
+    char * strsplit3( char * des, int len, char * buf, char ch, int n ) 
+    {
+        int     i = 0 ;
+        int     len = strlen(buf);
+        int     m=0;
+        int     k =0;       // 记录每一项的开始位置
+
+        if ( !des )
+            return NULL;
+        
+        while( i < len )  {
+            if ( buf[i] == ch ) {
+                m ++;
+                if ( m == n ) {     // 找到第几个项的位置了
+                    memset( des, 0, len);   
+                    memcpy( des, buf+k, i-k );
+                    printf( "des=%s\n", des );
+                    return des;
+                }
+                while( buf[i] == ch )       // 跳过连续的分隔符
+                    i ++;
+                k = i;  // 记录寻找项之前的最近的分隔符位置
+                continue;
+            }
+            i ++;
+        }
+
+        if ( i == len && m == n-1 ) {   // 最后一项
+            memset( des, 0, len );   
+            memcpy( des, buf+k, i-k );
+            return des;
         }
         return NULL;
     }
@@ -1567,11 +1603,11 @@
             
             buf = (char *)getObjContent( fm_p, xref_p, leafs_p[i] );
             
-            printf( "\n获取Font 数据:%s\n", buf);
+            //printf( "\n获取Font 数据:%s\n", buf);
             item = (char *)strtok( buf, "/" );
             flag = false;
             while( item && !flag ){     // flag = true 表示字体已经处理完毕， 退出循环
-                printf( "item = %s\n", item );
+                //printf( "item = %s\n", item );
                 if ( ! strstr( item, "Font" ) ) { // 没找到Font 就继续找下一个
                     item = (char *)strtok( NULL, "/" );
                     continue;
@@ -1581,7 +1617,7 @@
                 int     n = 0;
                 while ( item ) {
                     item = (char *)strtok( NULL, "/" );
-                    printf("Font 信息: %s\n", item );           // Font 信息: FT15 15 0 R
+                    //printf("Font 信息: %s\n", item );           // Font 信息: FT15 15 0 R
                     
                     tmpbuf = strsplit1( item, ' ', 1 );
                     memcpy( pages_p->fontmap_p[i][n].fontname, tmpbuf, strlen(tmpbuf) );
@@ -2063,7 +2099,8 @@
 
         printCellMap( decode_p->cellMap_p );
         printTextMap( decode_p->textMap_p );
-        
+        /*
+        */
         return retbuf;
     }
 
@@ -2194,6 +2231,7 @@
             }
 
             if ( strstr(tmpbuf, "ET" ) ) {  // # 正文结束的标识
+                printf("碰到ET, BT/ET 处理结束. tmpbuf=%s\n", tmpbuf );
                 free( tmpbuf );
                 return desbuf;
             }
@@ -2367,36 +2405,67 @@
      */
     char * processRE( MEMORYMAP *mm_p, char *desbuf, char * srcbuf, DECODE * decode_p, PAGES *pages_p  )
     {
-        CELL                cur_cell;
+        CELL            *   cp;
         char            *   tmpbuf;
+        int                 len;
+        int                 i, j, k, n;
+        char        buf[12];
         
+        printf( "-------------------------------------------------------------------------------processRE(), srcbuf=%s\n", srcbuf );
         if ( !srcbuf ) {
             return NULL;
         }
 
-        tmpbuf = (char *)strsplit1( srcbuf, ' ', 1 );        // 单元格的x坐标
-        cur_cell.x = atof( tmpbuf );
-        free( tmpbuf );
+        //cp = (CELL *)calloc( sizeof(CELL), 1 );
+        cp = (CELL *)malloc( sizeof(CELL) );
+        memset( cp, 0, sizeof(CELL) );
 
-        tmpbuf = (char *)strsplit1( srcbuf, ' ', 2 );        // 单元格的y坐标
-        cur_cell.y = atof( tmpbuf );
-        free( tmpbuf );
-
-        tmpbuf = (char *)strsplit1( srcbuf, ' ', 3 );        // 单元格的w 宽度
-        cur_cell.w = atof( tmpbuf );
-        free( tmpbuf );
-
-        tmpbuf = (char *)strsplit1( srcbuf, ' ', 4 );        // 单元格的h 高度
-        cur_cell.h = atof( tmpbuf );
-        free( tmpbuf );
+        len = strlen( srcbuf );
+        j = 0;
+        n = 1;
+        for ( i = 0; i < len; i ++ ){
+            if ( srcbuf[i] == ' ' ) {
+                memset( buf, 0, 12 );
+                memcpy( buf, srcbuf+j, i-j );
+                printf( "buf=%s, i=%d, j=%d\n", buf, i, j );
+                while ( buf[i] == ' ' )
+                    i ++;
+                j = i;      // 下一项的起始位置做准备
+                switch ( n ) {
+                    case 1:
+                            cp->x = atof( buf );      // 单元格的x坐标 
+                            n ++; 
+                            break;
+                    case 2:
+                            cp->y = atof( buf );      // 单元格的y坐标  
+                            n ++;
+                            break;
+                    case 3:
+                            cp->w = atof( buf );      // 单元格的w坐标 
+                            //n ++; 
+                            break;
+                    case 4: 
+                            cp->h = atof( buf );      // 单元格的h坐标  
+                            n ++;
+                            break;
+                    default:
+                            break;
+                }
+            }
+        }
 
         //# x 坐标小于0可能是控制用的, h,w数值小于1可能是用来做分割线的, (x,y)=(0,0)从原点来时的表格也是控制用(页眉都不可能在原点)
         //# 把页眉也保留, 用来判断页眉文本
-        if ( cur_cell.x < 0 || cur_cell.y < 0 || cur_cell.w < 1 || ( cur_cell.x ==0 && cur_cell.y == 0 ) )  //# (0,0)仍然过滤, 暂时没想到怎么处理
+        printf( "-------------------2----------processRE(), srcbuf=%s, x=%.2f, y=%.2f, w=%.2f, h=%.2f\n", srcbuf, cp->x, cp->y, cp->w, cp->h );
+        if ( cp->x < 0 || cp->y < 0 || cp->w < 1 || ( cp->x ==0 && cp->y == 0 ) )  //# (0,0)仍然过滤, 暂时没想到怎么处理
             return NULL;
-        
+
         //# 2017.01.15:  过滤或替代无效的cell
-        filterCell( decode_p->cellMap_p, cur_cell );
+        printf( "-----------------------------------------------------3--------------------------processRE(), srcbuf=%s\n", srcbuf );
+
+        fillCellMap( decode_p, cp );
+        
+        printCellMap( decode_p->cellMap_p );
         
         return NULL;
     }
@@ -2432,7 +2501,6 @@
     // 查找指定ID的单元格cell
     CELL * findCell( CELL * cellMap_p, int cellID )
     {
-        bool    flag = false;
         CELL  * cp = cellMap_p;  // 从头开始遍历
 
         while ( cp ) {
@@ -2442,91 +2510,60 @@
             cp = cp->next;
         }
 
-        if ( !flag )  // 遍历完还没有找到就返回NULL
-            return NULL;
+        return NULL;    // 遍历完还没有找到就返回NULL
     }
 
-    // 新建之前应该用findCell() 查找是否已经存在该cellID
-    // 新建的cell都放在尾部
-    int newCell( CELL * cellMap_p, CELL cell )
-    {
-        CELL        * cp;
-        
-        cp = ( CELL * )calloc( CELL, 1 );
-
-        if ( !cellMap_p ) {     // 如果链表为空
-            cellMap_p = cp;
-            
-            cp->id   = 1;                   // 编号从1开始
-            cp->x    = cell.x;
-            cp->y    = cell.y;
-            cp->w    = cell.w;
-            cp->h    = cell.h;
-            
-            cp->last = cp;
-            cp->prev = NULL;                // 第一个CELL的前一个CELL(prev) 为NULL
-            
-        } else {        // 添加到尾部
-            cellMap_p->last->next = cp;
-            cp->prev = cellMap_p->last;
-
-            cp->id   = cp->prev->id + 1;    // 前一个cell的id +1
-            cp->x    = cell.x;
-            cp->y    = cell.y;
-            cp->w    = cell.w;
-            cp->h    = cell.h;
-    
-            cellMap_p->last = cp;           // last 指向刚才新建的cell
-        }
-
-    }
-
-    // 根据cellID 找到cellMap中的对应Cell(单元格)
-    CELL * getCELLbyID( CELL * cellMap_p, int id )
-    {
-        CELL        * cp;
-        
-        if ( !cellMap_p )
-            return NULL;
-
-        cp = cellMap_p;
-
-        while ( cp ) {
-            if ( cp->id == id )     // 找到了
-                return cp;
-            cp = cp->next;          // 没找到, 继续查找后面的节点
-        }
-
-        return NULL;                // 遍历完没有找到
-    }
 
     // 保存cell信息时不区分是否是页眉, 保证数据完整性
     // 处理cell的时候, 判断出是页眉(h<1)页脚再处理或过滤即可
     // 这儿只过滤一种cell:  误差不超过1的, 视作一个cell
-    int filterCell( CELL * cellMap_p, CELL cur_cell )
+    int fillCellMap( DECODE *decode_p, CELL *cp )
     {
-        printf("-------------------fileterCell()---------\n");
-        //printfCellMap( cellMap_p );
+        printf("-------------------fileterCell()--cellMap_p=%p----cp=%p---\n", decode_p->cellMap_p, cp );
+        printCellMap( decode_p->cellMap_p );
 
         float       cx, cy, ch, cw; 
         float       px, py, ph, pw;     // 链表中的cell的x, y, w, h
-        int         count;
-        CELL    *   cp;     // 指向CELL链表的指针, 用来遍历cellMap
+        CELL    *   cpt;                // 链表的最后一个cell
 
-        cx = cur_cell.x;
-        cy = cur_cell.y;
-        cw = cur_cell.w;
-        ch = cur_cell.h;
+        if ( !cp )              // 要添加的cell为空, 则不操作
+            return 0;
 
-        cp = cellMap_p->last;       
+        cx = cp->x;
+        cy = cp->y;
+        cw = cp->w;
+        ch = cp->h;
+
+
+        if ( !decode_p->cellMap_p ) {       // 如果cellMap_p为空, 则这是第一个cell, 直接添加
+            printf("cellMap_p 为空,直接添加cp-----------------------------------------111  , \n");
+            cp->id = 1;
+            cp->last = cp;
+            cp->prev = NULL;
+            cp->next = NULL;
+            decode_p->cellMap_p = cp;
+            return 0;
+        }
         // 只与最后一个cell比较, 因为每一个新加入的cell都自己的前一个比较(最后一个), 相当于全比较了
         // 因为当前坐标一直在变化, 如果与最后一个cell不一样, 也肯定不会与之前的cell一样了
 
-        px = cp->x,   py = cp->y, pw = cp->w, ph = cp->h;
+        printf("----------------2--------------cellMap_p 不为空的处理, cellMap_p=%p\n", decode_p->cellMap_p);
+        
+        cpt = decode_p->cellMap_p->last;       
+
+        px = cpt->x,   py = cpt->y, pw = cpt->w, ph = cpt->h;
             
-        if ( !( abs( px - cx ) < 1 && abs( py - cy ) < 1 && abs( px+pw-cx-cw) < 1 && abs( py+ph-cy-ch) < 1 ) )    
-            // 该单元格被其他cell包含 或者 包含其他单元格, 并且误差小于1
-            newCell( cellMap_p, cur_cell );
+        if ( !( abs( px - cx ) < 1 && abs( py - cy ) < 1 && abs( px+pw-cx-cw) < 1 && abs( py+ph-cy-ch) < 1 ) )  {
+            // 该单元格 没有  被其他cell包含 或者 包含其他单元格, 并且误差小于1
+            cpt->next   = cp;
+            cp->prev    = cpt;
+            cp->id      = cpt->id + 1;
+            decode_p->cellMap_p->last = cp;
+
+            return 0;
+        }
+
+        free( cp );     // 该cp 是个无用的, 丢弃, 释放内存
 
         return 0;
     }
@@ -3108,35 +3145,56 @@
      *      碰到Tm后, 初始化 (x,y)= (0,0)*Tm= (e,f)
      *      似乎所有的Tm 都在BT/ET 中间. 或许 ET之后, 该Tm 就失效了.
      */
-    void processTm( char *buf, CUR_XY * cur_xy_p, TM * tm_p )
+    void processTm( char *srcbuf, CUR_XY * cur_xy_p, TM * tm_p )
     {
-        char    * tmpbuf;
+        char    buf[12];
+        int     i, j, k, n;
+        int     len;
 
         printf("==========================-----------------processTm(),buf=%s\n",buf);
 
-        tmpbuf = strsplit1( buf, ' ', 1 );
-        tm_p->a = atof( tmpbuf );         // 第1项是 tm_p->a 的值
-        free( tmpbuf );
-        
-        tmpbuf = strsplit1( buf, ' ', 2 );
-        tm_p->b = atof( tmpbuf );         // 第2项是 tm_p->b 的值
-        free( tmpbuf );
-        
-        tmpbuf = strsplit1( buf, ' ', 3 );
-        tm_p->c = atof( tmpbuf );         // 第3项是 tm_p->c 的值
-        free( tmpbuf );
-        
-        tmpbuf = strsplit1( buf, ' ', 4 );
-        tm_p->d = atof( tmpbuf );         // 第4项是 tm_p->d 的值
-        free( tmpbuf );
-        
-        tmpbuf = strsplit1( buf, ' ', 5 );
-        tm_p->e = atof( tmpbuf );         // 第5项是 tm_p->e 的值
-        free( tmpbuf );
-        
-        tmpbuf = strsplit1( buf, ' ', 6 );
-        tm_p->f = atof( tmpbuf );         // 第6项是 tm_p->f 的值
-        free( tmpbuf );
+        len = strlen( srcbuf );
+        j = 0;
+        n = 1;
+        for ( i = 0; i < len; i ++ ){
+            if ( srcbuf[i] == ' ' ) {
+                memset( buf, 0, 12 );
+                memcpy( buf, srcbuf+j, i-j );
+                //printf( "buf=%s, i=%d, j=%d\n", buf, i, j );
+                while ( buf[i] == ' ' )
+                    i ++;
+                j = i;      // 下一项的起始位置做准备
+                switch ( n ) {
+                    case 1:
+                            tm_p->a = atof( buf );      //第1项是 tm_p->a 的值 
+                            n ++; 
+                            break;
+                    case 2:
+                            tm_p->b = atof( buf );      //第1项是 tm_p->b 的值 
+                            n ++;
+                            break;
+                    case 3:
+                            tm_p->c = atof( buf );      //第1项是 tm_p->c 的值 
+                            n ++; 
+                            break;
+                    case 4: 
+                            tm_p->d = atof( buf );      //第1项是 tm_p->d 的值 
+                            n ++;
+                            break;
+                    case 5: 
+                            tm_p->e = atof( buf );      //第1项是 tm_p->e 的值 
+                            n ++;
+                            break;
+                    case 6: 
+                            tm_p->f = atof( buf );      //第1项是 tm_p->f 的值 
+                            n ++;
+                            break;
+                    default:
+                            break;
+                }
+            }
+        }
+
         
         cur_xy_p->x = cur_xy_p->ox = tm_p->e;       // 重置坐标值x
         cur_xy_p->y = cur_xy_p->oy = tm_p->f;       // 重置坐标值x
@@ -3147,7 +3205,7 @@
         //printTM( tm_p );
         //printCUR_XY( cur_xy_p );
 
-        printf("--------processTM() end !buf=%s\n", buf );
+        printf("--------processTM() end !srcbuf=%s\n", srcbuf );
         return;
     }
 
@@ -3228,8 +3286,10 @@
         
         printf("--------printCellMap()------------------\n");
 
-        if ( !cp ) 
+        if ( !cp ) { 
+            printf("------------------cellMap 是 空的?-----------------------------------------\n");
             return;
+        }
 
         while ( cp ) {
             printf( "-------------cell id=%d-----------\n", cp->id );
@@ -3265,8 +3325,8 @@
 
     //
     void preProcTxtMap( TEXT * textMap_p, CELL * cellMap_p );
+    void preProcTxtMap4Cell( TEXT * textMap_p, CELL * cellMap_p );
     /*
-    void preProcTxtMap4Cell( textMap, cellMap, cellIndexMap );
     void preProcColRow( cellMap, cellIndexMap, colMap, colIndexMap, rowMap, rowIndexMap );
     void buildTableMap( textMap, cellMap, cellIndexMap, tableMap, colIndexMap, rowIndexMap );
     char * buildPageTxt( textMap, cellMap, cellIndexMap, tableMap, colIndexMap, rowIndexMap );
@@ -3275,10 +3335,11 @@
     {
         // # 1. 处理textMap, 将不在表格中的文本进行处理, 如果是同一行的就进行合并, 同时将cell中的txtIDs_p 补充完整
         preProcTxtMap( textMap_p, cellMap_p );
-     /*           
+                
         // # 2. 预处理 表格中的文本, 将原本一行的多个文本拼接为一个文本, 删除多余的文本. 同时修正cell中的txtIDs_p 中的文本编号信息
-        preProcTxtMap4Cell( textMap, cellMap, cellIndexMap )
-            
+        //preProcTxtMap4Cell( textMap_p, cellMap_p );
+     
+        /*       
         // # 3. 预处理 表格, 根据坐标关系归类到列与行, 相关信息存放在 colMap, colIndexMap, rowMap, rowIndexMap
         //colMap, colIndexMap, rowMap, rowIndexMap = {}, {}, {}, {}  # 字典不能作为key, 只能再建立一个colIndexMap来记录每个col对应的cell集合
         self.preProcColRow( cellMap, cellIndexMap, colMap, colIndexMap, rowMap, rowIndexMap )
@@ -3299,16 +3360,6 @@
         return NULL;
     }
 
-    // # 1. 预处理textMap, 将不再表格中的文本进行处理, 如果是同一行的就进行合并
-    //# 15.3 preProcTxtMap()
-    //#     预处理textMap, 仅限于不在单元格里面的文本进行处理,  将原本在一行的拼接在一行, 删除多余的文本编号, 修正链表
-    //#     页眉内的文本也进行拼接处理
-    //# depends on:
-    //#       delTxt( item, textMap, cellIndexMap )
-    //# 2017.01.10:
-    //#     更改实现方式, 循环按照 oy 坐标从上往下处理
-    //# 2019.02.24
-    //      对于C语言版本， 增加cellMap_p 的预处理, 也就是为由文本的cell的txtIds_p 申请空间
     
     // 删除当前的节点
     void delCurTxt( TEXT * tp )
@@ -3351,8 +3402,8 @@
             return ;
         }
 
-        printf("合并前, tp1->buf=%s, tp1->len=%d, tp2->buf=%s, tp2->len=%d\n", 
-                        tp1->buf, tp1->len, tp2->buf, tp2->len );
+        printf("合并前, tp1->buf=%s, tp1->len=%d, tp1->id=%d, tp2->buf=%s, tp2->len=%d, tp2->id=%d\n", 
+                        tp1->buf, tp1->len, tp1->id, tp2->buf, tp2->len, tp2->id );
 
         // 先为合并后的文本重新申请空间并保存合并后的文本, 然后释放之前的2个文本内存空间
         buf = ( char * )calloc( tp1->len + tp2->len + 1, 1 );   // +1 是为了存放尾0
@@ -3364,10 +3415,20 @@
         tp1->buf = buf;
         tp1->len += tp2->len;
         
-        printf("合并后的内容为:%s(%p), len=%d\n", tp1->buf,tp1->buf, tp1->len);
+        printf("合并后的内容为:%s(textID=%d), len=%d\n", tp1->buf,tp1->id, tp1->len);
     }
 
 
+    // # 1. 预处理textMap, 将不再表格中的文本进行处理, 如果是同一行的就进行合并
+    //# 15.3 preProcTxtMap()
+    //#     预处理textMap, 仅限于不在单元格里面的文本进行处理,  将原本在一行的拼接在一行, 删除多余的文本编号, 修正链表
+    //#     页眉内的文本也进行拼接处理
+    //# depends on:
+    //#       delTxt( item, textMap, cellIndexMap )
+    //# 2017.01.10:
+    //#     更改实现方式, 循环按照 oy 坐标从上往下处理
+    //# 2019.02.24
+    //      对于C语言版本， 增加cellMap_p 的预处理, 也就是为由文本的cell的txtIds_p 申请空间
     void preProcTxtMap( TEXT * textMap_p, CELL * cellMap_p )
     {
         TEXT        * tp, * tpp;    // tp 存放当前节点指针, tpp 是当前节点的前一个节点
@@ -3412,6 +3473,7 @@
                     // tp 小，保留 tp
                     combineBuf( tp, tpp );
 
+
                     delCurTxt( tpp );                    // 删除tpp 节点
                     
                     tp = tp->next;                      // tp 重新定位到下一个需要处理的节点 
@@ -3436,9 +3498,118 @@
         printf("preProcTxtMap() end \n");
     }
 
-    // # 2. 预处理 表格中的文本, 将原本一行的多个文本拼接为一个文本, 删除多余的文本. 同时修正cell中的txtIDs_p 中的文本编号信息
-    void preProcTxtMap4Cell( TEXT *textMap_p, CELL * cellMap_p, CELL * cellIndexMap )
+    // 从当前节点往前查找指定ID的 TEXT
+    TEXT * searchForward( TEXT * textMap_p, int id )
     {
+        TEXT        * tp;
+
+        if ( !textMap_p ) 
+            return NULL;
+
+        tp = textMap_p;
+
+        while ( tp ) {
+            if ( tp->id == id )
+                return tp;
+
+            tp = tp->prev;
+        }
+
+        // 向前遍历完后没找到
+        return NULL;
+    }
+
+    // 遍历完后没有找到指定id的CELL
+    CELL *getCellByID( CELL * cellMap_p, int id )
+    {
+        CELL        * cp;
+
+        if ( !cellMap_p ) 
+            return NULL;
+
+        cp = cellMap_p;
+
+        while ( cp ) {
+            if ( cp->id == id )
+                return cp;
+
+            cp = cp->next;
+        }
+
+        // 遍历完后没找到
+        return NULL;
+    }
+
+    // # 2. 预处理 表格中的文本, 将原本一行的多个文本拼接为一个文本, 删除多余的文本. 同时修正cell中的txtIDs_p 中的文本编号信息
+    // 处理思路:
+    //    1. 遍历一遍所有的text节点, 跳过不在cell中的节点
+    //    2. 对于在cell中的文本节点, 找到对应的cell, 然后与该cell中的之前的文本进行比较, 看是否需要合并文本(同一行)
+    void preProcTxtMap4Cell( TEXT *textMap_p, CELL * cellMap_p )
+    {
+        TEXT        * tp, * tpp, * tpn;    // tp 存放当前节点指针, tpp 是当前节点的前一个节点, tpn 是下一个节点
+        CELL        * cp;
+        int         cell_id;   
+        int         text_id;  
+
+        float       ox, oy, px, py;     // 记录当前文本的坐标和前一个文本的坐标
+
+        int         i;                  // 数组下标
+
+        if ( !textMap_p || !cellMap_p )
+            return ;
+
+        tp = textMap_p;
+
+        while ( tp ) {
+            printf("--------address  tp->prev=%p, tp=%p, tp->next=%p\n", tp->prev, tp, tp->next );
+            if ( tp->cellID == 0 ) {   // 等于0, 表示该文本没有在cell中, 跳过不处理
+                tp = tp->next;
+                continue;        
+            }
+
+            cp = getCellByID( cellMap_p, tp->cellID );
+            // 此时, 该文本的id 并没有存放在cell 中的txtIDs_p 数组中, 之前的处理仅仅是申请了足够的存放空间
+            // 在这儿便处理便将处理后的文本的id存放到txtIDs_p 数组中
+            for ( i = 0; i < cp->txtTotal; i ++ ) 
+                if ( cp->txtIDs_p[i] == 0 )   // 碰到结尾了
+                    break;
+            
+            if ( i == 0 ) { // 表示该文本是cell 中的第一个文本, 记录在txtIDs_p[0] 中, 不做合并文本处理
+                cp->txtIDs_p[i] = tp->id;
+                tp = tp->next;
+                continue;
+            } else if ( i == cp->txtTotal ) {   // 容错处理,表示预申请空间已经存满了, 那么当前的这个文本就不应该在该cell中
+                return NULL;
+            } else  {
+                text_id = cp->txtIDs_p[i-1];
+                tpp = searchForward( tp, text_id );
+                if ( !tpp )                     // 容错处理 
+                    return NULL;
+
+                ox = tp->ox,        oy = tp->oy;
+                px = tpp->ox,       py = tpp->oy;
+
+                printf("ox=%.2f, oy=%.2f, px=%.2f, py=%.2f\n", ox, oy, px, py );
+            
+                if ( abs( py - oy ) < 1 ) {     //  # 两个Y坐标小于1视为同一行
+                    // 合并文本, 保留 tpp, 因为tpp已经记录了在cell中了
+                    combineBuf( tpp, tp );
+                    if ( tpp->len > cp->maxlen )    // 更新cell中的最大文本长度
+                        cp->maxlen = tpp->len;
+
+                    tpn = tp->next;
+                    delCurTxt( tp );                    // 删除tpp 节点
+                    
+                    tp = tpn;                      // tp 重新定位到下一个需要处理的节点 
+                } else {    // 不需要合并
+                    cp->txtIDs_p[i] = tp->id;       // 添加cell中的文本记录
+                    tp = tp->next;
+                }
+            }
+
+        }
+
+
         return;
     }
     /*

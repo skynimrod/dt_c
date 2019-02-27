@@ -18,7 +18,7 @@ void main(void)
 
     //printf( "\nret = %d\n", ret );
 
-    getSpecPage( pdf_p, 1 );
+    getSpecPage( pdf_p, 3 );
 
     freeALL2( pdf_p );
 
