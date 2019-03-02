@@ -1,0 +1,31 @@
+
+Microsoft (R) Windows Debugger Version 6.12.0002.633 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+CommandLine: "E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\1. utils\bin\pdf_tools_test.exe"
+Symbol search path is: SRV*F:\WinDbg(x64)* http://msdl.microsoft.com/download/symbols
+Executable search path is: 
+ModLoad: 00000000`00400000 00000000`00404000   image00000000`00400000
+ModLoad: 00000000`76cd0000 00000000`76e6f000   ntdll.dll
+ModLoad: 00000000`76970000 00000000`76a8f000   C:\Windows\system32\kernel32.dll
+ModLoad: 000007fe`fc620000 000007fe`fc68a000   C:\Windows\system32\KERNELBASE.dll
+ModLoad: 00000000`10000000 00000000`1000d000   E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\1. utils\bin\pdf_tools.dll
+ModLoad: 000007fe`fe570000 000007fe`fe60f000   C:\Windows\system32\msvcrt.dll
+ModLoad: 00000000`001c0000 00000000`001c4000   E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\1. utils\bin\filemap.dll
+ModLoad: 00000000`001d0000 00000000`001d4000   E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\1. utils\bin\file_tools.dll
+ModLoad: 00000000`002f0000 00000000`00314000   E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\1. utils\bin\zlib1.dll
+ModLoad: 00000000`001e0000 00000000`001e7000   E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\1. utils\bin\str_tools.dll
+ModLoad: 00000000`00320000 00000000`00324000   E:\E_1_Developement Tools\1 C&C++\1. Tcc\0. Dev Training\1. Junior\1. utils\bin\memorymap.dll
+(d6c.11f8): Break instruction exception - code 80000003 (first chance)
+ntdll!LdrpDoDebuggerBreak+0x30:
+00000000`76d76c50 cc              int     3
+
+
+0:000> ~*kv
+
+.  0  Id: 1b30.1974 Suspend: 1 Teb: 000007ff`fffde000 Unfrozen
+Child-SP          RetAddr           : Args to Child                                                           : Call Site
+00000000`0012f510 00000000`76d04731 : 00000000`00000000 00000000`0012fb00 00000000`0012fb00 00000000`00000000 : ntdll!LdrpDoDebuggerBreak+0x30
+00000000`0012f550 00000000`76d69780 : 00000000`00000000 00000000`76d76c7d 00000000`0012fb00 00000000`00000000 : ntdll!LdrpInitializeProcess+0x1b51
+00000000`0012fa40 00000000`76d1371e : 00000000`0012fb00 00000000`00000000 000007ff`fffd3000 00000000`00000000 : ntdll! ?? ::FNODOBFM::`string'+0x22790
+00000000`0012fab0 00000000`00000000 : 00000000`00000000 00000000`00000000 00000000`00000000 00000000`00000000 : ntdll!LdrInitializeThunk+0xe

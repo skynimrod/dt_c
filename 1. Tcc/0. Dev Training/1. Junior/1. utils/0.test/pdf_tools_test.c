@@ -20,6 +20,7 @@ void main(void)
 
     getSpecPage( pdf_p, 3 );
 
+    printf("结束之前出错了！\n");
     freeALL2( pdf_p );
 
 

@@ -99,14 +99,14 @@
             return NULL;
         }
 
-        mm_p = ( MEMORYMAP * )malloc( sizeof( MEMORYMAP ) );
+        mm_p = ( MEMORYMAP * )calloc( sizeof( MEMORYMAP ), 1 );
     	//printf("Size of MEMORYMAP=%d\n", sizeof(MEMORYMAP ) );
 	
         mm_p->streamlen = len;                          //字节流长度
         mm_p->pos       = 0;                            // pos        位置指针, 初始化为0
 
 	    //print_mm( mm_p );
-	    mm_p->stream       = (uchar *) malloc(  mm_p->streamlen + 1  );   // 为缓冲区申请内存空间
+	    mm_p->stream       = (uchar *) calloc(  mm_p->streamlen + 1  );   // 为缓冲区申请内存空间
 	    //printf( "mm_p->streamlen=%d\n", mm_p->streamlen );
 
 	    memset( mm_p->stream, 0, mm_p->streamlen + 1 ); // 置0
@@ -207,7 +207,7 @@
         if ( curpos >= mm_p->streamlen )    // 如果到结尾或超出结尾位置， 返回空
             return NULL;
 
-        for ( long i = curpos; i <= mm_p->streamlen; i ++ ) {
+        for ( long i = curpos; i < mm_p->streamlen; i ++ ) {
             ch = mm_p->stream[i];
             
             if ( ch == 13 || ch == 10 ) {  //  找到换行回车了   13 = "\0x0D", 10 = "0x0A"
@@ -222,12 +222,12 @@
                 curpos = i;      // curpos  赋值为当前的位置
                 ch = mm_p->stream[curpos];
 
-                while ( ch == 13 || ch == 10 ) {     // 继续跳过 后面的回车或换行
+                while ( ( ch == 13 || ch == 10 ) && ( curpos < mm_p->streamlen ) ) {     // 继续跳过 后面的回车或换行
                     curpos += 1;
                     ch = mm_p->stream[curpos];
                 }
                 mm_p->pos = curpos;
-                break;
+                return retbuf;
             }
         }
         return retbuf;

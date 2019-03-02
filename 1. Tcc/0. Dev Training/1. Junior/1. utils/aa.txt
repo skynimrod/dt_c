@@ -1,0 +1,749 @@
+filemap->filename=F:/F_T_tmp/1202.PDF
+filemap->filelen=451945
+filemap->pos=0
+filemap->filename=F:/F_T_tmp/1202.PDF
+filemap->filelen=451945
+filemap->pos=0
+
+firstObj=0, objSum=97
+
+第1个项目:trailer<<
+
+第2个项目:Size
+Size 的值为:97
+
+第3个项目:Root
+Root 的值为:1
+
+第4个项目:Info
+Info 的值为:3
+
+第5个项目:0
+
+第6个项目:R
+
+第7个项目:ID
+ID 的值为:[<0899dcceaf9147be9780d97ff9687c11><a17f73e6d9da4f5f8fdac7893a57f6e4>]>>
+Size=97
+Root=1
+Info=3
+ID=[<0899dcceaf9147be9780d97ff9687c11><a17f73e6d9da4f5f8fdac7893a57f6e4>]
+Prev=0(00000000)
+xrefStm=0
+retcode=7
+pages obj = 2
+Pages content =<</Count 32 /Kids [6 0 R 13 0 R 25 0 R 27 0 R 29 0 R 31 0 R 33 0 R 36 0 R 38 0 R 40 0 R 42 0 R 44 0 R 46 0 R 48 0 R 50 0 R 52 0 R 54 0 R 56 0 R 58 0 R 60 0 R 67 0 R 69 0 R 71 0 R 73 0 R 75 0 R 77 0 R 79 0 R 81 0 R 83 0 R 85 0 R 92 0 R 94 0 R] /Type /Pages>>
+叶子对象6| font:<</Contents 7 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT8 8 0 R>>>> /Type /Page>>
+叶子对象13| font:<</Contents 14 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象25| font:<</Contents 26 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象27| font:<</Contents 28 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象29| font:<</Contents 30 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象31| font:<</Contents 32 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象33| font:<</Contents 34 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>> /XObject <</IM35 35 0 R>>>> /Type /Page>>
+叶子对象36| font:<</Contents 37 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象38| font:<</Contents 39 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象40| font:<</Contents 41 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象42| font:<</Contents 43 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象44| font:<</Contents 45 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象46| font:<</Contents 47 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象48| font:<</Contents 49 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象50| font:<</Contents 51 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象52| font:<</Contents 53 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象54| font:<</Contents 55 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象56| font:<</Contents 57 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象58| font:<</Contents 59 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象60| font:<</Contents 61 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT62 62 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象67| font:<</Contents 68 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象69| font:<</Contents 70 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象71| font:<</Contents 72 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象73| font:<</Contents 74 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象75| font:<</Contents 76 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象77| font:<</Contents 78 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象79| font:<</Contents 80 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象81| font:<</Contents 82 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象83| font:<</Contents 84 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象85| font:<</Contents 86 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R /FT87 87 0 R>>>> /Type /Page>>
+叶子对象92| font:<</Contents 93 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+叶子对象94| font:<</Contents 95 0 R /MediaBox [0 0 595.3 841.9] /Parent 2 0 R /Resources <</Font <</FT15 15 0 R /FT20 20 0 R /FT8 8 0 R>>>> /Type /Page>>
+type0 count=5, type0 list:{ FT8 8 FT15 15 FT20 20 FT62 62 FT87 87}
+0: n=1, 字体名称:FT8
+0: n=2 字体对象编号:8
+1: n=3, 字体名称:FT15
+1: n=4 字体对象编号:15
+2: n=5, 字体名称:FT20
+2: n=6 字体对象编号:20
+3: n=7, 字体名称:FT62
+3: n=8 字体对象编号:62
+4: n=9, 字体名称:FT87
+4: n=10 字体对象编号:87
+字节流长度为4786
+
+写成功次数:l=1, 应该写入 len=4786
+cmap_p->obj=9, 压缩率为=2.84
+写成功次数:l=1, 应该写入 len=13590
+dlen=13590, len=4786
+-----------------------------------------cmap total=931
+字节流长度为297
+
+写成功次数:l=1, 应该写入 len=297
+cmap_p->obj=16, 压缩率为=1.89
+写成功次数:l=1, 应该写入 len=560
+dlen=560, len=297
+-----------------------------------------cmap total=17
+字节流长度为286
+
+写成功次数:l=1, 应该写入 len=286
+cmap_p->obj=21, 压缩率为=1.81
+写成功次数:l=1, 应该写入 len=518
+dlen=518, len=286
+-----------------------------------------cmap total=14
+字节流长度为267
+
+写成功次数:l=1, 应该写入 len=267
+cmap_p->obj=63, 压缩率为=1.73
+写成功次数:l=1, 应该写入 len=462
+dlen=462, len=267
+-----------------------------------------cmap total=10
+字节流长度为279
+
+写成功次数:l=1, 应该写入 len=279
+cmap_p->obj=88, 压缩率为=1.66
+写成功次数:l=1, 应该写入 len=462
+dlen=462, len=279
+-----------------------------------------cmap total=10
+第3页的叶子对象有1个
+第1个叶子内容对象为: 26
+
+写成功次数:l=1, 应该写入 len=3571
+
+写成功次数:l=1, 应该写入 len=26841
+=====================解压后的内容存放在文件:f:/F_t_tmp/tmp1/c_26_stream.txt
+ 压缩率为:7.52
+decode() : tmpbuf = 1 0 0 -1 0 841.9 cm
+decode() : tmpbuf = q
+decode() : tmpbuf = 0 0 595.3 841.9 re
+-------------------------------------------------------------------------------processRE(), srcbuf=0 0 595.3 841.9 re
+buf=0, i=1, j=0
+buf= 0, i=3, j=1
+buf= 595.3, i=9, j=3
+buf= 841.9, i=15, j=9
+-------------------2----------processRE(), srcbuf=0 0 595.3 841.9 re, x=0.00, y=0.00, w=595.30, h=841.90, cp=00000000004C0740
+decode() : tmpbuf = W* n
+decode() : tmpbuf = 0 w
+decode() : tmpbuf = 2 M
+decode() : tmpbuf = 2 J
+decode() : tmpbuf = 2 j
+decode() : tmpbuf = 0 0 0 RG
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 0 0 0 rg
+processBT() tmpbuf = /FT8 180 Tf
+----------------------------------------------tf=FT8----------------------
+processBT() tmpbuf = 0.05 0 0 -0.05 370.2 51.65 Tm
+==========================-----------------processTm(),srcbuf=0.05 0 0 -0.05 370.2 51.65 Tm
+--------processTm()------------buf=0.05, i=4, j=0
+--------processTm()------------buf=0, i=6, j=5
+--------processTm()------------buf=0, i=8, j=7
+--------processTm()------------buf=-0.05, i=14, j=9
+--------processTm()------------buf=370.2, i=20, j=15
+--------processTm()------------buf=51.65, i=26, j=21
+--------processTM() end !srcbuf=0.05 0 0 -0.05 370.2 51.65 Tm
+processBT() tmpbuf = <547F>Tj 180 0 TD<097E>Tj 180 0 TD<4AD2>Tj 180 0 TD<4AF1>Tj 180 0 TD<0836>Tj 180 0 TD<34D7>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT8, 编码数量:931
+processTj() Begin:<547F>Tj 180 0 TD<097E>Tj 180 0 TD<4AD2>Tj 180 0 TD<4AF1>Tj 180 0 TD<0836>Tj 180 0 TD<34D7>Tj, len=93
+-------------tmpbuf=547F, 5-1=4, n=0
+buf=547F
+
+---------------转换后的内容为:鹏(len=2)
+-------------tmpbuf=097E, 22-18=4, n=2
+buf=097E
+
+---------------转换后的内容为:华(len=2)
+-------------tmpbuf=4AD2, 39-35=4, n=4
+buf=4AD2
+
+---------------转换后的内容为:钢(len=2)
+-------------tmpbuf=4AF1, 56-52=4, n=6
+buf=4AF1
+
+---------------转换后的内容为:铁(len=2)
+-------------tmpbuf=0836, 73-69=4, n=8
+buf=0836
+
+---------------转换后的内容为:分(len=2)
+-------------tmpbuf=34D7, 90-86=4, n=10
+buf=34D7
+
+---------------转换后的内容为:级(len=2)
+解码前:<547F>Tj 180 0 TD<097E>Tj 180 0 TD<4AD2>Tj 180 0 TD<4AF1>Tj 180 0 TD<0836>Tj 180 0 TD<34D7>Tj
+解码后:鹏华钢铁分级|
+fillTextMap(), tp->buf=鹏华钢铁分级, tp->id=1
+processBT() tmpbuf = ET
+碰到ET, BT/ET 处理结束. tmpbuf=ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = /FT15 180 Tf
+----------------------------------------------tf=FT15----------------------
+processBT() tmpbuf = 0.05 0 0 -0.05 426.48 51.65 Tm
+==========================-----------------processTm(),srcbuf=0.05 0 0 -0.05 426.48 51.65 Tm
+--------processTm()------------buf=0.05, i=4, j=0
+--------processTm()------------buf=0, i=6, j=5
+--------processTm()------------buf=0, i=8, j=7
+--------processTm()------------buf=-0.05, i=14, j=9
+--------processTm()------------buf=426.48, i=21, j=15
+--------processTm()------------buf=51.65, i=27, j=22
+--------processTM() end !srcbuf=0.05 0 0 -0.05 426.48 51.65 Tm
+processBT() tmpbuf = <0015>Tj 91.188 0 TD<0013>Tj 88.797 0 TD<0014>Tj 91.188 0 TD<0019>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT15, 编码数量:17
+processTj() Begin:<0015>Tj 91.188 0 TD<0013>Tj 88.797 0 TD<0014>Tj 91.188 0 TD<0019>Tj, len=68
+-------------tmpbuf=0015, 5-1=4, n=0
+buf=0015
+
+---------------转换后的内容为:2(len=1)
+-------------tmpbuf=0013, 25-21=4, n=1
+buf=0013
+
+---------------转换后的内容为:0(len=1)
+-------------tmpbuf=0014, 45-41=4, n=2
+buf=0014
+
+---------------转换后的内容为:1(len=1)
+-------------tmpbuf=0019, 65-61=4, n=3
+buf=0019
+
+---------------转换后的内容为:6(len=1)
+解码前:<0015>Tj 91.188 0 TD<0013>Tj 88.797 0 TD<0014>Tj 91.188 0 TD<0019>Tj
+解码后:2016|
+fillTextMap(), tp->buf=2016, tp->id=2
+processBT() tmpbuf = ET
+碰到ET, BT/ET 处理结束. tmpbuf=ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = /FT8 180 Tf
+----------------------------------------------tf=FT8----------------------
+processBT() tmpbuf = 0.05 0 0 -0.05 446.759 51.65 Tm
+==========================-----------------processTm(),srcbuf=0.05 0 0 -0.05 446.759 51.65 Tm
+--------processTm()------------buf=0.05, i=4, j=0
+--------processTm()------------buf=0, i=6, j=5
+--------processTm()------------buf=0, i=8, j=7
+--------processTm()------------buf=-0.05, i=14, j=9
+--------processTm()------------buf=446.759, i=22, j=15
+--------processTm()------------buf=51.65, i=28, j=23
+--------processTM() end !srcbuf=0.05 0 0 -0.05 446.759 51.65 Tm
+processBT() tmpbuf = <14A4>Tj 180 0 TD<097A>Tj 180 0 TD<14A4>Tj 180 0 TD<14D6>Tj 180 0 TD<18D5>Tj 180 0 TD<0A7A>Tj 180 0 TD<1A88>Tj 180 0 TD<3FB1>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT8, 编码数量:931
+processTj() Begin:<14A4>Tj 180 0 TD<097A>Tj 180 0 TD<14A4>Tj 180 0 TD<14D6>Tj 180 0 TD<18D5>Tj 180 0 TD<0A7A>Tj 180 0 TD<1A88>Tj 180 0 TD<3FB1>Tj, len=127
+-------------tmpbuf=14A4, 5-1=4, n=0
+buf=14A4
+
+---------------转换后的内容为:年(len=2)
+-------------tmpbuf=097A, 22-18=4, n=2
+buf=097A
+
+---------------转换后的内容为:半(len=2)
+-------------tmpbuf=14A4, 39-35=4, n=4
+buf=14A4
+
+---------------转换后的内容为:年(len=2)
+-------------tmpbuf=14D6, 56-52=4, n=6
+buf=14D6
+
+---------------转换后的内容为:度(len=2)
+-------------tmpbuf=18D5, 73-69=4, n=8
+buf=18D5
+
+---------------转换后的内容为:报(len=2)
+-------------tmpbuf=0A7A, 90-86=4, n=10
+buf=0A7A
+
+---------------转换后的内容为:告(len=2)
+-------------tmpbuf=1A88, 107-103=4, n=12
+buf=1A88
+
+---------------转换后的内容为:摘(len=2)
+-------------tmpbuf=3FB1, 124-120=4, n=14
+buf=3FB1
+
+---------------转换后的内容为:要(len=2)
+解码前:<14A4>Tj 180 0 TD<097A>Tj 180 0 TD<14A4>Tj 180 0 TD<14D6>Tj 180 0 TD<18D5>Tj 180 0 TD<0A7A>Tj 180 0 TD<1A88>Tj 180 0 TD<3FB1>Tj
+解码后:年半年度报告摘要|
+fillTextMap(), tp->buf=年半年度报告摘要, tp->id=3
+processBT() tmpbuf = ET
+碰到ET, BT/ET 处理结束. tmpbuf=ET
+decode() : tmpbuf = q
+decode() : tmpbuf = 76.55 55.2 442.2 0.72 re
+-------------------------------------------------------------------------------processRE(), srcbuf=76.55 55.2 442.2 0.72 re
+buf=76.55, i=5, j=0
+buf= 55.2, i=10, j=5
+buf= 442.2, i=16, j=10
+buf= 0.72, i=21, j=16
+-------------------2----------processRE(), srcbuf=76.55 55.2 442.2 0.72 re, x=76.55, y=55.20, w=442.20, h=0.72, cp=00000000004C0E30
+----------------------------------------3--------------------------processRE(), srcbuf=76.55 55.2 442.2 0.72 re, cp=00000000004C0E30
+-------------------fileterCell()--cellMap_p=0000000000000000----cp=00000000004C0E30---
+--------printCellMap()------------------
+------------------cellMap 是 空的?-----------------------------------------
+after assert(decode_p)------------------------------------------------------------------------------aaaaaaaaaaaaaaaaa
+cellMap_p 为空,直接添加cp-----------------------------------------111  , 
+--------printCellMap()------------------
+-------------cell id=1--address=00000000004C0E30---------
+x=76.55,y=55.20,w=442.20, h=0.72
+rows=0, cols=0
+maxlines=0, maxlen=0, txtTotal=0
+
+decode() : tmpbuf = f*
+decode() : tmpbuf = Q
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 0.05 0 0 -0.05 253.8 789.769 Tm
+==========================-----------------processTm(),srcbuf=0.05 0 0 -0.05 253.8 789.769 Tm
+--------processTm()------------buf=0.05, i=4, j=0
+--------processTm()------------buf=0, i=6, j=5
+--------processTm()------------buf=0, i=8, j=7
+--------processTm()------------buf=-0.05, i=14, j=9
+--------processTm()------------buf=253.8, i=20, j=15
+--------processTm()------------buf=789.769, i=28, j=21
+--------processTM() end !srcbuf=0.05 0 0 -0.05 253.8 789.769 Tm
+processBT() tmpbuf = <315C>Tj
+找到CMAP, fontname=FT8, 编码数量:931
+processTj() Begin:<315C>Tj, len=8
+-------------tmpbuf=315C, 5-1=4, n=0
+buf=315C
+
+---------------转换后的内容为:第(len=2)
+解码前:<315C>Tj
+解码后:第|
+fillTextMap(), tp->buf=第, tp->id=4
+1===========================cp=00000000004C0E30, cx=76.55, cy=55.20, cw=442.20, ch=0.72, txtTotal=0
+processBT() tmpbuf = ET
+碰到ET, BT/ET 处理结束. tmpbuf=ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = /FT15 180 Tf
+----------------------------------------------tf=FT15----------------------
+processBT() tmpbuf = 0.05 0 0 -0.05 267.24 789.65 Tm
+==========================-----------------processTm(),srcbuf=0.05 0 0 -0.05 267.24 789.65 Tm
+--------processTm()------------buf=0.05, i=4, j=0
+--------processTm()------------buf=0, i=6, j=5
+--------processTm()------------buf=0, i=8, j=7
+--------processTm()------------buf=-0.05, i=14, j=9
+--------processTm()------------buf=267.24, i=21, j=15
+--------processTm()------------buf=789.65, i=28, j=22
+--------processTM() end !srcbuf=0.05 0 0 -0.05 267.24 789.65 Tm
+processBT() tmpbuf = <0016>Tj
+找到CMAP, fontname=FT15, 编码数量:17
+processTj() Begin:<0016>Tj, len=8
+-------------tmpbuf=0016, 5-1=4, n=0
+buf=0016
+
+---------------转换后的内容为:3(len=1)
+解码前:<0016>Tj
+解码后:3|
+fillTextMap(), tp->buf=3, tp->id=5
+1===========================cp=00000000004C0E30, cx=76.55, cy=55.20, cw=442.20, ch=0.72, txtTotal=0
+processBT() tmpbuf = ET
+碰到ET, BT/ET 处理结束. tmpbuf=ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = /FT8 180 Tf
+----------------------------------------------tf=FT8----------------------
+processBT() tmpbuf = 0.05 0 0 -0.05 276.24 789.769 Tm
+==========================-----------------processTm(),srcbuf=0.05 0 0 -0.05 276.24 789.769 Tm
+--------processTm()------------buf=0.05, i=4, j=0
+--------processTm()------------buf=0, i=6, j=5
+--------processTm()------------buf=0, i=8, j=7
+--------processTm()------------buf=-0.05, i=14, j=9
+--------processTm()------------buf=276.24, i=21, j=15
+--------processTm()------------buf=789.769, i=29, j=22
+--------processTM() end !srcbuf=0.05 0 0 -0.05 276.24 789.769 Tm
+processBT() tmpbuf = <4EA5>Tj
+找到CMAP, fontname=FT8, 编码数量:931
+processTj() Begin:<4EA5>Tj, len=8
+-------------tmpbuf=4EA5, 5-1=4, n=0
+buf=4EA5
+
+---------------转换后的内容为:页(len=2)
+解码前:<4EA5>Tj
+解码后:页|
+fillTextMap(), tp->buf=页, tp->id=6
+1===========================cp=00000000004C0E30, cx=76.55, cy=55.20, cw=442.20, ch=0.72, txtTotal=0
+processBT() tmpbuf = ET
+碰到ET, BT/ET 处理结束. tmpbuf=ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 0.05 0 0 -0.05 289.8 789.769 Tm
+==========================-----------------processTm(),srcbuf=0.05 0 0 -0.05 289.8 789.769 Tm
+--------processTm()------------buf=0.05, i=4, j=0
+--------processTm()------------buf=0, i=6, j=5
+--------processTm()------------buf=0, i=8, j=7
+--------processTm()------------buf=-0.05, i=14, j=9
+--------processTm()------------buf=289.8, i=20, j=15
+--------processTm()------------buf=789.769, i=28, j=21
+--------processTM() end !srcbuf=0.05 0 0 -0.05 289.8 789.769 Tm
+processBT() tmpbuf = <07A1>Tj
+找到CMAP, fontname=FT8, 编码数量:931
+processTj() Begin:<07A1>Tj, len=8
+-------------tmpbuf=07A1, 5-1=4, n=0
+buf=07A1
+
+---------------转换后的内容为:共(len=2)
+解码前:<07A1>Tj
+解码后:共|
+fillTextMap(), tp->buf=共, tp->id=7
+1===========================cp=00000000004C0E30, cx=76.55, cy=55.20, cw=442.20, ch=0.72, txtTotal=0
+processBT() tmpbuf = ET
+碰到ET, BT/ET 处理结束. tmpbuf=ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = /FT15 180 Tf
+----------------------------------------------tf=FT15----------------------
+processBT() tmpbuf = 0.05 0 0 -0.05 300.959 789.65 Tm
+==========================-----------------processTm(),srcbuf=0.05 0 0 -0.05 300.959 789.65 Tm
+--------processTm()------------buf=0.05, i=4, j=0
+--------processTm()------------buf=0, i=6, j=5
+--------processTm()------------buf=0, i=8, j=7
+--------processTm()------------buf=-0.05, i=14, j=9
+--------processTm()------------buf=300.959, i=22, j=15
+--------processTm()------------buf=789.65, i=29, j=23
+--------processTM() end !srcbuf=0.05 0 0 -0.05 300.959 789.65 Tm
+processBT() tmpbuf = <0016>Tj 91.188 0 TD<0015>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT15, 编码数量:17
+processTj() Begin:<0016>Tj 91.188 0 TD<0015>Tj, len=28
+-------------tmpbuf=0016, 5-1=4, n=0
+buf=0016
+
+---------------转换后的内容为:3(len=1)
+-------------tmpbuf=0015, 25-21=4, n=1
+buf=0015
+
+---------------转换后的内容为:2(len=1)
+解码前:<0016>Tj 91.188 0 TD<0015>Tj
+解码后:32|
+fillTextMap(), tp->buf=32, tp->id=8
+1===========================cp=00000000004C0E30, cx=76.55, cy=55.20, cw=442.20, ch=0.72, txtTotal=0
+processBT() tmpbuf = ET
+碰到ET, BT/ET 处理结束. tmpbuf=ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = /FT8 180 Tf
+----------------------------------------------tf=FT8----------------------
+processBT() tmpbuf = 0.05 0 0 -0.05 314.52 789.769 Tm
+==========================-----------------processTm(),srcbuf=0.05 0 0 -0.05 314.52 789.769 Tm
+--------processTm()------------buf=0.05, i=4, j=0
+--------processTm()------------buf=0, i=6, j=5
+--------processTm()------------buf=0, i=8, j=7
+--------processTm()------------buf=-0.05, i=14, j=9
+--------processTm()------------buf=314.52, i=21, j=15
+--------processTm()------------buf=789.769, i=29, j=22
+--------processTM() end !srcbuf=0.05 0 0 -0.05 314.52 789.769 Tm
+processBT() tmpbuf = <4EA5>Tj
+找到CMAP, fontname=FT8, 编码数量:931
+processTj() Begin:<4EA5>Tj, len=8
+-------------tmpbuf=4EA5, 5-1=4, n=0
+buf=4EA5
+
+---------------转换后的内容为:页(len=2)
+解码前:<4EA5>Tj
+解码后:页|
+fillTextMap(), tp->buf=页, tp->id=9
+1===========================cp=00000000004C0E30, cx=76.55, cy=55.20, cw=442.20, ch=0.72, txtTotal=0
+processBT() tmpbuf = ET
+碰到ET, BT/ET 处理结束. tmpbuf=ET
+decode() : tmpbuf = Q
+decode() : tmpbuf = q
+decode() : tmpbuf = 0 0 595.3 841.9 re
+-------------------------------------------------------------------------------processRE(), srcbuf=0 0 595.3 841.9 re
+buf=0, i=1, j=0
+buf= 0, i=3, j=1
+buf= 595.3, i=9, j=3
+buf= 841.9, i=15, j=9
+-------------------2----------processRE(), srcbuf=0 0 595.3 841.9 re, x=0.00, y=0.00, w=595.30, h=841.90, cp=00000000004C0190
+decode() : tmpbuf = W* n
+decode() : tmpbuf = q
+decode() : tmpbuf = -1638.4 72 3795.5 39.1 re
+-------------------------------------------------------------------------------processRE(), srcbuf=-1638.4 72 3795.5 39.1 re
+buf=-1638.4, i=7, j=0
+buf= 72, i=10, j=7
+buf= 3795.5, i=17, j=10
+buf= 39.1, i=22, j=17
+-------------------2----------processRE(), srcbuf=-1638.4 72 3795.5 39.1 re, x=-1638.40, y=72.00, w=3795.50, h=39.10, cp=00000000004C01F0
+decode() : tmpbuf = W* n
+decode() : tmpbuf = 0 w
+decode() : tmpbuf = 2 M
+decode() : tmpbuf = 2 J
+decode() : tmpbuf = 2 j
+decode() : tmpbuf = 0 0 0 RG
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 0 0 0 rg
+processBT() tmpbuf = /FT8 281 Tf
+----------------------------------------------tf=FT8----------------------
+processBT() tmpbuf = 2 Tr
+processBT() tmpbuf = 0.40183 w
+processBT() tmpbuf = 0.05 0 0 -0.05 251.4 92.69 Tm
+==========================-----------------processTm(),srcbuf=0.05 0 0 -0.05 251.4 92.69 Tm
+--------processTm()------------buf=0.05, i=4, j=0
+--------processTm()------------buf=0, i=6, j=5
+--------processTm()------------buf=0, i=8, j=7
+--------processTm()------------buf=-0.05, i=14, j=9
+--------processTm()------------buf=251.4, i=20, j=15
+--------processTm()------------buf=92.69, i=26, j=21
+--------processTM() end !srcbuf=0.05 0 0 -0.05 251.4 92.69 Tm
+processBT() tmpbuf = <0063>Tj
+找到CMAP, fontname=FT8, 编码数量:931
+processTj() Begin:<0063>Tj, len=8
+-------------tmpbuf=0063, 5-1=4, n=0
+buf=0063
+
+---------------转换后的内容为:§(len=2)
+解码前:<0063>Tj
+解码后:§|
+fillTextMap(), tp->buf=§, tp->id=10
+1===========================cp=00000000004C0E30, cx=76.55, cy=55.20, cw=442.20, ch=0.72, txtTotal=0
+processBT() tmpbuf = ET
+碰到ET, BT/ET 处理结束. tmpbuf=ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = /FT20 281 Tf
+----------------------------------------------tf=FT20----------------------
+processBT() tmpbuf = 0 Tr
+processBT() tmpbuf = 0.05 0 0 -0.05 265.44 92.57 Tm
+==========================-----------------processTm(),srcbuf=0.05 0 0 -0.05 265.44 92.57 Tm
+--------processTm()------------buf=0.05, i=4, j=0
+--------processTm()------------buf=0, i=6, j=5
+--------processTm()------------buf=0, i=8, j=7
+--------processTm()------------buf=-0.05, i=14, j=9
+--------processTm()------------buf=265.44, i=21, j=15
+--------processTm()------------buf=92.57, i=27, j=22
+--------processTM() end !srcbuf=0.05 0 0 -0.05 265.44 92.57 Tm
+processBT() tmpbuf = <0374>Tj
+找到CMAP, fontname=FT20, 编码数量:14
+processTj() Begin:<0374>Tj, len=8
+-------------tmpbuf=0374, 5-1=4, n=0
+buf=0374
+
+---------------转换后的内容为:2(len=1)
+解码前:<0374>Tj
+解码后:2|
+fillTextMap(), tp->buf=2, tp->id=11
+1===========================cp=00000000004C0E30, cx=76.55, cy=55.20, cw=442.20, ch=0.72, txtTotal=0
+processBT() tmpbuf = ET
+碰到ET, BT/ET 处理结束. tmpbuf=ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = /FT8 281 Tf
+----------------------------------------------tf=FT8----------------------
+processBT() tmpbuf = 2 Tr
+processBT() tmpbuf = 0.40183 w
+processBT() tmpbuf = 0.05 0 0 -0.05 287.64 92.69 Tm
+==========================-----------------processTm(),srcbuf=0.05 0 0 -0.05 287.64 92.69 Tm
+--------processTm()------------buf=0.05, i=4, j=0
+--------processTm()------------buf=0, i=6, j=5
+--------processTm()------------buf=0, i=8, j=7
+--------processTm()------------buf=-0.05, i=14, j=9
+--------processTm()------------buf=287.64, i=21, j=15
+--------processTm()------------buf=92.69, i=27, j=22
+--------processTM() end !srcbuf=0.05 0 0 -0.05 287.64 92.69 Tm
+processBT() tmpbuf = <0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31B0>Tj 280.797 0 TD<04FB>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT8, 编码数量:931
+processTj() Begin:<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31B0>Tj 280.797 0 TD<04FB>Tj, len=71
+-------------tmpbuf=0E2A, 5-1=4, n=0
+buf=0E2A
+
+---------------转换后的内容为:基(len=2)
+-------------tmpbuf=4801, 26-22=4, n=2
+buf=4801
+
+---------------转换后的内容为:金(len=2)
+-------------tmpbuf=31B0, 47-43=4, n=4
+buf=31B0
+
+---------------转换后的内容为:简(len=2)
+-------------tmpbuf=04FB, 68-64=4, n=6
+buf=04FB
+
+---------------转换后的内容为:介(len=2)
+解码前:<0E2A>Tj 280.797 0 TD<4801>Tj 280.797 0 TD<31B0>Tj 280.797 0 TD<04FB>Tj
+解码后:基金简介|
+fillTextMap(), tp->buf=基金简介, tp->id=12
+1===========================cp=00000000004C0E30, cx=76.55, cy=55.20, cw=442.20, ch=0.72, txtTotal=0
+processBT() tmpbuf = ET
+碰到ET, BT/ET 处理结束. tmpbuf=ET
+decode() : tmpbuf = Q
+decode() : tmpbuf = Q
+decode() : tmpbuf = q
+decode() : tmpbuf = 0 0 595.3 841.9 re
+-------------------------------------------------------------------------------processRE(), srcbuf=0 0 595.3 841.9 re
+buf=0, i=1, j=0
+buf= 0, i=3, j=1
+buf= 595.3, i=9, j=3
+buf= 841.9, i=15, j=9
+-------------------2----------processRE(), srcbuf=0 0 595.3 841.9 re, x=0.00, y=0.00, w=595.30, h=841.90, cp=00000000004C04B0
+decode() : tmpbuf = W* n
+decode() : tmpbuf = q
+decode() : tmpbuf = -1638.4 111 3795.5 23.5 re
+-------------------------------------------------------------------------------processRE(), srcbuf=-1638.4 111 3795.5 23.5 re
+buf=-1638.4, i=7, j=0
+buf= 111, i=11, j=7
+buf= 3795.5, i=18, j=11
+buf= 23.5, i=23, j=18
+-------------------2----------processRE(), srcbuf=-1638.4 111 3795.5 23.5 re, x=-1638.40, y=111.00, w=3795.50, h=23.50, cp=00000000004C0510
+decode() : tmpbuf = W* n
+decode() : tmpbuf = 0 w
+decode() : tmpbuf = 2 M
+decode() : tmpbuf = 2 J
+decode() : tmpbuf = 2 j
+decode() : tmpbuf = 0 0 0 RG
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 0 0 0 rg
+processBT() tmpbuf = /FT20 240 Tf
+----------------------------------------------tf=FT20----------------------
+processBT() tmpbuf = 0 Tr
+processBT() tmpbuf = 0.05 0 0 -0.05 76.559 123.05 Tm
+==========================-----------------processTm(),srcbuf=0.05 0 0 -0.05 76.559 123.05 Tm
+--------processTm()------------buf=0.05, i=4, j=0
+--------processTm()------------buf=0, i=6, j=5
+--------processTm()------------buf=0, i=8, j=7
+--------processTm()------------buf=-0.05, i=14, j=9
+--------processTm()------------buf=76.559, i=21, j=15
+--------processTm()------------buf=123.05, i=28, j=22
+--------processTM() end !srcbuf=0.05 0 0 -0.05 76.559 123.05 Tm
+processBT() tmpbuf = <0374>Tj 141.594 0 TD<01E4>Tj 55.188 0 TD<0373>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT20, 编码数量:14
+processTj() Begin:<0374>Tj 141.594 0 TD<01E4>Tj 55.188 0 TD<0373>Tj, len=49
+-------------tmpbuf=0374, 5-1=4, n=0
+buf=0374
+
+---------------转换后的内容为:2(len=1)
+-------------tmpbuf=01E4, 26-22=4, n=1
+buf=01E4
+
+---------------转换后的内容为:?(len=-1)
+-------------tmpbuf=0373, 46-42=4, n=1
+buf=0373
+
+---------------转换后的内容为:1(len=1)
+解码前:<0374>Tj 141.594 0 TD<01E4>Tj 55.188 0 TD<0373>Tj
+解码后:21|
+fillTextMap(), tp->buf=21, tp->id=13
+1===========================cp=00000000004C0E30, cx=76.55, cy=55.20, cw=442.20, ch=0.72, txtTotal=0
+processBT() tmpbuf = ET
+碰到ET, BT/ET 处理结束. tmpbuf=ET
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = /FT8 240 Tf
+----------------------------------------------tf=FT8----------------------
+processBT() tmpbuf = 2 Tr
+processBT() tmpbuf = 0.3432 w
+processBT() tmpbuf = 0.05 0 0 -0.05 99.48 123.17 Tm
+==========================-----------------processTm(),srcbuf=0.05 0 0 -0.05 99.48 123.17 Tm
+--------processTm()------------buf=0.05, i=4, j=0
+--------processTm()------------buf=0, i=6, j=5
+--------processTm()------------buf=0, i=8, j=7
+--------processTm()------------buf=-0.05, i=14, j=9
+--------processTm()------------buf=99.48, i=20, j=15
+--------processTm()------------buf=123.17, i=27, j=21
+--------processTM() end !srcbuf=0.05 0 0 -0.05 99.48 123.17 Tm
+processBT() tmpbuf = <0E2A>Tj 240 0 TD<4801>Tj 242.391 0 TD<0E2A>Tj 240 0 TD<1D5C>Tj 242.391 0 TD<16F5>Tj 240 0 TD<07E5>Tj
+getOriginXY():-------------======================================
+找到CMAP, fontname=FT8, 编码数量:931
+processTj() Begin:<0E2A>Tj 240 0 TD<4801>Tj 242.391 0 TD<0E2A>Tj 240 0 TD<1D5C>Tj 242.391 0 TD<16F5>Tj 240 0 TD<07E5>Tj, len=101
+-------------tmpbuf=0E2A, 5-1=4, n=0
+buf=0E2A
+
+---------------转换后的内容为:基(len=2)
+-------------tmpbuf=4801, 22-18=4, n=2
+buf=4801
+
+---------------转换后的内容为:金(len=2)
+-------------tmpbuf=0E2A, 43-39=4, n=4
+buf=0E2A
+
+---------------转换后的内容为:基(len=2)
+-------------tmpbuf=1D5C, 60-56=4, n=6
+buf=1D5C
+
+---------------转换后的内容为:本(len=2)
+-------------tmpbuf=16F5, 81-77=4, n=8
+buf=16F5
+
+---------------转换后的内容为:情(len=2)
+-------------tmpbuf=07E5, 98-94=4, n=10
+buf=07E5
+
+---------------转换后的内容为:况(len=2)
+解码前:<0E2A>Tj 240 0 TD<4801>Tj 242.391 0 TD<0E2A>Tj 240 0 TD<1D5C>Tj 242.391 0 TD<16F5>Tj 240 0 TD<07E5>Tj
+解码后:基金基本情况|
+fillTextMap(), tp->buf=基金基本情况, tp->id=14
+1===========================cp=00000000004C0E30, cx=76.55, cy=55.20, cw=442.20, ch=0.72, txtTotal=0
+processBT() tmpbuf = ET
+碰到ET, BT/ET 处理结束. tmpbuf=ET
+decode() : tmpbuf = Q
+decode() : tmpbuf = Q
+decode() : tmpbuf = q
+decode() : tmpbuf = 0 0 595.3 841.9 re
+-------------------------------------------------------------------------------processRE(), srcbuf=0 0 595.3 841.9 re
+buf=0, i=1, j=0
+buf= 0, i=3, j=1
+buf= 595.3, i=9, j=3
+buf= 841.9, i=15, j=9
+-------------------2----------processRE(), srcbuf=0 0 595.3 841.9 re, x=0.00, y=0.00, w=595.30, h=841.90, cp=00000000004C0250
+decode() : tmpbuf = W* n
+decode() : tmpbuf = q
+decode() : tmpbuf = 75.15 134.4 130 16.1 re
+-------------------------------------------------------------------------------processRE(), srcbuf=75.15 134.4 130 16.1 re
+buf=75.15, i=5, j=0
+buf= 134.4, i=11, j=5
+buf= 130, i=15, j=11
+buf= 16.1, i=20, j=15
+-------------------2----------processRE(), srcbuf=75.15 134.4 130 16.1 re, x=75.15, y=134.40, w=130.00, h=16.10, cp=00000000004C0310
+----------------------------------------3--------------------------processRE(), srcbuf=75.15 134.4 130 16.1 re, cp=00000000004C0310
+-------------------fileterCell()--cellMap_p=00000000004C0E30----cp=00000000004C0310---
+--------printCellMap()------------------
+-------------cell id=1--address=00000000004C0E30---------
+x=76.55,y=55.20,w=442.20, h=0.72
+rows=0, cols=0
+maxlines=0, maxlen=0, txtTotal=0
+
+after assert(decode_p)------------------------------------------------------------------------------aaaaaaaaaaaaaaaaa
+----------------2--------------cellMap_p 不为空的处理, cellMap_p=00000000004C0E30, cellMap_p->last=00000000004C0E30
+================asf=============
+-2222222222- cpt=00000000004C0E30, cp=00000000004C0310
+222111222
+12121212
+-33333 cpt=00000000004C0E30, cp=00000000004C0310
+--------printCellMap()------------------
+-------------cell id=1--address=00000000004C0E30---------
+x=76.55,y=55.20,w=442.20, h=0.72
+rows=0, cols=0
+maxlines=0, maxlen=0, txtTotal=0
+
+-------------cell id=2--address=00000000004C0310---------
+x=75.15,y=134.40,w=130.00, h=16.10
+rows=0, cols=0
+maxlines=0, maxlen=0, txtTotal=0
+
+decode() : tmpbuf = W* n
+decode() : tmpbuf = 0 w
+decode() : tmpbuf = 2 M
+decode() : tmpbuf = 2 J
+decode() : tmpbuf = 2 j
+decode() : tmpbuf = 0 0 0 RG
+decode() : tmpbuf = BT
+processBT() buf = BT
+processBT() tmpbuf = 0 0 0 rg
+processBT() tmpbuf = /FT8 209 Tf
+----------------------------------------------tf=FT8----------------------
+processBT() tmpbuf = 0 Tr
+processBT() tmpbuf = 0.05 0 0 -0.05 80.52 146.45 Tm
+==========================-----------------processTm(),srcbuf=0.05 0 0 -0.05 80.52 146.45 Tm
+--------processTm()------------buf=0.05, i=4, j=0
+--------processTm()------------buf=0, i=6, j=5
+--------processTm()------------buf=0, i=8, j=7
+--------processTm()------------buf=-0.05, 

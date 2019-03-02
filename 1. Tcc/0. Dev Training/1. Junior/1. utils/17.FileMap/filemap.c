@@ -100,14 +100,14 @@
             return NULL;
         }
 
-        fm_p = ( FILEMAP * )malloc( sizeof( FILEMAP ) );
+        fm_p = ( FILEMAP * )calloc( sizeof( FILEMAP ), 1 );
     	//printf("Size of FILEMAP=%d\n", sizeof(FILEMAP ) );
 	    //printf("size of long=%d, sizeof char *=%d\n", sizeof(long), sizeof(char *));
 	
 	    int 	len = strlen( srcFile );
 
-	    fm_p->filename = (char *) malloc( len + 1 );
-	    memset( fm_p->filename, 0, len + 1 );
+	    fm_p->filename = (char *) calloc( len + 1, 1 );
+	    //memset( fm_p->filename, 0, len + 1 );
 	    memcpy( fm_p->filename, srcFile, len );
 
 	
@@ -116,9 +116,9 @@
         fm_p->pos       = 0;                            // pos        位置指针, 初始化为0
 
 	    print_fm( fm_p );
-	    fm_p->stream       = (uchar *) malloc(  fm_p->streamlen + 1  );   // 为缓冲区申请内存空间
+	    fm_p->stream       = (uchar *) calloc(  fm_p->streamlen + 1, 1  );   // 为缓冲区申请内存空间
 	    //printf( "fm_p->streamlen=%d\n", fm_p->streamlen );
-	    memset( fm_p->stream, 0, fm_p->streamlen + 1 ); // 置0
+	    //memset( fm_p->stream, 0, fm_p->streamlen + 1 ); // 置0
 
 	    FILE  *fp = fopen( srcFile, "rb" );
 	    long n = fread( fm_p->stream, 1, fm_p->streamlen, fp );  // 把文件内容读取到内存映射缓冲区中

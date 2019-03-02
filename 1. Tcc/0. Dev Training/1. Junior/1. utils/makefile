@@ -19,7 +19,7 @@
 #!include "0.test/filemap_test.mak"
 #!include "0.test/memorymap_test.mak"
 !include "0.test/pdf_tools_test.mak"
-!include "0.test/tmp_test.mak"
+#!include "0.test/tmp_test.mak"
 
 #all: clean
 clean:
