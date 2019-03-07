@@ -166,7 +166,7 @@
     int     fillCellMap( DECODE * decode_p, CELL * cp );
     int     fillTextMap( char * buf, DECODE * decode_p );
 
-    char *  procText4Table( TEXT * textMap_p, CELL * cellMap_p );
+    char *  procText4Table( TEXT * textMap_p, DECODE * decode_p );
     
 
     #define CHECK_ERR(err, msg) { \
@@ -355,8 +355,6 @@
         char      * tmpbuf;
         
 
-
-        
         if ( !pdf_p || pageno > pdf_p->pages_p->total || pageno < 1 )
             return NULL;
         
@@ -400,8 +398,12 @@
             pdf_p->pages_p->comprRatio_p[pageno-1][i] = (float)dlen/len;
             printf(" Ñ¹ËõÂÊÎª:%2.2f\n", pdf_p->pages_p->comprRatio_p[pageno-1][i] );
 
+            char * retbuf;
             sprintf( filename, "f:/F_t_tmp/tmp1/c_%d_decode.dat", obj );
-            buf = decode( pdf_p->pages_p, desbuf, dlen, filename );
+            retbuf = decode( pdf_p->pages_p, desbuf, dlen, filename );
+
+            free( retbuf );
+            
             free( srcbuf );
             free( desbuf );
         }

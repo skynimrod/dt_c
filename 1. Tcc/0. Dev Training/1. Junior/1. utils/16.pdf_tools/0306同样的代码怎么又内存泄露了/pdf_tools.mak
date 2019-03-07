@@ -31,7 +31,7 @@ $(SHAREDLIB): $(OBJS)
 	IF not Exist "$(lib)" md "$(lib)"
 	echo "$(lib)\$(SHAREDLIB)"
 	move $(SHAREDLIB) "$(lib)\$(SHAREDLIB)"	 
-	move $(def) "$(lib)\$(def)"	 
+	move $(DEF) "$(lib)\$(DEF)"	 
 	
 $(obj)pdf_tool.o: $(source)pdf_tool.c
 	@echo "compile pdf_tool.o"

@@ -117,6 +117,7 @@
     }CUR_XY;
 
     // 单元格信息
+    /*
     typedef struct __cell__ {
         int                 id;             // 编号从1开始 , 自动产生
         float               x;
@@ -127,32 +128,67 @@
         int                 maxlen;         // 最长的文本长度
         int                 rows;           // 行数
         int                 cols;           // 列数
+        struct __cell__  *  last;           // 总是指向最后一个cell
         struct __cell__  *  prev;           // 前一个单元格
         struct __cell__  *  next;           // 后一个单元格
         int              *  txtIDs_p;       // 单元格中的文本编号(数组)
         int                 txtTotal;       // 单元格中的文本编号数量
     }CELL;
+    */
+    // 由于 链表格式处理过程中, 出现 last 指针赋值总出内存泄露的错误
+    // 排查很麻烦, 放弃链表, 改用数组, 假设一页中的表格数量不会超过512个
+    // 放弃编号, 改用游标cursor, 因为下标可以取代编号了
+    // 删除 last, prev, next 指针, 因为可以通过下标进行访问了
+    // cursor 在外部定义, 用来定位对应的cell
+    typedef struct __cell__ {
+        float               x;
+        float               y;
+        float               w;
+        float               h;
+        int                 maxlines;
+        int                 maxlen;         // 最长的文本长度
+        int                 rows;           // 行数
+        int                 cols;           // 列数
+        int                 txtTotal;       // 单元格中的文本编号数量
+        int              *  txtIDs_p;       // 单元格中的文本编号(数组)
+    }CELL;
 
     // 文本信息
+    /*
     typedef struct __text__ {
         int                 id;
         float               ox;
         float               oy;
         char            *   buf;
         int                 len;
+        struct __text__  *  last;
         struct __text__  *  prev;       
         struct __text__  *  next;
         int                 cellID;     // 该文本属于哪个CELL, 如果是0表示不在cell中
     } TEXT;
+    */
+
+    typedef struct __text__ {
+        int                 id;
+        float               ox;
+        float               oy;
+        char            *   buf;
+        int                 len;
+        int                 cellID;     // 该文本属于哪个CELL, 如果是0表示不在cell中
+
+    } TEXT;
+
+    #define L_MAXCELL   512     // 一页中的最大 单元格数量
+    #define L_MAXROWS   512     // 一页中的最大 文本行数 , 包括单元格内的文本行数
 
     typedef struct __decode__ {
         CUR_XY      cur_xy;
         TM          tm;
         char        tf[L_FONTNAME];     // 当前使用的字体名称(对应cmap中的fontname)
-        TEXT    *   ltp;                // last text pointer
-        TEXT    *   tp;                 // text map pointer, 链表, 每个节点是个TEXT 指针
-        CELL    *   lcp;                // last cell Pointer
-        CELL    *   cp;                 // Cell Map pointer, 链表, 每个节点是个CELL指针。 处理表格式需要re
+        int         txtRows;                // 文本行数， 也就是textMap 数组中的有效文本个数
+        TEXT        textMap[L_MAXROWS];
+        int         c_cursor;               // 单元格的游标, 用来指向最后一个之后的下标(这个位置是待添加cell的位置),缺省是0, 也就是第一个
+        CELL        cellMap[L_MAXCELL];        // 处理表格式需要re
     }DECODE;
 
     int     parsePDF( char * desfile,  char * srcfile );

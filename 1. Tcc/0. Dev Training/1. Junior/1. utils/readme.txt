@@ -13,3 +13,9 @@
  2. FileApi.dll  合并到 file_tools.dll中
 
  3. 
+
+. 2019.03.07
+
+  修正了 pdf_tools 的内存泄露问题. 原因是  第一次遍历文本的时候， cellMap_p->txtTotal 会根据文本是否在cell 来增加, 但是并没有真正为txtIDs_p 申请内存并存放对应textID, 但是printCellMap()里面确实直接访问  txtIDs_p[i], 那么就出现了内存泄露.  修改printCellMap()， 不判断txtTotal ， 而是判断txtIDs_p 是否已经申请内存了, 再决定是否显示cell 中的文本编号.
+
+  

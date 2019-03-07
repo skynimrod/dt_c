@@ -41,10 +41,8 @@
 
     void    printTM( TM * tm_p );
     void    printCUR_XY( CUR_XY * cur_xy_p );
-
-    void    printTextMap( TEXT * textMap_p );
-    void    printCellMap( CELL * cellMap_p );
-
+    /*
+    */
 
     #define L_TMPBUF        256
 
@@ -349,45 +347,27 @@
         printf( "----------------cur_xy_p->opr=%s\n", cur_xy_p->opr );
     }
 
-    void printCellMap( CELL * cellMap_p )
+    void printCellMap( CELL * cellMap_p, int total )
     {
-        CELL    * cp = cellMap_p;
-        
-        printf("--------printCellMap()------------------\n");
 
-        if ( !cp ) { 
-            printf("------------------cellMap 是 空的?-----------------------------------------\n");
-            return;
-        }
-
-        while ( cp ) {
-            printf( "-------------cell id=%d--address=%p---------\n", cp->id, cp );
-            printf( "x=%.2f,y=%.2f,w=%.2f, h=%.2f\n", cp->x, cp->y, cp->w, cp->h );
-            printf( "rows=%d, cols=%d\n",  cp->rows, cp->cols );
-            printf( "maxlines=%d, maxlen=%d, txtTotal=%d\n", cp->maxlines, cp->maxlen, cp->txtTotal );
-            if ( cp->txtIDs_p )         // 因为第一次创建cell的时候, 还没有为txtIDs_p申请空间, 当时不知道有多少文本在cell中, 后来处理完文本才会知道
-                for ( int i = 0; i < cp->txtTotal; i ++ ) {
-                    printf( "%d ", cp->txtIDs_p[i] ); 
-                }
+        for ( int i = 0; i < total; i ++ ) {
+            printf( "-------------cell id=%d-----------\n", i );
+            printf( "x=%.2f,y=%.2f,w=%.2f, h=%.2f\n", cellMap_p[i].x, cellMap_p[i].y, cellMap_p[i].w, cellMap_p[i].h );
+            printf( "rows=%d, cols=%d\n",  cellMap_p[i].rows, cellMap_p[i].cols );
+            printf( "maxlines=%d, maxlen=%d, txtTotal=%d\n", cellMap_p[i].maxlines, cellMap_p[i].maxlen, cellMap_p[i].txtTotal );
+            for ( int j = 0; j < cellMap_p[i].txtTotal; j ++ )
+                printf( "%d ", cellMap_p[i].txtIDs_p[j] ); 
 
             printf("\n");
-            cp = cp->next;
         }
     }
 
-    void printTextMap( TEXT * textMap_p )
+    void printTextMap( TEXT * textMap_p, int total )
     {
-        TEXT    * tp = textMap_p;
-        
-        if ( !tp ) 
-            return;
-
-        while ( tp ) {
-            printf( "-------------text id=%d-----------\n", tp->id );
-            printf( "ox=%.2f, oy=%.2f, cellID=%d\n", tp->ox, tp->oy, tp->cellID );
-            printf( "len=%d, buf=%s\n",  tp->len, tp->buf );
-            printf( "tp->prev=%p, tp=%p,tp->next=%p\n", tp->prev, tp, tp->next );
-            tp = tp->next;
+        for ( int i = 0; i < total; i ++ ) {
+            printf( "-------------text id=%d-----------\n", textMap_p[i].id );
+            printf( "ox=%.2f, oy=%.2f, cellID=%d\n", textMap_p[i].ox, textMap_p[i].oy, textMap_p[i].cellID );
+            printf( "len=%d, buf=%s\n",  textMap_p[i].len, textMap_p[i].buf );
             printf("------\n");
         }
 

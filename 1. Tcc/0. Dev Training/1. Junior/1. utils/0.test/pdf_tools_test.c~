@@ -18,9 +18,9 @@ void main(void)
 
     //printf( "\nret = %d\n", ret );
 
-    //getSpecPage( pdf_p, 3 );
+    for( int i = 0; i < 10000; i++ )
+    getSpecPage( pdf_p, 3 );
 
-    printf("结束之前出错了！\n");
     freeALL2( pdf_p );
 
 

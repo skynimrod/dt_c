@@ -127,7 +127,6 @@
         int                 maxlen;         // 最长的文本长度
         int                 rows;           // 行数
         int                 cols;           // 列数
-        struct __cell__  *  last;           // 总是指向最后一个cell
         struct __cell__  *  prev;           // 前一个单元格
         struct __cell__  *  next;           // 后一个单元格
         int              *  txtIDs_p;       // 单元格中的文本编号(数组)
@@ -141,7 +140,6 @@
         float               oy;
         char            *   buf;
         int                 len;
-        struct __text__  *  last;
         struct __text__  *  prev;       
         struct __text__  *  next;
         int                 cellID;     // 该文本属于哪个CELL, 如果是0表示不在cell中
@@ -151,11 +149,10 @@
         CUR_XY      cur_xy;
         TM          tm;
         char        tf[L_FONTNAME];     // 当前使用的字体名称(对应cmap中的fontname)
-        TEXT    *   firstText_p;
-        TEXT    *   lastText_p;
-        TEXT    *   textMap_p;
-        
-        CELL    *   cellMap_p;        // 处理表格式需要re
+        TEXT    *   ltp;                // last text pointer
+        TEXT    *   tp;                 // text map pointer, 链表, 每个节点是个TEXT 指针
+        CELL    *   lcp;                // last cell Pointer
+        CELL    *   cp;                 // Cell Map pointer, 链表, 每个节点是个CELL指针。 处理表格式需要re
     }DECODE;
 
     int     parsePDF( char * desfile,  char * srcfile );
