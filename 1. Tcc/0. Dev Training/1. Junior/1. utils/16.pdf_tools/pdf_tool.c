@@ -363,7 +363,7 @@
         while ( cp ) {
             printf( "-------------cell id=%d--address=%p---------\n", cp->id, cp );
             printf( "x=%.2f,y=%.2f,w=%.2f, h=%.2f\n", cp->x, cp->y, cp->w, cp->h );
-            printf( "rows=%d, cols=%d\n",  cp->rows, cp->cols );
+            printf( "row=%d, col=%d\n",  cp->row, cp->col );
             printf( "maxlines=%d, maxlen=%d, txtTotal=%d\n", cp->maxlines, cp->maxlen, cp->txtTotal );
             if ( cp->txtIDs_p )         // 因为第一次创建cell的时候, 还没有为txtIDs_p申请空间, 当时不知道有多少文本在cell中, 后来处理完文本才会知道
                 for ( int i = 0; i < cp->txtTotal; i ++ ) {

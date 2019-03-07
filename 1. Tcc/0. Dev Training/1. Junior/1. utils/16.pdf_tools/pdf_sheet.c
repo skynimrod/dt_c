@@ -21,6 +21,37 @@
     #include "zlib.h"
     #include "pdf_tools.h"
 
+    typedef struct __colMap_ {
+        int                     id;
+        int                 *   c_list;         // 该col的cell列表
+        int                     cellTotal;      // 该col 包含的cell 数量,用来为c_list 申请空间
+        float                   x;              // col的 x 坐标
+        float                   w;              // col的 w 宽度
+        float                   maxlen;         // col的最大宽度
+        struct __colMap_    *   parent;         // 父col
+        struct __colMap_    *   son;            // 子col
+    }COLMAP;
+
+    typedef struct __rowMap_ {
+        int                     id;
+        int                 *   c_list;         // 该row的cell列表
+        int                     cellTotal;      // 该row 包含的cell 数量,用来为c_list 申请空间
+        float                   y;              // row的 y 坐标
+        float                   h;              // row的 h 高度
+        int                     lines;          // row的最大行数
+        int                     parentID;       // 父row ID
+        int                 *   son;            // 子row ID 数组
+        int                     sonTotal;       // 子row 数量
+    }ROWMAP;
+
+    typedef struct __tableMap__ {
+        int                     id;             // 表 编号
+        int                 *   c_list;         // 表中的cell id列表
+        int                 *   row_list;       // 表中的row id列表
+        int                 *   col_list;       // 表中的col id列表
+        int                     l_txtid;        // 表中的最后一个文本编号
+    } TABLEMAP;
+
     char *  procText4Table( TEXT * textMap_p, CELL * cellMap_p );
     
 

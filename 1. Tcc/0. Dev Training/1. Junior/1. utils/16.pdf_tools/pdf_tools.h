@@ -125,8 +125,8 @@
         float               h;
         int                 maxlines;
         int                 maxlen;         // 最长的文本长度
-        int                 rows;           // 行数
-        int                 cols;           // 列数
+        int                 row;            // 所属行ID
+        int                 col;            // 所属列ID
         struct __cell__  *  prev;           // 前一个单元格
         struct __cell__  *  next;           // 后一个单元格
         int              *  txtIDs_p;       // 单元格中的文本编号(数组)
