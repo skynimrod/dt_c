@@ -99,7 +99,7 @@
 
 
         // # 5251||<</Count 100/Kids[5252 0 R 5253 0 R 5254 0 R 5255 0 R 5256 0 R 5257 0 R 5258 0 R 5259 0 R 5260 0 R 5261 0 R]/Parent 5250 0 R/Type/Pages>>
-        buf = getObjContent( fm_p, xref_p, obj );
+        buf = (char *)getObjContent( fm_p, xref_p, obj );
         
         if ( strstr( buf, "Kids" ) ) {      // 如果有"Kids", 说明不是叶子页面, 需要继续嵌套遍历kids页面, 直到找到最终的内容页面
             item = (char *) strtok( buf, "/" );
@@ -212,7 +212,7 @@
         printf("pages obj = %d\n", pagesobj);
 
         // 获取Pages  对象中的页面对象的数据(主要是页面数量, 页面内容对象通过嵌套函数getPageleaf()获取 )
-        buf = getObjContent( fm_p, xref_p, pagesobj );      
+        buf = (char *)getObjContent( fm_p, xref_p, pagesobj );      
         printf( "Pages content =%s\n", buf );
         item = (char *)strtok( buf, "/" );
         while ( item != NULL ) {

@@ -19,6 +19,8 @@
     #ifndef __PDF_TOOLS_H__    // define pdf_tools.h Start {
     #define __PDF_TOOLS_H__
 
+    #include "filemap.h"
+
     // 
     #define L_pos       128
     typedef struct __posmap__{
@@ -58,19 +60,19 @@
 
     typedef struct __cmap__ {
         char        fontname[L_FONTNAME];
+        float       comprRatio;      
         int         obj;        
         int         total;     
         CODE        * code_p; 
-        float       comprRatio;      
     } CMAP;
 
     typedef struct __pages__ {
         int         total;   
         int         cursor; 
+        int         cmaptotal; 
         int     *   leafs_p;
         int     **  c_objlist_p;
         FONTMAP **  fontmap_p;  
-        int         cmaptotal; 
         CMAP    *   cmaps_p;  
         float   **  comprRatio_p;    
     }PAGES;
@@ -127,10 +129,11 @@
         int                 maxlen;         // 最长的文本长度
         int                 row;            // 所属行ID
         int                 col;            // 所属列ID
+        int                 table;          // 所属  表id
+        int                 txtTotal;       // 单元格中的文本编号数量
         struct __cell__  *  prev;           // 前一个单元格
         struct __cell__  *  next;           // 后一个单元格
         int              *  txtIDs_p;       // 单元格中的文本编号(数组)
-        int                 txtTotal;       // 单元格中的文本编号数量
     }CELL;
 
     // 文本信息
@@ -138,11 +141,11 @@
         int                 id;
         float               ox;
         float               oy;
-        char            *   buf;
         int                 len;
+        int                 cellID;     // 该文本属于哪个CELL, 如果是0表示不在cell中
+        char            *   buf;
         struct __text__  *  prev;       
         struct __text__  *  next;
-        int                 cellID;     // 该文本属于哪个CELL, 如果是0表示不在cell中
     } TEXT;
 
     typedef struct __decode__ {

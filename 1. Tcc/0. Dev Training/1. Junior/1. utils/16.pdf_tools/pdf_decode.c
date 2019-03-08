@@ -251,7 +251,7 @@
         printCellMap( decode_p->cp );
         printTextMap( decode_p->tp );
         
-        retbuf = procText4Table( decode_p->tp, decode_p->cp );
+        retbuf = (char *)procText4Table( decode_p->tp, decode_p->cp );
 
         printCellMap( decode_p->cp );
         printTextMap( decode_p->tp );
