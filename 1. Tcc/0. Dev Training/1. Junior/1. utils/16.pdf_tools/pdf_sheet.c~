@@ -26,13 +26,13 @@
     
     ROW * getRowOfID( ROW * rowMap_p, int  id );
     COL * getColOfID( COL * colMap_p, int  id );
+    TABLE * getTableOfID( TABLE * tableMap_p, int  id );
 
     // buildColRowMap(), spaceForColRowMap(), fill_c_list()  仅被 preProcColRow() 调用
     void  buildColRowMap( CELL * cellMap_p,  SHEET * sheet_p );
     void spaceForColRowMap( SHEET * sheet_p );
     void fill_c_list( CELL * cellMap_p, SHEET * sheet_p );
     void fixColMaxlen( CELL *cellMap_p, SHEET * sheet_p );
-    void orderColMap( COL ** des, COL * src, int colTotal );
 
     /*
     void buildTableMap( textMap, cellMap, cellIndexMap, tableMap, colIndexMap, rowIndexMap );
@@ -425,7 +425,9 @@
         // 修正 Col 中的maxlen, 主要是根据子col 来修正 父 col 的宽度
         fixColMaxlen( cellMap_p, sheet_p );
 
-        //printColMap( sheet_p->colMap_p );
+        printf("==============================aaaaaaaaaaaaa=================\n");
+        printColMap( sheet_p->colMap_p );
+        printRowMap( sheet_p->rowMap_p );
         // 修正 row 中的maxlines, 主要是根据 儿子row 来修正 父 row 的行数
         //fixRows( cellMap, cellIndexMap, rowMap, colIndexMap, rowIndexMap )
         return;
@@ -468,173 +470,77 @@
     //       先将colMap 排序, 从窄到宽处理。对于每个列, 循环处理所有行, 判断该行中所有的cell, 对于cell 在列中的记录在
     //       col 的son 中, 每一行的所有son cell(其实也就是son col), 计算所有son col 的长度之和, 如果大于当前col 的maxlen
     //       则更新当前col 的maxlen为所有son col 的长度之和
+    //  2019.03.12
+    //       有个问题, 对于同一页中的不同表格, 不应该进行列的子列判断.
+    //       增加判断, 如果下一个cell不等于上一个cell的y + h, 那么就是另一个表中的cell了
+    //       修改实现方式, 不适用cellMap， 也不用给colMap排序了, 直接双重循环处理
     void fixColMaxlen( CELL *cellMap_p, SHEET * sheet_p )
     {
+        char        tmpbuf[12];         // 用来临时存放col的id 编号字符串
+        char        buf[512];           // 用来临时存放子列的编号, 因为没遍历完之前无法为col的son申请内存
+        int         sonTotal;
+        int         maxlen;             // 用来计算子列长度之和
+        int         i, j, k;
+        float       x, w, sx, sw;
+        COL     *   son_col_p;
+        COL     *   col_p;
+        
         if ( !cellMap_p || ! sheet_p )
             return;
         
         if ( !sheet_p->colMap_p )
             return;
         
-        int     colTotal = sheet_p->colTotal;
-
-        COL     *o_colMap[ sheet_p->colTotal ];      // 存放排序后的col 数组
-        
-        // 先把col 进行从窄到宽 排序, 因为只有宽的col才能是窄的col的父col 
-        orderColMap( o_colMap, sheet_p->colMap_p, sheet_p->colTotal ); // 从窄到宽对 colMap_p 排序, 结果存放在 o_colMap
-
-        for ( int i = 0; i < sheet_p->colTotal; i ++ ) {
-            if ( ! o_colMap[i] ) {
-                printf( " o_colMap[%d] 是空指针！！！！\n", i);
-                continue; 
-            }
-            printf( " ----------- after orderColMap()- 排序好的:-----col id=%d--------------------\n", o_colMap[i]->id );
-            printf( "x=%.2f, w=%.2f, maxlen = %d\n", o_colMap[i]->x, o_colMap[i]->w, o_colMap[i]->maxlen );
-            printf( "cellTotal = %d, sonTotal=%d\n", o_colMap[i]->cellTotal, o_colMap[i]->sonTotal );
-
-            if ( o_colMap[i]->c_list ) {
-                printf("cells:");
-                for( int j = 0; j < o_colMap[i]->cellTotal; j ++ ) {
-                    printf( " %d", o_colMap[i]->c_list[j] );
-                }
-                printf("\n");
-            }
-            if ( o_colMap[i]->son ) {
-                printf("sons:");
-                for( int j = 0; j < o_colMap[i]->sonTotal; j ++ ) {
-                    printf( " %d", o_colMap[i]->son[j] );
-                }
-                printf("\n");
-            }
-        }
-        
-        // 下面遍历所有行, 根据行中的cell 所在的列来判断是否是当前列的子列, 然后计算子列长度综合是否超过夫列maxlen
-        for ( int i = 0;i < colTotal; i ++ ) {              // 遍历所有的col
-            getColSon( sheet_p, o_colMap[i], cellMap_p );
-        }
-        
-    }
-
-
-    // getColSonTotal()
-    //      获取给定的col 的可能存在的子列的个数。 有可能子列为0, 即没有子列
-    // 该函数仅被 fixColMaxlen() 调用
-    int getColSon( SHEET * sheet_p, COL *col_p, CELL * cellMap_p )
-    {
-        int         sonTotal;
-        COL     *   scol_p;             // 用来指向son col_p
-        ROW     *   row_p;
-        CELL    *   cp;
-        int         x, w, sx, sw;       // sx, sw 用来存放子列的x, w
-        char        buf[512];           // 用来临时存放子列的编号, 因为没遍历完之前无法为col的son申请内存
-        int         i, j, k;
-        char        tmpbuf[12];         // 用来临时存放col的id 编号字符串
-        int         maxlen;             // 用来计算子列长度之和
-        
-        if( !sheet_p || !col_p )
-            return 0;
-
-        x = col_p->x,  w = col_p->w;
-             
-        // 遍历rowMap
-        sonTotal = 0;
-        row_p = sheet_p->rowMap_p;
-        memset( buf, 0, 512 );
-        printf("getColSon()  打印 rowMap_p\n");
-        printRowMap( row_p );
-        while ( row_p ) {                                   // 遍历所有的行
-            maxlen = 0;
-            for ( j = 0; j < row_p->cellTotal; j ++ ) {     // 遍历 行中的所有cell
-                cp = (CELL *)findCell( cellMap_p, row_p->c_list[j] );   // 根据编号找到cell 节点
-                if ( !cp ) {
-                    printf("row_p->c_list[%d]没找到！！！！！\n", j, row_p->c_list[j] );
-                    continue;
-                }
-                if ( cp->col == col_p->id)                 // 该cell所在的col 与外循环中的col 是同一列, 跳过
-                    continue;
-                scol_p = findCol( sheet_p->colMap_p, cp->col );
-                if ( !scol_p )                                   // 容错
-                    continue;
-                sx = scol_p->x, sw = scol_p->w;
-                // 下面判断是否是子列
-                if ( sx >= x && ( (sx+sw) < (x+w) || abs(x+w-sx-sw)<1 ) ) {  // abs() 是因为对于画布而言像素小于1也是同一列
-                    sonTotal ++;      
-                    sprintf( buf, "%s %d", buf, scol_p->id );   // " 2 3 12 23", 空格分隔, 临时保存子列列表
-                    maxlen += scol_p->maxlen;
-                }
-            }
-
-            // 根据子列总长度来修正当前列的maxlen
-            if ( maxlen > col_p->maxlen )
-                col_p->maxlen = maxlen; 
-
-            row_p = row_p->next;
-        }
-
-        printf(" col id=%d 子列:%s\n", col_p->id,  buf );
-        return 0;
-        // 下面处理临时保存子列列表的字符串, 将子列编号放入 col_p->son 数组中
-        if ( sonTotal > 0 ) {
-            printf("列%d 的子列为:%s\n", col_p->id, buf);
-            col_p->sonTotal = sonTotal;
-            col_p->son = (int *)calloc( sizeof(int) * sonTotal, 1 );
-
-            int     len = strlen( buf );
-            j = 0,  k = 1;                          // 从1开始, 是为了跳过字符串的第一个空格
-            for ( i = 1; i < len; i ++ ) {          // 从1开始, 是为了跳过字符串的第一个空格
-                if ( buf[i] == ' ' || i == len-1 ) {      // 找见空格 或者到了尾部
-                    memset( tmpbuf, 0, 12 );
-                    memcpy( tmpbuf, &buf+k, i-k );
-                    col_p->son[j] = atoi( tmpbuf );
-                }
-            }
-        }
-        return 0;
-    }
-
-    // orderColMap()
-    //     将 colMap 链表按照col 的宽度从窄往宽排序,  结果存放在 des 数组中
-    // 该函数仅被 fixColMaxlen() 调用, 调用前务必要确认空间足够
-    // 排序方法:
-    //     希尔排序法, 因为原来的链表要保持不变, 排序结果存放在新的数组中. 只需要
-    //  遍历一遍链表就可以排序完成。
-    //     增量从 coltotal/2 开始， 依次减1.
-    void orderColMap( COL ** des, COL * src, int colTotal )
-    {
-        COL     *   dcol_p, * col_p;
-        int         i;          // 用来记录排好序的col个数
-        
-        if ( !des || !src )
-            return;
-
-        col_p = src;
-        
-        // 1. 先将链表节点复制到 des 数组中
-        i = 0;
+        col_p = sheet_p->colMap_p;
         while ( col_p ) {
-            des[i] = col_p;    
-            col_p = col_p->next;
-            i ++;
-        }
+            x = col_p->x,  w = col_p->w;
 
-        //2. 希尔排序法对 des 数组进行排序
-        int     step = colTotal /2;     // 第一个增量是总长度/2
-        while ( step > 0 ) {
-            i = 0;
-            while ( i < colTotal - step ) {    // 根据步长(增量) 进行比较交换
-                if ( des[i]->w > des[i+step]->w ) { 
-                    col_p       = des[i];
-                    des[i]      = des[i+step];
-                    des[i+step] = col_p;
+            son_col_p   = sheet_p->colMap_p;
+            sonTotal    = 0; 
+            maxlen      = 0;       
+            memset( buf, 0, 512 );
+            while ( son_col_p ) {
+                if ( son_col_p->id == col_p->id ) {                 // 是同一列, 跳过
+                    son_col_p = son_col_p->next;
+                    continue;
                 }
-                i ++;
-            } 
-            step --;
-        }
-        
 
+                sx = son_col_p->x, sw = son_col_p->w;
+                
+                // 下面判断是否是子列, 首先要确保在一个table里
+                if ( son_col_p->table_id == col_p->table_id && sx >= x && ( (sx+sw) < (x+w) || abs(x+w-sx-sw)<1 ) ) {  // abs() 是因为对于画布而言像素小于1也是同一列
+                    sonTotal ++;     
+                    sprintf( buf, "%s %d", buf, son_col_p->id );   // " 2 3 12 23", 空格分隔, 临时保存子列列表
+                    maxlen += son_col_p->maxlen;
+                }
+                son_col_p = son_col_p->next;            // 内循环的 next
+            }
+
+            printf(" col id=%d 子列:%s\n", col_p->id,  buf );
+            // 下面处理临时保存子列列表的字符串, 将子列编号放入 col_p->son 数组中
+            if ( sonTotal > 0 ) {
+                printf("列%d 的子列为:%s\n", col_p->id, buf);
+                col_p->sonTotal = sonTotal;
+                col_p->son = (int *)calloc( sizeof(int) * sonTotal, 1 );
+
+                    int     len = strlen( buf );
+                j = 0,  k = 1;                          // 从1开始, 是为了跳过字符串的第一个空格
+                for ( i = 1; i <= len && j < sonTotal; i ++ ) {          // 从1开始, 是为了跳过字符串的第一个空格
+                    if ( buf[i] == ' ' || i == len ) {      // 找见空格 或者到了尾0处
+                        memset( tmpbuf, 0, 12 );
+                        memcpy( tmpbuf, buf+k, i-k );
+                        col_p->son[j] = atoi( tmpbuf );
+                        printf("|%s|tmpbuf=%s,i=%d,k=%d,j=%d\n", buf, tmpbuf, i, k, j);
+                        k = i + 1;
+                        j ++;
+                    }
+                }
+            }
+            col_p = col_p->next;     // 外循环的 next
+        }
         
     }
+
 
     /*
     #  15.62 fixRows()
@@ -784,6 +690,7 @@
     void newCol( SHEET *sheet_p, CELL * cp )
     {
         COL     * col_p, * lcp;
+        TABLE   * table_p;
 
         if ( !sheet_p || !cp ) 
             return;
@@ -793,6 +700,7 @@
 
             col_p->id       = 1;                                // 第一列 id 为 1
             col_p->x        = cp->x,    col_p->w    = cp->w;
+            col_p->table_id = cp->table_id;
             col_p->prev     = NULL, col_p->next = NULL;         // 申请内存时已经初始化为0了， 这儿赋值是为了可读性
             col_p->parent   = NULL, col_p->son  = NULL;         // 申请内存时已经初始化为0了， 这儿赋值是为了可读性
             
@@ -805,6 +713,10 @@
 
             cp->col = 1;
 
+            // 如果有需要就在这儿 table节点 colTotal ++, 然后最后还要申请空间并填充col_list..., 暂时没有处理
+            table_p = getTableOfID( sheet_p->tableMap_p, cp->table_id );
+            table_p->colTotal ++;
+
             printf("newCol()  cp->col=%d, cp->id=%d\n", cp->col, cp->id);
             return;
         } else {
@@ -812,9 +724,10 @@
             
             lcp = sheet_p->lcp;                                 // 最后一个col pointer
 
-            col_p->id = lcp->id + 1;                            // 新id 为 前一个col的id + 1
-            col_p->x  = cp->x, col_p->w = cp->w;
-            col_p->prev   = lcp, col_p->next = NULL;            // 申请内存时已经初始化为0了， 这儿赋值是为了可读性
+            col_p->id       = lcp->id + 1;                            // 新id 为 前一个col的id + 1
+            col_p->x        = cp->x,    col_p->w = cp->w;
+            col_p->table_id = cp->table_id;
+            col_p->prev     = lcp, col_p->next = NULL;            // 申请内存时已经初始化为0了， 这儿赋值是为了可读性
 
             col_p->maxlen = cp->maxlen;
             col_p->cellTotal = 1;                               // 对于新建的col而言,  这是第一个cell
@@ -828,6 +741,10 @@
 
             cp->col = col_p->id;
 
+            // 如果有需要就在这儿 table节点 colTotal ++, 然后最后还要申请空间并填充col_list..., 暂时没有处理
+            table_p = getTableOfID( sheet_p->tableMap_p, cp->table_id );
+            table_p->colTotal ++;
+
             printf("newCol()  cp->col=%d, cp->id=%d\n", cp->col, cp->id);
             
             return;
@@ -838,10 +755,10 @@
 
     // 查找列  映射中是否有复合挑件的列
     // 仅 被  buildColRowMap() 调用, 查找复合挑件的COL 
-    COL * inColMap( COL * colMap_p, float x, float w )
+    COL * inColMap( COL * colMap_p, CELL * cp )
     {
         COL     *   col_p;
-        float       cx, cw;     // col的x坐标与w宽度
+        float       x, w, cx, cw;     // col的x坐标与w宽度
 
         if ( !colMap_p )        // 如果 colMap_p 是空, 则肯定不包含
             return NULL;
@@ -849,9 +766,10 @@
         col_p = colMap_p;
 
         while ( col_p ) {
+            x = cp->x,      w = cp->w;
             cx = col_p->x,  cw = col_p->w;
             
-            if ( x == cx && w == cw  ) {    // 说明该列已经存
+            if ( x == cx && w == cw && col_p->table_id == cp->table_id  ) {    // 说明该列已经存, 不但x,w 一样, 而且要同一个表才行
                 return col_p;
             }
             col_p = col_p->next;
@@ -881,6 +799,7 @@
 
             row_p->id       = 1;                            // 第一行 id 为 1
             row_p->y        = cp->y,    row_p->h    = cp->h;
+            row_p->table_id = cp->table_id;
             row_p->prev     = NULL, row_p->next = NULL;     // 申请内存时已经初始化为0了， 这儿赋值是为了可读性
             row_p->parent   = NULL, row_p->son  = NULL;     // 申请内存时已经初始化为0了， 这儿赋值是为了可读性
             
@@ -893,16 +812,19 @@
 
             cp->row = 1;
             
+            // 如果有需要就在这儿 table节点 rowTotal ++, 然后最后还要申请空间并填充col_list..., 暂时没有处理
+            
             return;
         } else {
             printf("这是尾部添加的节点！y=%.2f, h=%.2f\n", cp->y, cp->h );
             row_p = ( ROW * )calloc( sizeof( ROW ), 1 );
             
-            lrp = sheet_p->lrp;                             // 最后一个col pointer
+            lrp = sheet_p->lrp;                             // 最后一个row pointer
 
-            row_p->id   = lrp->id + 1;                      // 新id 为 前一个col的id + 1
-            row_p->y    = cp->y,    row_p->h    = cp->h;
-            row_p->prev = lrp,  row_p->next = NULL;         // 申请内存时已经初始化为0了， 这儿赋值是为了可读性
+            row_p->id       = lrp->id + 1;                      // 新id 为 前一个row的id + 1
+            row_p->y        = cp->y,    row_p->h    = cp->h;
+            row_p->table_id = cp->table_id;
+            row_p->prev     = lrp,  row_p->next = NULL;         // 申请内存时已经初始化为0了， 这儿赋值是为了可读性
 
             //row_p->parent = NULL, row_p->son = NULL;      // 申请内存时已经初始化为0了， 这儿赋值是为了可读性
 
@@ -916,15 +838,17 @@
 
             cp->row = row_p->id;
             
+            // 如果有需要就在这儿 table节点 rowTotal ++, 然后最后还要申请空间并填充col_list..., 暂时没有处理
+
             return;
         } 
     }
 
     // 仅 被  buildColRowMap() 调用, 查找复合挑件的ROW 
-    ROW * inRowMap( ROW * rowMap_p, float y, float h )
+    ROW * inRowMap( ROW * rowMap_p, CELL * cp )
     {
         ROW     *   row_p;
-        float       cy, ch;     // row的y坐标与h宽度
+        float       y, h, cy, ch;     // row的y坐标与h宽度
 
         if ( !rowMap_p )        // 如果 rowMap_p 是空, 则肯定不包含
             return NULL;
@@ -932,12 +856,96 @@
         row_p = rowMap_p;
 
         while ( row_p ) {
-            cy = row_p->y,  ch = row_p->h;
+            y   = cp->y,    h   = cp->h;
+            cy  = row_p->y, ch  = row_p->h;
             
-            if ( y == cy && h == ch  ) {    // 说明该列已经存
+            if ( y == cy && h == ch && row_p->table_id == cp->table_id ) {    // 说明该行已经存在
                 return row_p;
             }
             row_p = row_p->next;
+        }
+
+        // 如果遍历完都没有找到, 则说明该cell所在的col 没有记录
+        return NULL;
+    }
+
+    // newTable()
+    //     注意, 这儿没有真正将cellID 记录到tableMap中, 因为只有遍历完一遍cellMap才知道有多少cell在该table
+    // 仅 被  buildColRowMap() 调用, 创建一个TABLE 节点
+    //
+    void newTable( SHEET *sheet_p, CELL *cp )
+    {
+        TABLE     * table_p, * ltp;
+
+        if ( !sheet_p ) 
+            return;
+
+        if ( !sheet_p->tableMap_p ) { // tableMap_p 是空的, 则是第一个table
+            printf("这是第一个table节点！\n" );
+            table_p = ( TABLE * )calloc( sizeof( TABLE ), 1 );
+
+            table_p->id         = 1;                            // 第一行 id 为 1
+            table_p->prev       = NULL, table_p->next = NULL;     // 申请内存时已经初始化为0了， 这儿赋值是为了可读性
+            
+            table_p->cellTotal  = 1;
+
+            sheet_p->tableMap_p = table_p;
+            sheet_p->ltp        = table_p;
+            sheet_p->tableTotal = 1;
+
+            cp->table_id        = 1;
+            
+            return;
+        } else {
+            printf("这是尾部添加的table节点！\n" );
+            table_p = ( TABLE * )calloc( sizeof( TABLE ), 1 );
+            
+            ltp = sheet_p->ltp;                             // 最后一个TABLE pointer
+
+            table_p->id   = ltp->id + 1;                      // 新id 为 前一个table的id + 1
+            table_p->prev = ltp,  table_p->next = NULL;    // 申请内存时已经初始化为0了， 这儿赋值是为了可读性
+
+            table_p->cellTotal = 1;
+
+            ltp->next = table_p;
+            
+            sheet_p->ltp = table_p;               // 更新 last table pointer
+            sheet_p->tableTotal ++;               // 更新 shet 中的tableTotal 数量
+
+            cp->table_id = table_p->id;
+            
+            return;
+        } 
+    }
+
+    // 仅 被  buildColRowMap() 调用, 查找复合挑件的table
+    // 判断当前cell 是否在已经存在的table里, 只需要与前一个cell进行比较
+    //    
+    TABLE * inTableMap( TABLE * tableMap_p, CELL * cp )
+    {
+        TABLE       *   table_p;
+        float           px, py, pw, ph, x, y, w, h;     // py, ph 是前一个cell的, cell的y坐标与h宽度
+
+        if ( !tableMap_p )          // 如果 tableMap_p 是空, 则肯定不包含
+            return NULL;
+
+        if ( !cp->prev )            // 如果cp 没有prev, 也就是cp 是第一个cell, 则肯定不包含
+            return NULL;
+
+        x = cp->x,          y   = cp->y,        w = cp->w,          h = cp->h, 
+        x = cp->prev->x,    py  = cp->prev->y,  pw= cp->prev->w,    ph = cp->prev->h;
+        
+        if (  y > py+ ph || x > px+pw   )          // 如果与上一个cell 不在同一个表, 2个附近的cell 不相连, 则认为不是同一个表
+            return NULL;
+
+        // 到这儿说明与上一个cell 在同一个表, 找到这个table节点并返回
+        table_p = tableMap_p;
+
+        while ( table_p ) {
+            if ( table_p->id = cp->prev->table_id  ) {    // 找到table节点
+                return table_p;
+            }
+            table_p = table_p->next;
         }
 
         // 如果遍历完都没有找到, 则说明该cell所在的col 没有记录
@@ -953,9 +961,9 @@
     void buildColRowMap( CELL * cellMap_p,  SHEET * sheet_p )
     {
         CELL        *   cp;
-        float           x, y, w, h;
         COL         *   col_p;
         ROW         *   row_p;
+        TABLE       *   table_p;
         
         cp = cellMap_p;
         while( cp ) {
@@ -965,15 +973,24 @@
             if ( !cp )
                 break;
             
-            x = cp->x, y = cp->y, w = cp->w, h = cp->h;
-                                                    // 1. 先处理列row
-            col_p = inColMap( sheet_p->colMap_p, x, w );
+            // 2019.03.12  将tableMap 的构建也提前到这儿, 因为有可能一页有多个表, 如果比先把tableMap处理了, 后面的判断子列有可能是跨表格的
+            // 这儿的tableMap 也仅仅是个表格编号, 不用记录长宽高等信息, 因为信息在 cellMap, colMap, rowMap 就足够处理了
+            table_p = inTableMap( sheet_p->tableMap_p, cp );
+            if ( !table_p ) {                       // cell 没有在现有tableMap中, 新建一个TABLE节点
+                newTable( sheet_p, cp );
+            }  else {                               // 该cell 所在的表格已经存在, 也就是与上一个cell的tableID 一样.
+                cp->table_id = cp->prev->table_id;
+                table_p->cellTotal ++;
+            }
+            
+            col_p = inColMap( sheet_p->colMap_p, cp );
             
             if ( !col_p ) {                         // 如果该cell 所在列 不在colMap 中, 则加入colMap
                 newCol( sheet_p, cp );              // 注意, 这儿没有真正将cellID 记录到colMap中, 因为只有遍历完一遍cellMap才知道有多少cell在该col
             } else {                                // cell 所在的列已经在colmap里记录了
                                                     // 同时在cell 中记录col 信息
                 col_p->cellTotal ++;                // 增加列中的cell 计数
+                col_p->table_id = cp->table_id;
                 cp->col = col_p->id;
                 
                                                     // 更新 col_p 的maxlen
@@ -983,13 +1000,14 @@
             
             printf("--------------------------cp->col=%d, cp->id=%d\n", cp->col, cp->id);
                                                     // 2. 处理 行row
-            row_p = inRowMap( sheet_p->rowMap_p, y, h );
+            row_p = inRowMap( sheet_p->rowMap_p, cp );
             
             if ( !row_p ) {                         // 如果该cell 所在行 没有在rowMap中记录, 则增加该行在rowMap中的记录
                 newRow( sheet_p, cp );
             } else {                                // 该cell所在的行已经在rowMap中了, row id 记录在 row_id变量中
                                                     // 在cell 中记录  row 信息
                 row_p->cellTotal ++;
+                row_p->table_id = cp->table_id;
                 cp->row = row_p->id;
                 
                 if ( row_p->maxlines < cp->txtTotal )
@@ -998,6 +1016,7 @@
             
             // 继续处理下一个cell
             cp = cp->next;
+
         }
     }
 
@@ -1030,6 +1049,23 @@
             if ( row_p->id == id )
                 return row_p;
             row_p = row_p->next;
+        }
+        // 遍历完没有找到
+        return NULL;
+    }
+    
+    TABLE * getTableOfID( TABLE * tableMap_p, int  id )
+    {
+        TABLE     * table_p;
+        
+        if ( !tableMap_p )
+            return NULL;
+        
+        table_p = tableMap_p;
+        while ( table_p ) {
+            if ( table_p->id == id )
+                return table_p;
+            table_p = table_p->next;
         }
         // 遍历完没有找到
         return NULL;

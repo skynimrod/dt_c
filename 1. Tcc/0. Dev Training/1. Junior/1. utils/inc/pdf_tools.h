@@ -129,7 +129,7 @@
         int                 maxlen;         // 最长的文本长度
         int                 row;            // 所属行ID
         int                 col;            // 所属列ID
-        int                 table;          // 所属  表id
+        int                 table_id;       // 所属  表id
         int                 txtTotal;       // 单元格中的文本编号数量
         struct __cell__  *  prev;           // 前一个单元格
         struct __cell__  *  next;           // 后一个单元格

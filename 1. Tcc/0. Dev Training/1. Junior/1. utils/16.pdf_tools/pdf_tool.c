@@ -368,7 +368,8 @@
             printf( "-------------cell id=%d--address=%p---------\n", cp->id, cp );
             printf( "x=%.2f,y=%.2f,w=%.2f, h=%.2f\n", cp->x, cp->y, cp->w, cp->h );
             printf( "row=%d, col=%d\n",  cp->row, cp->col );
-            printf( "maxlines=%d, maxlen=%d, txtTotal=%d\n", cp->maxlines, cp->maxlen, cp->txtTotal );
+            printf( "maxlines=%d, maxlen=%d, txtTotal=%d, table_id=%d\n",
+                       cp->maxlines, cp->maxlen, cp->txtTotal, cp->table_id );
             if ( cp->txtIDs_p )         // 因为第一次创建cell的时候, 还没有为txtIDs_p申请空间, 当时不知道有多少文本在cell中, 后来处理完文本才会知道
                 for ( int i = 0; i < cp->txtTotal; i ++ ) {
                     printf( "%d ", cp->txtIDs_p[i] ); 
@@ -411,7 +412,8 @@
         while ( col_p ) {
             printf( " -----------------col id=%d--------------------\n", col_p->id );
             printf( "x=%.2f, w=%.2f, maxlen = %d\n", col_p->x, col_p->w, col_p->maxlen );
-            printf( "cellTotal = %d, sonTotal=%d\n", col_p->cellTotal, col_p->sonTotal );
+            printf( "cellTotal = %d, sonTotal=%d, table_id=%d\n",
+                            col_p->cellTotal, col_p->sonTotal, col_p->table_id );
             if ( col_p->c_list ) {
                 printf("cells:");
                 for( int i = 0; i < col_p->cellTotal; i ++ ) {
@@ -443,7 +445,8 @@
         while ( row_p ) {
             printf( " -----------------row id=%d--------------------\n", row_p->id );
             printf( "y=%.2f, h=%.2f, maxlines = %d\n", row_p->y, row_p->h, row_p->maxlines );
-            printf( "cellTotal = %d, sonTotal=%d\n", row_p->cellTotal, row_p->sonTotal );
+            printf( "cellTotal = %d, sonTotal=%d, table_id=%d\n",
+                            row_p->cellTotal, row_p->sonTotal, row_p->table_id );
             if ( row_p->c_list ) {
                 printf("cells:");
                 for( int i = 0; i < row_p->cellTotal; i ++ ) {
