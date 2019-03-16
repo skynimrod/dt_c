@@ -14,6 +14,7 @@
     //      
     #ifndef __SHEET_H__    // define sheet.h Start {
     #define __SHEET_H__
+    #include "pdf_tools.h"
 
     // 
     typedef struct __col_ {
@@ -21,11 +22,11 @@
         int                 cellTotal;      // 该col 包含的cell 数量,用来为c_list 申请空间
         int                 sonTotal;       // 子col 数量
         int                 table_id;       // 所属table id
+        int                 maxlen;         // col的最大宽度, 字符串的最大长度
         float               x;              // col的 x 坐标
         float               w;              // col的 w 宽度
-        float               maxlen;         // col的最大宽度
-        int             *   c_list;         // 该col的cell列表
-        int             *   son;            // 子col id 列表
+        CELL            **   c_list;         // 该col的cell列表
+        struct __col_   **  son;            // 子col 节点指针数组
         struct __col_   *   parent;         // 父col
         struct __col_   *   prev;           // 前一个col
         struct __col_   *   next;           // 后一个col
@@ -39,9 +40,9 @@
         int                 table_id;       // 所属table id
         float               y;              // row的 y 坐标
         float               h;              // row的 h 高度
-        int             *   c_list;         // 该row的cell列表
-        int             *   son;            // 子col id 列表
-        struct __row_   *   parent;         // 父row
+        CELL            **  c_list;         // 该row的cell列表
+        struct __row_   **  son;            // 子row 节点指针数组
+        struct __row_   *   parent;         // 父row 节点指针
         struct __row_   *   prev;           // 前一个row
         struct __row_   *   next;           // 后一个row
     }ROW;

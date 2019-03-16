@@ -12,33 +12,39 @@
     // Interface :
     //  
     #include <stdlib.h>
-    #include <time.h>
-    #include <assert.h>
+    #include "str_tools.h"
     #include "pdf_tools.h"
     #include "sheet.h"
 
-    char *  procText4Table( TEXT * textMap_p, CELL * cellMap_p );
+    char * procText4Table( char * retbuf, int dlen, TEXT * textMap_p, CELL * cellMap_p );
     void freeSheet( SHEET * sheet_p );
     
     void preProcTxtMap( TEXT * textMap_p, CELL * cellMap_p );
     void preProcTxtMap4Cell( TEXT * textMap_p, CELL * cellMap_p );
     void preProcColRow( CELL *cellMap_p,  SHEET * sheet_p );
     
-    ROW * getRowOfID( ROW * rowMap_p, int  id );
-    COL * getColOfID( COL * colMap_p, int  id );
-    TABLE * getTableOfID( TABLE * tableMap_p, int  id );
+    ROW * getRowByID( ROW * rowMap_p, int  id );
+    COL * getColByID( COL * colMap_p, int  id );
+    TABLE * getTableByID( TABLE * tableMap_p, int  id );
 
     // buildColRowMap(), spaceForColRowMap(), fill_c_list()  仅被 preProcColRow() 调用
     void  buildColRowMap( CELL * cellMap_p,  SHEET * sheet_p );
     void spaceForColRowMap( SHEET * sheet_p );
     void fill_c_list( CELL * cellMap_p, SHEET * sheet_p );
-    void fixColMaxlen( CELL *cellMap_p, SHEET * sheet_p );
+    void fill_son_c_llist( COL * col_p, ROW * row_p, int cell_id );
+    void fixCols( CELL * cellMap_p, SHEET * sheet_p );
+    void fixRows( CELL * cellMap_p, SHEET * sheet_p );
+    
+    void orderRowMap( ROW ** des, ROW * src, int rowTotal );
 
-    /*
-    void buildTableMap( textMap, cellMap, cellIndexMap, tableMap, colIndexMap, rowIndexMap );
-    char * buildPageTxt( textMap, cellMap, cellIndexMap, tableMap, colIndexMap, rowIndexMap );
-    */
-    char * procText4Table( TEXT * textMap_p, CELL * cellMap_p )
+    TEXT * buildTableTxt( char * desbuf, int dlen, SHEET *sheet_p, CELL *cellMap_p, TEXT * tp, int table_id );
+    int getTableID( SHEET * sheet_p, CELL * cellMap_p, int cell_id  );
+
+    char * buildPageTxt( char * retbuf, int dlen, SHEET * sheet_p, CELL * cellMap_p, TEXT * textMap_p );
+
+    bool buildRowHeader( char * desbuf, int dlen, CELL * cellMap_p, SHEET * sheet_p, ROW * row_p );
+
+    char * procText4Table( char * retbuf, int dlen, TEXT * textMap_p, CELL * cellMap_p )
     {
         SHEET       * sheet_p;          // 表单, 记录表格及相关信息
 
@@ -69,8 +75,10 @@
         
         return retbuf
         */
+        buildPageTxt( retbuf, dlen, sheet_p, cellMap_p, textMap_p );
+        
 
-        //freeSheet( sheet_p );
+        freeSheet( sheet_p );
         
         return NULL;
     }
@@ -80,6 +88,7 @@
         if ( !col_p )
             return;
 
+        return;
         if ( col_p->c_list )
             free( col_p->c_list );
 
@@ -122,37 +131,40 @@
 
     void freeSheet( SHEET * sheet_p )
     {
-        COL     * col_p;
-        ROW     * row_p;
-        TABLE   * table_p;
+        COL     * col_p, * tmp_col_p;
+        ROW     * row_p, * tmp_row_p;
+        TABLE   * table_p,* tmp_table_p;
         
         if ( !sheet_p )
             return;
         
         // 1. 释放 列col  相关节点
         if ( sheet_p->colMap_p ) {
-            col_p = sheet_p->lcp;           // 从后往前释放col 节点
+            col_p = sheet_p->colMap_p;       // 从前往后删除节点
             while( col_p ) {
-                col_p = col_p->prev;        // 先保留好前一个节点的地址( 如果是首节点，则这个值为NULL)
-                freeCOL( col_p->next );
+                tmp_col_p = col_p->next;
+                freeCOL( col_p );
+                col_p = tmp_col_p;
             }
         }
 
         // 2. 释放 行row  相关节点
         if ( sheet_p->rowMap_p ) {
-            row_p = sheet_p->lrp;           // 从后往前释放row 节点
+            row_p = sheet_p->rowMap_p;            // 从前往后删除节点
             while( row_p ) {
-                row_p = row_p->prev;        // 先保留好前一个节点的地址( 如果是首节点，则这个值为NULL)
-                freeROW( row_p->next );     // row_p->next 其实就是当前节点, 因为前一句重新赋值了
+                tmp_row_p = row_p->next;        // 先保留好下一个节点的地址
+                freeROW( row_p );    
+                row_p = tmp_row_p;
             }
         }
 
         // 3. 释放 表格 table  相关节点
         if ( sheet_p->tableMap_p ) {
-            table_p = sheet_p->ltp;           // 从后往前释放table 节点
+            table_p = sheet_p->tableMap_p;      // 从前往后删除节点
             while( table_p ) {
-                table_p = table_p->prev;        // 先保留好前一个节点的地址( 如果是首节点，则这个值为NULL)
-                freeTable( table_p->next );
+                tmp_table_p = table_p->next;        // 先保留好下一个节点的地址
+                freeTable( table_p );
+                table_p = tmp_table_p;
             }
         }
     }
@@ -266,14 +278,14 @@
             }
         }     
 
-        // 2. 下面为单元格 的文本编号记录申请空间(txtIDs_p)
+        // 2. 下面为cell 的文本指针数组 申请空间(txtIDs_p)
         if ( !cellMap_p )
             return;
 
         cp = cellMap_p;
         while ( cp ) {
             if ( cp->txtTotal > 0 )
-                cp->txtIDs_p = (int *)calloc( sizeof(int), cp->txtTotal );   // 为存放记录cell中的文本编号申请空间
+                cp->tps = (TEXT **)calloc( sizeof(TEXT*), cp->txtTotal );   // 为存放记录cell中的文本编号申请空间
             cp = cp->next;
         }
 
@@ -350,22 +362,21 @@
             }
 
             cp = getCellByID( cellMap_p, tp->cellID );
-            // 此时, 该文本的id 并没有存放在cell 中的txtIDs_p 数组中, 之前的处理仅仅是申请了足够的存放空间
-            // 在这儿便处理便将处理后的文本的id存放到txtIDs_p 数组中
+            // 此时, 该文本的id 并没有存放在cell 中的tps 数组中, 之前的处理仅仅是申请了足够的存放空间
+            // 在这儿便处理便将处理后的文本指针存放到tps 数组中
             for ( i = 0; i < cp->txtTotal; i ++ ) 
-                if ( cp->txtIDs_p[i] == 0 )         // 碰到结尾了
+                if ( cp->tps[i] == 0 )         // 碰到结尾了
                     break;
             
-            if ( i == 0 ) {                         // 表示该文本是cell 中的第一个文本, 记录在txtIDs_p[0] 中, 不做合并文本处理
-                cp->txtIDs_p[i] = tp->id;
+            if ( i == 0 ) {                    // 表示该文本是cell 中的第一个文本, 记录在tps[0] 中, 不做合并文本处理
+                cp->tps[i] = tp;
                 tp = tp->next;
                 continue;
             } else if ( i == cp->txtTotal ) {       // 容错处理,表示预申请空间已经存满了, 那么当前的这个文本就不应该在该cell中
                 return ;
             } else  {
-                text_id = cp->txtIDs_p[i-1];        //在同一个cell中的文本节点的前一个文本节点编号
-                tpp = searchForward( tp, text_id );
-                if ( !tpp )                         // 容错处理 , 没找到前一个文本节点。。。(这种情况不应该发生)
+                tpp = cp->tps[i-1];        //在同一个cell中的文本节点的前一个文本节点编号
+                if ( !tpp )                         // 容错处理。(这种情况不应该发生)
                     return ;
 
                 ox = tp->ox,        oy = tp->oy;
@@ -385,7 +396,7 @@
                     tp = tpn;                       // tp 重新定位到下一个需要处理的节点
                     cp->txtTotal --;                // 修正 cell 中的文本数量总数
                 } else {                            // 不需要合并
-                    cp->txtIDs_p[i] = tp->id;       // 添加cell中的文本记录
+                    cp->tps[i] = tp;            // 添加cell中的text指针记录
                     tp = tp->next;
                 }
             }
@@ -416,20 +427,25 @@
         // 为 c_list 无法申请空间
         buildColRowMap( cellMap_p, sheet_p );
 
+        // 修正 Col 中的maxlen, 主要是根据子col 来修正 父 col 的宽度
+        fixCols( cellMap_p, sheet_p );
+
+        printf("==============================aaaaaaaaaaaaa=================\n");
+        printColMap( sheet_p->colMap_p );
+        printRowMap( sheet_p->rowMap_p );
+        // 修正 row 中的maxlines, 主要是根据 儿子row 来修正 父 row 的行数
+        fixRows( cellMap_p, sheet_p );
+
         // 为colMap和rowMap中的col, row 申请对应c_list 需要的空间
         spaceForColRowMap( sheet_p );
         
         // 第二次遍历cellMap_p 中的cell, 为 col, row 中的c_list 填充cell id
         fill_c_list( cellMap_p, sheet_p );
 
-        // 修正 Col 中的maxlen, 主要是根据子col 来修正 父 col 的宽度
-        fixColMaxlen( cellMap_p, sheet_p );
-
-        printf("==============================aaaaaaaaaaaaa=================\n");
+        printf("==============================bbbbbbbbbbbb=================\n");
         printColMap( sheet_p->colMap_p );
         printRowMap( sheet_p->rowMap_p );
-        // 修正 row 中的maxlines, 主要是根据 儿子row 来修正 父 row 的行数
-        //fixRows( cellMap, cellIndexMap, rowMap, colIndexMap, rowIndexMap )
+        printf("==============================cccccccccccccc=================\n");
         return;
     }
 
@@ -447,6 +463,49 @@
 
         return NULL;    // 遍历完还没有找到就返回NULL
     }
+
+    // orderColMap()
+    //     将 colMap 链表按照col 的w(宽度)从小往大排序,  结果存放在 des 数组中
+    // 该函数仅被 fixColMaxlen() 调用, 调用前务必要确认空间足够
+    // 排序方法:
+    //     希尔排序法, 因为原来的链表要保持不变, 排序结果存放在新的数组中. 只需要
+    //  遍历一遍链表就可以排序完成。
+    //     增量从 coltotal/2 开始， 依次减1.
+    void orderColMap( COL ** des, COL * src, int colTotal )
+    {
+        COL     *   col_p;
+        int         i;          // 用来记录排好序的col个数
+        
+        if ( !des || !src )
+            return;
+
+        col_p = src;
+        
+        // 1. 先将链表节点复制到 des 数组中
+        i = 0;
+        while ( col_p ) {
+            des[i] = col_p;    
+            col_p = col_p->next;
+            i ++;
+        }
+
+        //2. 希尔排序法对 des 数组进行排序
+        int     step = colTotal /2;     // 第一个增量是总长度/2
+        while ( step > 0 ) {
+            i = 0;
+            while ( i < colTotal-step ) {    // 根据步长(增量) 进行比较交换
+                if ( des[i]->w > des[i+step]->w ) { 
+                    col_p       = des[i];
+                    des[i]      = des[i+step];
+                    des[i+step] = col_p;
+                }
+                i ++;
+            } 
+            step --;
+        }
+    }
+
+
 
             
     // 修正 Col 中的maxlen, 主要是根据子col 来修正 父 col 的宽度
@@ -474,6 +533,85 @@
     //       有个问题, 对于同一页中的不同表格, 不应该进行列的子列判断.
     //       增加判断, 如果下一个cell不等于上一个cell的y + h, 那么就是另一个表中的cell了
     //       修改实现方式, 不适用cellMap， 也不用给colMap排序了, 直接双重循环处理
+    // 2019.03.14
+    //       需要处理排序后的colMap, 一个col 只能有且只有一个是最窄的那个col parent, 否则可能会匹配到宽的parent col, 结果造成maxlen 计算错误
+    void fixCols( CELL * cellMap_p, SHEET * sheet_p )
+    {
+        int             maxlen;
+        int             colTotal;
+        float           x1, w1, x2, w2;
+        COL         **  o_colMap_p;           // 存放 排好序的rowMap 节点指针, 按 maxline 从小到大排序 
+        COL         *   col_p1, * col_p2;
+
+        if ( !sheet_p || !cellMap_p ) 
+            return;
+
+        colTotal = sheet_p->colTotal;
+        
+        o_colMap_p = (COL **)calloc( sizeof(COL *) * colTotal, 1 );
+
+        orderColMap( o_colMap_p, sheet_p->colMap_p, colTotal );
+
+        // 1. 循环便利寻找母行
+        for ( int i = 0; i < colTotal; i ++ ) {
+            col_p1 = o_colMap_p[i];
+            x1 = col_p1->x, w1 = col_p1->w;
+
+            for ( int j = 0; j < colTotal; j ++ ) {
+                col_p2 = o_colMap_p[j];
+
+                if ( col_p1->id == col_p2->id )     // 跳过同一个row
+                    continue;
+
+                x2 = col_p2->x, w2 = col_p2->w;
+
+                if ( col_p1->table_id == col_p2->table_id &&                        // 首先要保证在一个表中
+                      ( x1 >= x2 || abs(x2-x1) < 1 ) && ( (x1+w1) <= (x2+w2) || abs(x2+w2-x1-w1) < 1 ) ) { // 判断col_p2 是否是  col_p1 母列  
+                        // # abs 的判断是因为子列和母列左面边或右面边重叠的时候, 坐标有可能不是完全相同, 有可能有微小误差
+                    printf( "col id=%d 的母列  是 col id=%d\n", col_p1->id, col_p2->id );
+
+                    col_p1->parent = col_p2;
+                    col_p2->sonTotal ++;
+                    break;      // 找到 最窄的那个母行就结束, 有且只有一个母行
+                }
+            }
+        }
+
+        // 2. 填充 子行 节点指针   数组, 同时修正母行的maxlines
+        int     k;
+        for( int i = 0; i < colTotal; i ++ ) {
+            col_p1 = o_colMap_p[i];             // 这个赋值是为了提高下面代码的可读性
+            if ( col_p1->sonTotal > 0 )  {           // 有子行
+               col_p1->son = (COL **)calloc( sizeof(COL *) * col_p1->sonTotal, 1);
+               
+                maxlen      = 0;
+                k           = 0;        // 用来标识son 指针数组的下标
+                
+                for ( int j = 0; j < colTotal, k < col_p1->sonTotal; j ++ ) {       // k < col_p1->sonTotal 是为了防止内存溢出
+                    col_p2 = o_colMap_p[j];
+                    if  ( col_p2->parent == col_p1 ) {     // 找见 子列 了
+                        col_p1->son[k] = col_p2;
+                        k ++;
+
+                        maxlen += col_p2->maxlen;       // 合计子列的 maxlen
+                    }
+                }
+
+                // 修正 母列的maxlen
+                if ( maxlen > col_p1->maxlen ) {
+                    col_p1->maxlen = maxlen;
+                }
+
+                // 给子列排序, 按照y 坐标从小到大, 暂时不排序, 因为后面填充col 的 c_list 的时候, 需要把母列的c_list 也要补充进去
+                // 暂时不需要, 应为整理表格内容的时候是按照row  顺序来输出的
+
+            } 
+        } 
+
+        free( o_colMap_p );
+    }
+       
+    /*
     void fixColMaxlen( CELL *cellMap_p, SHEET * sheet_p )
     {
         char        tmpbuf[12];         // 用来临时存放col的id 编号字符串
@@ -540,6 +678,7 @@
         }
         
     }
+    */
 
 
     /*
@@ -566,15 +705,90 @@
     #          rowIndexMap={1: [2, 7], 2: [2, 1, 2, 3], 3: [1, 5], 4: [2, 4, 6]}
     #     2017.01.11:
     #          rowIndexMap = {1:{"cells":,"lines":,"parent":,"sons":}}
+          2019.03.14:
+               每个row 只有一个parent, 且是最窄的那个parent. 每个son row 会继承 parent row 的cell list. 并且cell list 是按照x 坐标顺序排列(不是id顺序)
+               这样能保证显示表格的时候顺序正确.
     #          
     */
-    void fixRows()
+    void fixRows( CELL * cellMap_p, SHEET * sheet_p )
     {
+        int             maxlines;
+        int             rowTotal;
+        float           y1, h1, y2, h2;
+        ROW         **  o_rowMap_p;           // 存放 排好序的rowMap 节点指针, 按 maxline 从小到大排序 
+        ROW         *   row_p1, * row_p2;
+
+        if ( !sheet_p || !cellMap_p ) 
+            return;
+
+        rowTotal = sheet_p->rowTotal;
+        
+        o_rowMap_p = (ROW **)calloc( sizeof(ROW *) * rowTotal, 1 );
+
+        orderRowMap( o_rowMap_p, sheet_p->rowMap_p, rowTotal );
+
+        // 1. 循环便利寻找母行
+        for ( int i = 0; i < rowTotal; i ++ ) {
+            row_p1 = o_rowMap_p[i];
+            y1 = row_p1->y, h1 = row_p1->h;
+
+            for ( int j = 0; j < rowTotal; j ++ ) {
+                row_p2 = o_rowMap_p[j];
+
+                if ( row_p1->id == row_p2->id )     // 跳过同一个row
+                    continue;
+
+                y2 = row_p2->y, h2 = row_p2->h;
+
+                if ( row_p1->table_id == row_p2->table_id &&                        // 首先要保证在一个表中
+                        ( y1 >= y2 || abs(y2-y1) < 1 ) && ( (y1+h1) <= (y2+h2) || abs(y2+h2-y1-h2) < 1 ) ) { // 判断row_p2 是否是  row_p1 母行  
+                        // # abs 的判断是因为子行和母行上面边或下面边重叠的时候, 坐标有可能不是完全相同, 有可能有微小误差
+                    printf( "row id=%d 的母行  是 row id=%d\n", row_p1->id, row_p2->id );
+
+                    row_p1->parent = row_p2;
+                    row_p2->sonTotal ++;
+                    break;      // 找到 最窄的那个母行就结束, 有且只有一个母行
+                }
+            }
+        }
+
+        // 2. 填充 子行 节点指针   数组, 同时修正母行的maxlines
+        int     k;
+        for( int i = 0; i < rowTotal; i ++ ) {
+            row_p1 = o_rowMap_p[i];             // 这个赋值是为了提高下面代码的可读性
+            if ( row_p1->sonTotal > 0 )  {           // 有子行
+               row_p1->son = (ROW **)calloc( sizeof(ROW *) * row_p1->sonTotal, 1);
+               
+                maxlines    = 0;
+                k           = 0;        // 用来标识son 指针数组的下标
+                
+                for ( int j = 0; j < rowTotal, k < row_p1->sonTotal; j ++ ) {       // k < row_p1->sonTotal 是为了防止内存溢出
+                    row_p2 = o_rowMap_p[j];
+                    if ( row_p2->parent == row_p1 ) {     // 找见 子行 了
+                        row_p1->son[k] = row_p2;
+                        k ++;
+
+                        maxlines += row_p2->maxlines;       // 合计子行的 maxlines
+                    }
+                }
+
+                // 修正 母行的maxlines
+                if ( maxlines > row_p1->maxlines ) {
+                    row_p1->maxlines = maxlines;
+                }
+
+                // 给子行排序, 按照x 坐标从小到大, 暂时不排序, 因为后面填充row 的 c_list 的时候, 需要把母行的c_list 也要补充进去
+
+            } 
+        }
             
+        free( o_rowMap_p );
     }
 
+    
+
     // orderRowMap()
-    //     将 rowMap 链表按照row 的高度从小往大排序,  结果存放在 des 数组中
+    //     将 rowMap 链表按照row 的h(高度)从小往大排序,  结果存放在 des 数组中
     // 该函数仅被 fixRows() 调用, 调用前务必要确认空间足够
     // 排序方法:
     //     希尔排序法, 因为原来的链表要保持不变, 排序结果存放在新的数组中. 只需要
@@ -595,6 +809,7 @@
         while ( row_p ) {
             des[i] = row_p;    
             row_p = row_p->next;
+            i ++;
         }
 
         //2. 希尔排序法对 des 数组进行排序
@@ -607,7 +822,40 @@
                     des[i]      = des[i+step];
                     des[i+step] = row_p;
                 }
+                i ++;
             } 
+            step --;
+        }
+    }
+
+    void printC_list( CELL **c_list, int total )
+    {
+        printf("--------------------adams-------printC_list() -------\n");
+        for ( int i = 0; i < total; i ++ ) {
+            printf("%d个 cell is %d \n", i,  c_list[i]->id);
+        }
+    }
+    // 将c_list 指针数组排序 CELL **
+    // 仍然用希尔排序法进行排序, 按照cell 的id 来进行排序
+    void orderC_list( CELL **c_list, int total )
+    { 
+        int         i, step;
+        CELL    *   cp;
+        
+        if ( !c_list )
+            return;
+    
+        step = total / 2;
+        while ( step > 0 ) {
+            i = 0;
+            while ( i < total - step ) {    // 根据步长(增量)进行比较交换排序
+                if ( c_list[i]->id >c_list[i+step]->id ) {      // 前面的id 比后面的id 大
+                    cp              = c_list[i];
+                    c_list[i]       = c_list[i+step];
+                    c_list[i+step]  = cp;
+                }
+                i ++;
+            }
             step --;
         }
     }
@@ -616,6 +864,65 @@
     // 第二次遍历cellMap_p 中的cell, 为 col, row 中的c_list 填充cell id
     // fill_c_list() 仅仅是为了提高可读性而封装的代码
     //     仅被 preProcColRow() 调用
+    //
+    // 嵌套调用 修正 col的c_list, 保证先 修正 父col的c_list, 后 修正子 col的c_list
+    void fixCol_c_list( COL * col_p )
+    {
+        int     i;
+        
+        if ( ! col_p )
+            return;
+
+        i = col_p->cellTotal;
+
+        if ( col_p->c_list[i-1] )    // 如果最后一个位置已经被占用, 说明已经处理过了
+            return;
+            
+        if ( col_p->parent ) {
+                
+            fixCol_c_list( col_p->parent );
+
+            // 合并父col的c_list 到 子 c_list 中, 然后排序
+            i = 0;
+            while( col_p->c_list[i] && i < col_p->cellTotal )  // 因为子col的cellTotal 已经包含了父col的cellTotal, 这儿要跳过已经记录过的位置
+                i ++;
+
+            for ( int j = 0; j < col_p->parent->cellTotal && i+j < col_p->cellTotal ; j ++ ) 
+                col_p->c_list[i+j] = col_p->parent->c_list[j]; 
+        }
+        // 下面进行排序
+        orderC_list( col_p->c_list, col_p->cellTotal );
+    }
+
+    // 嵌套调用 修正 row的c_list, 保证先 修正 父row的c_list, 后 修正子 row的c_list
+    void fixRow_c_list( ROW * row_p )
+    {
+        int     i;
+        
+        if ( ! row_p )
+            return;
+
+        i = row_p->cellTotal;
+
+        if ( row_p->c_list[i-1] )    // 如果最后一个位置已经被占用, 说明已经处理过了
+            return;
+            
+        if ( row_p->parent ) {
+                
+            fixRow_c_list( row_p->parent );
+            // 合并父row的c_list 到 子 c_list 中, 然后排序
+            
+            i = 0;
+            while( row_p->c_list[i] && i < row_p->cellTotal )  // 因为子row的cellTotal 已经包含了父row的cellTotal, 这儿要跳过已经记录过的位置
+                i ++;
+
+            for ( int j = 0; j < row_p->parent->cellTotal && i+j < row_p->cellTotal ; j ++ ) 
+                row_p->c_list[i+j] = row_p->parent->c_list[j]; 
+        }
+        // 下面进行排序, 必须保证正确, 否则后面提取表格文本的时候会出错
+        orderC_list( row_p->c_list, row_p->cellTotal );
+    }
+
     void fill_c_list( CELL * cellMap_p, SHEET * sheet_p )
     {
         CELL        *   cp;
@@ -635,35 +942,146 @@
             }
 
             printf( "-------------------cellID=%d(x=%.2f, w=%.2f)要找的列为:%d$$$$$$$$\n", cp->id, cp->x, cp->w, cp->col );
-            col_p = getColOfID( sheet_p->colMap_p, cp->col );
+            col_p = getColByID( sheet_p->colMap_p, cp->col );
             
             if ( !col_p )
                 return;
                        
             i = 0;
-            while ( col_p->c_list[i] != 0 )      // 寻找c_list第一个可用的位置, 用来存放cell ID
+            while ( col_p->c_list[i] != 0 &&  i < col_p->cellTotal )      // 寻找c_list第一个可用的位置, 用来存放cell ID
                 i ++;
             
-            col_p->c_list[i] = cp->id;
+            col_p->c_list[i] = cp;
 
-            row_p = getRowOfID( sheet_p->rowMap_p, cp->row );
+            row_p = getRowByID( sheet_p->rowMap_p, cp->row );
+            
+            if ( !row_p )
+                return;
+
             i = 0;
             while ( row_p->c_list[i] != 0 )      // 寻找c_list第一个可用的位置, 用来存放cell ID
                 i ++;
             
-            row_p->c_list[i] = cp->id;
+            row_p->c_list[i] = cp;
 
             cp = cp->next;
         }
+
+        // 下面进行修正, 将父c_list  补充到儿子的 c_list 中， 并进行排序
+        col_p = sheet_p->colMap_p;
+
+        while( col_p ) {
+            i = col_p->cellTotal;
+            
+            if ( col_p->c_list[i-1] ) {   // 如果最后一个cell也已经记录了, 说明已经处理过了 
+                col_p = col_p->next;
+                continue;
+            }
+            
+            fixCol_c_list( col_p );
+            
+            col_p = col_p->next;
+        }
+
+        row_p = sheet_p->rowMap_p;
+
+        while( row_p ) {
+            i = row_p->cellTotal;
+            
+            if ( row_p->c_list[i-1] ) {   // 如果最后一个cell也已经记录了, 说明已经处理过了 
+                row_p = row_p->next;
+                continue;
+            }
+            
+            fixRow_c_list( row_p );
+            
+            row_p = row_p->next;
+        }
     }
+    
+    // 仅被 fill_c_list() 调用,
+    /*
+    void fill_son_c_llist( COL * col_p, ROW * row_p, int cell_id )
+    {
+        int         sonTotal;
+        COL     *   s_col_p;
+        ROW     *   s_row_p;
+        int         i;
+
+        if ( !col_p || !row_p ) 
+            return;
+
+        // 子列的处理, 补充母列中的cell 到子列中, 暂时没用
+        sonTotal = col_p->sonTotal;
+        for( i = 0; i < sonTotal; i ++ ) {
+            s_col_p = col_p->son[i];
+            
+            while ( s_col_p->c_list[i] != 0 )      // 寻找c_list第一个可用的位置, 用来存放cell ID
+                i ++;
+
+            s_col_p->c_list[i] = cell_id;
+        }
+
+        // 子行row 的处理, 补充母行中的cell 到子行中, 很重要, 展现表格时需要
+        sonTotal = row_p->sonTotal;
+        for( i = 0; i < sonTotal; i ++ ) {
+            s_row_p = row_p->son[i];
+            
+            while ( s_row_p->c_list[i] != 0 )      // 寻找c_list第一个可用的位置, 用来存放cell ID
+                i ++;
+
+            s_row_p->c_list[i] = cell_id;
+        }
+        
+    }
+    */
+
 
     // 为colMap和rowMap中的col, row 申请对应c_list 需要的空间
     //  spaceForColRowMap()  函数是为了提高可读性而封装的部分代码
     //      仅被 preProcColRow() 调用
+    //  2019.03.14
+    //      由于要把父col的c_list 也要合并加入, 所以, 申请空间要要考虑增加父col的cellTotal大小
+    //
+    // 嵌套函数, 保证先计算父col 的c_list空间, 后计算子 col 的c_list 空间(要包含父c_list 空间)
+    void spaceForCol( COL * col_p )
+    {
+        int         cellTotal;
+
+        cellTotal = col_p->cellTotal;
+
+        if ( col_p->parent ) {
+            spaceForCol( col_p->parent );
+            
+            cellTotal += col_p->parent->cellTotal;        // 加了父列的c_list 空间
+
+            col_p->cellTotal = cellTotal;
+        }
+        col_p->c_list = (CELL **)calloc( sizeof(CELL*) * cellTotal, 1 ); 
+    }
+
+    // 嵌套函数, 保证先计算父row 的c_list空间, 后计算 子row  的c_list 空间(要包含父c_list 空间)
+    void spaceForRow( ROW * row_p )
+    {
+        int         cellTotal;
+
+        cellTotal = row_p->cellTotal;
+
+        if ( row_p->parent ) {
+            spaceForCol( row_p->parent );
+            
+            cellTotal += row_p->parent->cellTotal;        // 加了父列的c_list 空间
+
+            row_p->cellTotal = cellTotal;
+        }
+        row_p->c_list = (CELL **)calloc( sizeof(CELL *) * cellTotal, 1 ); 
+    }
+
     void spaceForColRowMap( SHEET * sheet_p )
     {
-        COL         * col_p;
-        ROW         * row_p;
+        int             cellTotal;
+        COL         *   col_p, * p_col_p;
+        ROW         *   row_p, * p_row_p;
 
         if ( !sheet_p )
             return;
@@ -671,16 +1089,16 @@
         col_p = sheet_p->colMap_p;
         
         while( col_p ) {
-            if ( col_p->cellTotal > 0 )
-                col_p->c_list = (int *)calloc( sizeof(int) * col_p->cellTotal, 1 ); 
+            if ( !col_p->c_list )       // 如果c_list 没有申请空间, 则申请. 因为spaceForCol() 是嵌套调用, 会将父col的c_list 空间申请了
+                spaceForCol( col_p );
             col_p = col_p->next;
         }
 
         row_p = sheet_p->rowMap_p;
         
         while( row_p ) {
-            if ( row_p->cellTotal > 0 )
-                row_p->c_list = (int *)calloc( sizeof(int) * row_p->cellTotal, 1 ); 
+            if ( !row_p->c_list )       // 如果c_list 没有申请空间, 则申请. 因为spaceForRow() 是嵌套调用, 会将父row的c_list 空间申请了
+                spaceForRow( row_p );
             row_p = row_p->next;
         }
     }
@@ -714,7 +1132,7 @@
             cp->col = 1;
 
             // 如果有需要就在这儿 table节点 colTotal ++, 然后最后还要申请空间并填充col_list..., 暂时没有处理
-            table_p = getTableOfID( sheet_p->tableMap_p, cp->table_id );
+            table_p = getTableByID( sheet_p->tableMap_p, cp->table_id );
             table_p->colTotal ++;
 
             printf("newCol()  cp->col=%d, cp->id=%d\n", cp->col, cp->id);
@@ -742,7 +1160,7 @@
             cp->col = col_p->id;
 
             // 如果有需要就在这儿 table节点 colTotal ++, 然后最后还要申请空间并填充col_list..., 暂时没有处理
-            table_p = getTableOfID( sheet_p->tableMap_p, cp->table_id );
+            table_p = getTableByID( sheet_p->tableMap_p, cp->table_id );
             table_p->colTotal ++;
 
             printf("newCol()  cp->col=%d, cp->id=%d\n", cp->col, cp->id);
@@ -826,7 +1244,7 @@
             row_p->table_id = cp->table_id;
             row_p->prev     = lrp,  row_p->next = NULL;         // 申请内存时已经初始化为0了， 这儿赋值是为了可读性
 
-            //row_p->parent = NULL, row_p->son = NULL;      // 申请内存时已经初始化为0了， 这儿赋值是为了可读性
+            row_p->parent = NULL, row_p->son = NULL;      // 申请内存时已经初始化为0了， 这儿赋值是为了可读性
 
             row_p->maxlines  = cp->txtTotal;               // 对于新建的row, 最大行数就是第一个cell的最大行数(txtTotals 里面已经把同行的合并了)
             row_p->cellTotal = 1;
@@ -1020,7 +1438,7 @@
         }
     }
 
-    COL * getColOfID( COL * colMap_p, int  id )
+    COL * getColByID( COL * colMap_p, int  id )
     {
         COL     * col_p;
         
@@ -1037,7 +1455,7 @@
         return NULL;
     }
 
-    ROW * getRowOfID( ROW * rowMap_p, int  id )
+    ROW * getRowByID( ROW * rowMap_p, int  id )
     {
         ROW     * row_p;
         
@@ -1054,7 +1472,7 @@
         return NULL;
     }
     
-    TABLE * getTableOfID( TABLE * tableMap_p, int  id )
+    TABLE * getTableByID( TABLE * tableMap_p, int  id )
     {
         TABLE     * table_p;
         
@@ -1071,16 +1489,320 @@
         return NULL;
     }
     
-    // # 4. 解析文本与cell的关系, 拆分出table 出来, 创建tableMap={1:[cellid_list]}， 同时在cellMap 中添加tableid 属性
-    void buildTableMap( textMap, cellMap, cellIndexMap, tableMap, colIndexMap, rowIndexMap )
-    {
-        return;
-    }
 
     // # 5. 输出文本. 已经处理过同行多文本的拼接, 不再cell中的文本就是单独一行文本
-    char * buildPageTxt( textMap, cellMap, cellIndexMap, tableMap, colIndexMap, rowIndexMap )
+    char * buildPageTxt( char * retbuf, int dlen, SHEET * sheet_p, CELL * cellMap_p, TEXT * textMap_p )
     {
-        return;
+        char        tmpbuf[512];            // 
+        TEXT    *   tp;
+        int         table_id;
+        int         len;
+
+        if ( !sheet_p || !textMap_p )       // cellMap_p 有可能为空, 没有表格的情况
+            return NULL;
+
+        tp = textMap_p;
+
+        while ( tp ) {
+            memset( tmpbuf, 0, 512 );
+            memcpy( tmpbuf, tp->buf, tp->len );
+            if ( tp->cellID == 0 )   {       // 不在表格中的文本 
+                if ( strlen( rtrim(tmpbuf) ) == 0 )    // 空行, 要处理下空行的情况, 有可能全是空格
+                    sprintf( retbuf, "%s\n\n", retbuf );
+                else
+                    sprintf( retbuf, "%s%s\n", retbuf, tp->buf );
+            } else {                        // 表格中的文本
+                table_id = getTableID( sheet_p, cellMap_p, tp->cellID );  
+                len = strlen( retbuf );
+                //tp = buildTableTxt( retbuf + len, dlen - len, sheet_p, cellMap_p, tp, table_id );  
+            }
+            tp = tp->next;
+        }
+        
+        return retbuf;
     }
+    // getTableID()
+    //
+    //  仅被 buildPageTxt() 调用
+    int getTableID( SHEET * sheet_p, CELL * cellMap_p, int cell_id  )
+    {
+        CELL    * cp;
+        TABLE   * table_p;
+
+        if ( !sheet_p || !cellMap_p ) 
+            return -1;
+
+        cp = (CELL *)findCell( cellMap_p, cell_id );
+
+        if ( !cp )
+            return -1;
+
+        table_p = getTableByID( sheet_p->tableMap_p, cp->table_id );
+
+        if ( !table_p )
+            return -1;
+
+        return table_p->id;
+        
+    }    
+
+    // getLastTp()
+    // 获取该行的最后一个文本指针, 其实就是最后一个cell 的最后一个txtID
+    TEXT * getLastTp( ROW * row_p )
+    {
+        int         cellTotal;
+        int         txtTotal;
+        CELL    *   cp;
+
+        if ( !row_p )
+            return NULL;
+     
+        cellTotal = row_p->cellTotal;
+        
+        cp = row_p->c_list[ cellTotal - 1 ];     // 该 row 的最后一个cp
+
+        txtTotal = cp->txtTotal;
+
+        return cp->tps[ txtTotal - 1];        // cel 中的最后一个text id
+    }
+
+    TEXT * buildTableTxt( char * desbuf, int dlen, SHEET *sheet_p, CELL *cellMap_p, TEXT * tp, int table_id )
+    {
+        ROW     *   row_p;
+        bool        flag = false;       // 是否建过表头的标识
+        TEXT    *   tp = NULL;                 // 用来放置最后一个cell的最后一个TEXT指针, 返回方便后续处理
+        int         text_id;
+
+        if ( !desbuf || !sheet_p || !cellMap_p || !tp ) 
+            return NULL;
+
+        row_p = sheet_p->rowMap_p;
+
+        while( row_p && row_p->table_id == table_id ) { 
+            if ( !flag ) {              // # 如果没有建表头, 需要建表头
+                flag = buildRowHeader( desbuf, dlen, cellMap_p, sheet_p, row_p );
+            } else {
+                // 建表 中间分割线
+                // #retbuf += "├──────────┼────┼────┼────┼────┼────┤ "
+                // buildRowSplit( desbuf,  sheet_p, row_p, cellMap );
+                ;
+            }
+            // buildRowBody( rowIndexMap, colIndexMap, item, textMap, cellMap, cellIndexMap )
+            tp = getLastTp( row_p );
+            row_p = row_p->next;
+        }
+
+        /*
+         * # 表格最下面的线
+            lastRowId = rows[-1]
+            while ( len( rowIndexMap[lastRowId]['sons'] ) > 0 ):   # 如果最后一行有子行, 那么就处理该行的最后一个子行
+                lastRowId = rowIndexMap[lastRowId]['sons'][-1]
+            retbuf += self.buildRowFooter( rowIndexMap, colIndexMap, lastRowId, cellMap, cellIndexMap )
+         */
+
+
+        return tp;
+    }
+
     /*
-*/
+    # 15.10 buildRowHeader()
+    #      将表格里面的文本格式化输出
+    # getRowSplitPos
+    # 2017.01.11:
+    #      修正实现方式, 根据新的rowIndexMap ={'cells':,'lines':,'parent':,'sons':[]}来进行处理
+    #      只处理子行, 母行不用处理, 因为处理子行的时候顺便就把母行的内容处理了.
+    #      header 的处理简单处理, 直接按照子行中的所有cell来进行处理(包含母行)
+    #      也就是说实现方式其实没有改变.
+    */
+    #define LEFT_TOP        "┌"
+    #define MID_TOP         "┬"
+    #define RIGHT_TOP       "┐"
+    #define MID_LEFT        "├"
+    #define MID_MID         "┼"
+    #define MID_RIGHT       "'┤"
+    #define LEFT_BOTTOM     "└"
+    #define MID_BOTTOM      "┴"
+    #define RIGHT_BOTTOM    "┘"
+    #define ROWLINE         "─"
+    #define COLLINE         "│"
+
+    char * nchar( char * buf, int n, char ch )
+    {
+
+        if ( n < 1 )
+            return NULL;
+        
+        for ( int i = 0; i < n; i ++ ) 
+            buf[i] = ch;
+
+        return buf;
+    }
+
+    char * nstr( char * buf, int buflen, int n, char  *str )
+    {
+        int     len;
+
+        if ( !buf || n < 1 || !str )
+            return NULL;
+
+        if ( buflen < n*strlen(str) )
+            return NULL;
+        
+        len = strlen( str );
+        for ( int i = 0; i < n; i ++ ) {
+            memcpy( buf + i * len, str, len );
+        }
+
+        return buf;
+    }
+
+    //             # ┌──────────┬────┬────┬────┬────┬────┐
+    bool buildRowHeader( char * desbuf, int dlen, CELL * cellMap_p, SHEET * sheet_p, ROW * row_p )
+    {
+        int         col_pos;
+        CELL    *   cp;
+        COL     *   col_p;
+        
+        if ( !desbuf || !cellMap_p || sheet_p || !row_p )
+            return false; 
+
+        if ( row_p->sonTotal > 0 )  // 如果有子行, 则不处理母行, 直接处理子行就同时处理母行的内容了
+            return false;
+    
+        strcpy( desbuf, LEFT_TOP );                             // "┌"
+        
+        for ( int i = 0; i < row_p->cellTotal; i ++ ) {         // 遍历行中的cell
+            cp = (CELL *)findCell( cellMap_p, row_p->c_list[i] );       // 找到 cell 节点
+            col_p = getColByID( sheet_p->colMap_p, cp->col );     // 找到 cell对应的col节点
+
+            if ( i != 0 )                                       // 不是第一个cell 的话, 都有中间间隔符 "┬"
+                memcpy( desbuf+strlen(desbuf), MID_TOP, strlen(MID_TOP) );      // "┬"
+            
+            col_pos = col_p->maxlen;                            // 连线长度
+            nstr( desbuf + strlen(desbuf), dlen, col_pos, ROWLINE );       //  "─"
+        }
+
+        // 最后再增加一个结束符     RIGHT_TOP      
+        memcpy( desbuf+strlen(desbuf), RIGHT_TOP, strlen(RIGHT_TOP) );      //  "┐"
+        
+        return true;
+    }
+
+/*
+    # 15.14 buildRowSplit()
+    #      创建表格的行之间的分隔线
+    # 2017.01.11:
+    #      更改实现方式, rowIndexMap={'cells':,'lines':,'parent':,'sons':}
+    #      调用这个方法之前已经确认这个就是子行了，
+    #      获取的前一行要进一步判断是否是同一parent的子行, 如果不是, 需要进一步判断有子行,
+    #      嵌套处理, 获取最后一个子行, 这个子行才是真正的"前一行"
+    def buildRowSplit( self, rowIndexMap, colIndexMap, rowID, cellMap, cellIndexMap ):
+        tableDict = {'left_top':'┌', 'mid_top':'┬', 'right_top':'┐', 'mid_left':'├', 'mid_mid':'┼',
+                     'mid_right':'┤', 'left_bottom':'└', 'mid_bottom':'┴', 'right_bottom':'┘',
+                     'rowline':'─', 'colline':'|', "body_left":"│", "body_right":"│" }
+        
+        retbuf = ""
+        try:
+            
+            cols = len( rowIndexMap[rowID] ) -1 #  几个单元格就是几列, -1 是因为第一个元素是行数
+
+            # 1. 获取真正的"前一行"
+            preRowID = self.getRealPreRowID( rowIndexMap, rowID )
+            
+            parent = rowIndexMap[rowID]['parent']
+            curRowSplitPos = self.getRowSplitPos( rowIndexMap, colIndexMap, cellIndexMap, rowID )
+
+            print("parent =%d,rowIndexMap[preRowID]['parent']=%d" % (parent, rowIndexMap[preRowID]['parent']))
+            if ( parent == -1 or  parent != rowIndexMap[preRowID]['parent'] ):
+                retbuf = tableDict["mid_left"]            # "├"
+                # 2.1 本行是单独一行或者第一个子行, 正常处理, 没有需要省略的连接线
+                preRowSplitPos = self.getRowSplitPos( rowIndexMap, colIndexMap, cellIndexMap, preRowID )
+                
+                allSplitPos = sorted(set( preRowSplitPos + curRowSplitPos ))
+                len_all = len( allSplitPos )
+
+                print("--------pre,cur, all-------pos-")
+                print(preRowSplitPos)
+                print(curRowSplitPos)
+                print(allSplitPos)
+
+                flag1,flag2 = False, False  # 值为True时表示该行结束. flag1表示上一行, flag2表示当前行(位操作效率更高,但是可读性不如2个变量)
+                # 这儿需要注意,  preRowSplitPos=[0 22 42], cur..=[0 22 37 52 67]  all = [0, 22, 37, 42, 52, 67]
+                # 那么对pre的第二个cell而言, 连接线及分隔符长度应该是: 42-22+1=21, 但是用all 计算的时候: 37-22+1+(42-37+1)=16+6=22， 也就是37所占的分隔符计算了2次
+                #  应该减去37对应的分隔符一次. 也就是说删除的是相邻两个cell之间多余计算的分隔符部分
+                for i in range(1, len_all ):        # i == 0的时候就是位置0, 用来方便后续计算控制用的, 没有实际意义
+                    curPos = allSplitPos[i]
+                    con_len = allSplitPos[i] - allSplitPos[i-1]
+                    if ( i != 1 ):      # 第一列不需要修正分隔符的占位, 其他行都要修正
+                        con_len -= 1    # 计算连线距离, 减去1是为了修正连线不包括分隔符的占位1, 因为前面的位置也修正过了, 所以这儿只需要减1即可
+
+                    print("buildRowSplit(), 独立一行或第一子行, curpos=%d, con_len=%d,:%s:" % (curPos, con_len, retbuf) )
+                    flag1, flag2 = (curPos == preRowSplitPos[-1]), (curPos == curRowSplitPos[-1])  # 逻辑判断结果赋值
+                        
+                    if (  curPos in preRowSplitPos and curPos in curRowSplitPos ): # 两行都有
+                        retbuf += con_len * tableDict['rowline'] 
+                        if ( not flag1 or not flag2 ) :   # 只要有一行没结束, 无论另一行是否结束, 对于两行都有的情况, 用'mid_mid':'┼'
+                            retbuf += tableDict['mid_mid']                         # '-----┼'
+                        else:                                    # 2行都结束, 即 flag1和flag2 都是True 用   '-----┤'
+                            retbuf += tableDict['mid_right']                    # '-----┤'
+                    else: #    不是两行同时有的情况
+                        if ( curPos in preRowSplitPos ) :    # 在上一行
+                            retbuf += con_len * tableDict['rowline']    # 属于上一行的分隔符, 减去之前的当前行的分隔符数量
+                            if ( not flag1 ):  # 上一行没结束, 无论下一行是否结束, 都是'------┴'
+                                retbuf += tableDict['mid_bottom']
+                            elif ( flag1 and not flag2 ):   # 上一行结束了, 但是下一行没结束, 也用'------┴'
+                                retbuf += tableDict['mid_bottom']
+                            else:  # 2行都结束了, 但是最后是上一行, 因为外围的判断是上一行, 用'------┘' 也就是说下一行早就结束了
+                                retbuf += tableDict['right_bottom']
+                        else:          # 不在上一行就是当前行
+                            retbuf += con_len * tableDict['rowline'] 
+                            if ( not flag2 ):  # 当前行没结束, 无论上一行是否结束, 都是'------┬'
+                                retbuf += tableDict['mid_top']
+                            elif ( flag2 and not flag1 ):   # 当前行结束了, 但是上一行没结束, 也用'------┬'
+                                retbuf += tableDict['mid_top']
+                            else:  # 2行都结束了, 但是最后是当前行, 因为外围的判断是上一行, 用'------┐'
+                                retbuf += tableDict['right_top']
+            else:                   # 本行是单独一行, 没有母行, 正常处理, 没有需要省略的连接线
+                # 2.2 是子行, 并且不是第一个子行, 需要省略母行中cell对应的连接线. 判断子行中的cell成员, 如果在母行中,
+                #  那么就省略连接线,  直接用 |, 第一个不再母行中的cell， 用 ├, 最后一个用┤
+                #  因为是第二个子行, 位置信息不会发生变化, 也就是与上一行相同, 就不用像上面那么复杂判断了
+                cur_cells = rowIndexMap[rowID]['cells']
+                par_cells = rowIndexMap[parent]['cells']
+                len_cur = len( curRowSplitPos )
+                print("buildRowSplit(), 其他子行,len_cur=%d" % (len_cur))
+                print(cur_cells)
+                print(par_cells)
+                for i in range(1, len_cur ):    # i == 0的时候就是位置0, 用来方便后续计算控制用的, 没有实际意义
+                    col_len = curRowSplitPos[i] - curRowSplitPos[i-1]
+                    print("col=%d,宽度=%d" % (i,col_len))
+                    print(curRowSplitPos)
+                    if ( i != 1 ):
+                        col_len -= 1
+                        
+                    if ( cur_cells[i-1] in par_cells ):     # 当前cell是母行的, 没有连接线, cur_cells 的下标从0开始的
+                        if ( i == 1 or ( cur_cells[i-2] in par_cells ) ):  # 前一个cell 是母行的话, 需要应该用"│     "
+                            retbuf += "│" + col_len * " "
+                        else:                               # 前一个cell 不是母行的话, 需要应该用"┤     "
+                            retbuf += "┤" + col_len * " "
+                    else:                                   # 当前cell是子行的, 有连接线
+                        if ( i == 1 or ( cur_cells[i-2] in par_cells ) ):  # 前一个cell 是母行的话, 需要应该用"├     "
+                            retbuf += "├" + col_len * "─"
+                        else:                               # 前一个cell 不是母行的话, 需要应该用"┼     "
+                            retbuf += "┼" + col_len * "─"
+                    # 最后一个cell判断
+                    if ( i == len_cur-1 ):
+                        if ( cur_cells[i-1] in par_cells ): # 如果是母行的, 结束符是"|"
+                            retbuf += "│"
+                        else:
+                            retbuf += "┤"
+                
+            retbuf += '\r\n'
+            print("-----------分割线为-------")
+            print(retbuf)
+        except:
+            print("buildRowBody() Exception Error!")
+            traceback.print_exc()
+            retbuf= ""
+        return retbuf
+ * 
+ */

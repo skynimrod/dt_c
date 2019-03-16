@@ -370,9 +370,9 @@
             printf( "row=%d, col=%d\n",  cp->row, cp->col );
             printf( "maxlines=%d, maxlen=%d, txtTotal=%d, table_id=%d\n",
                        cp->maxlines, cp->maxlen, cp->txtTotal, cp->table_id );
-            if ( cp->txtIDs_p )         // 因为第一次创建cell的时候, 还没有为txtIDs_p申请空间, 当时不知道有多少文本在cell中, 后来处理完文本才会知道
+            if ( cp->tps )         // 因为第一次创建cell的时候, 还没有为txtIDs_p申请空间, 当时不知道有多少文本在cell中, 后来处理完文本才会知道
                 for ( int i = 0; i < cp->txtTotal; i ++ ) {
-                    printf( "%d ", cp->txtIDs_p[i] ); 
+                    printf( "%d ", cp->tps[i]->id ); 
                 }
 
             printf("\n");
@@ -410,24 +410,32 @@
         col_p = colMap_p;
 
         while ( col_p ) {
-            printf( " -----------------col id=%d--------------------\n", col_p->id );
+            printf( " -----------------col id=%d-----(%p)---------------\n", col_p->id, col_p );
             printf( "x=%.2f, w=%.2f, maxlen = %d\n", col_p->x, col_p->w, col_p->maxlen );
             printf( "cellTotal = %d, sonTotal=%d, table_id=%d\n",
                             col_p->cellTotal, col_p->sonTotal, col_p->table_id );
+            printf("col_p->prev=%p, col_p->next=%p\n", col_p->prev, col_p->next );
             if ( col_p->c_list ) {
                 printf("cells:");
                 for( int i = 0; i < col_p->cellTotal; i ++ ) {
-                    printf( " %d", col_p->c_list[i] );
+                    if ( col_p->c_list[i] )
+                        printf( " %d", col_p->c_list[i]->id );
+                    else
+                        printf( " 0" );         //  有可能没有填充
                 }
                 printf("\n");
             }
             if ( col_p->son ) {
                 printf("sons:");
                 for( int i = 0; i < col_p->sonTotal; i ++ ) {
-                    printf( " %d", col_p->son[i] );
+                    printf( " %d", col_p->son[i]->id );
                 }
                 printf("\n");
             }
+
+            if ( col_p->parent ) 
+                printf("parent:%d(%p)\n", col_p->parent->id, col_p->parent );
+
             col_p = col_p->next;
         }
     }
@@ -450,19 +458,23 @@
             if ( row_p->c_list ) {
                 printf("cells:");
                 for( int i = 0; i < row_p->cellTotal; i ++ ) {
-                    printf( " %d", row_p->c_list[i] );
+                    if ( row_p->c_list[i] )
+                        printf( " %d", row_p->c_list[i]->id );
+                    else
+                        printf( " 0" );         //  有可能没有填充
                 }
                 printf("\n");
             }
             if ( row_p->son ) {
                 printf("sons:");
                 for( int i = 0; i < row_p->sonTotal; i ++ ) {
-                    printf( " %d", row_p->son[i] );
+                    printf( " %d", row_p->son[i]->id );
                 }
                 printf("\n");
             }
-            /*
-            */
+            if ( row_p->parent ) 
+                printf("parent:%d(%p)\n", row_p->parent->id, row_p->parent );
+                
             row_p = row_p->next;
         }
     }

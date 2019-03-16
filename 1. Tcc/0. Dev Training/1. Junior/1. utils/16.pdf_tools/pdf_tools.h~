@@ -118,24 +118,6 @@
         char        opr[L_OPR];    // 操作符, 比如"Td", "TD"等
     }CUR_XY;
 
-    // 单元格信息
-    typedef struct __cell__ {
-        int                 id;             // 编号从1开始 , 自动产生
-        float               x;
-        float               y;
-        float               w;
-        float               h;
-        int                 maxlines;
-        int                 maxlen;         // 最长的文本长度
-        int                 row;            // 所属行ID
-        int                 col;            // 所属列ID
-        int                 table_id;      // 所属  表id
-        int                 txtTotal;       // 单元格中的文本编号数量
-        struct __cell__  *  prev;           // 前一个单元格
-        struct __cell__  *  next;           // 后一个单元格
-        int              *  txtIDs_p;       // 单元格中的文本编号(数组)
-    }CELL;
-
     // 文本信息
     typedef struct __text__ {
         int                 id;
@@ -147,6 +129,24 @@
         struct __text__  *  prev;       
         struct __text__  *  next;
     } TEXT;
+
+    // 单元格信息
+    typedef struct __cell__ {
+        int                 id;             // 编号从1开始 , 自动产生
+        float               x;
+        float               y;
+        float               w;
+        float               h;
+        int                 maxlines;
+        int                 maxlen;         // 最长的文本长度
+        int                 row;            // 所属行ID
+        int                 col;            // 所属列ID
+        int                 table_id;       // 所属  表id
+        int                 txtTotal;       // 单元格中的文本编号数量
+        struct __cell__  *  prev;           // 前一个单元格
+        struct __cell__  *  next;           // 后一个单元格
+        TEXT             ** tps;            // 单元格中TEXT指针数组
+    }CELL;
 
     typedef struct __decode__ {
         CUR_XY      cur_xy;

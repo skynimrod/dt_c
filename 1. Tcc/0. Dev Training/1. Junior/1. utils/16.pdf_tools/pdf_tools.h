@@ -118,6 +118,18 @@
         char        opr[L_OPR];    // 操作符, 比如"Td", "TD"等
     }CUR_XY;
 
+    // 文本信息
+    typedef struct __text__ {
+        int                 id;
+        float               ox;
+        float               oy;
+        int                 len;
+        int                 cellID;     // 该文本属于哪个CELL, 如果是0表示不在cell中
+        char            *   buf;
+        struct __text__  *  prev;       
+        struct __text__  *  next;
+    } TEXT;
+
     // 单元格信息
     typedef struct __cell__ {
         int                 id;             // 编号从1开始 , 自动产生
@@ -133,20 +145,8 @@
         int                 txtTotal;       // 单元格中的文本编号数量
         struct __cell__  *  prev;           // 前一个单元格
         struct __cell__  *  next;           // 后一个单元格
-        int              *  txtIDs_p;       // 单元格中的文本编号(数组)
+        TEXT             ** tps;            // 单元格中TEXT指针数组
     }CELL;
-
-    // 文本信息
-    typedef struct __text__ {
-        int                 id;
-        float               ox;
-        float               oy;
-        int                 len;
-        int                 cellID;     // 该文本属于哪个CELL, 如果是0表示不在cell中
-        char            *   buf;
-        struct __text__  *  prev;       
-        struct __text__  *  next;
-    } TEXT;
 
     typedef struct __decode__ {
         CUR_XY      cur_xy;
