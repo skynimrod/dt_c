@@ -451,10 +451,11 @@
         row_p = rowMap_p;
 
         while ( row_p ) {
-            printf( " -----------------row id=%d--------------------\n", row_p->id );
+            printf( " -----------------row id=%d--(%p)------------------\n", row_p->id, row_p );
             printf( "y=%.2f, h=%.2f, maxlines = %d\n", row_p->y, row_p->h, row_p->maxlines );
             printf( "cellTotal = %d, sonTotal=%d, table_id=%d\n",
                             row_p->cellTotal, row_p->sonTotal, row_p->table_id );
+            printf("row_p->prev=%p, row_p->next=%p\n", row_p->prev, row_p->next );
             if ( row_p->c_list ) {
                 printf("cells:");
                 for( int i = 0; i < row_p->cellTotal; i ++ ) {
@@ -476,6 +477,48 @@
                 printf("parent:%d(%p)\n", row_p->parent->id, row_p->parent );
                 
             row_p = row_p->next;
+        }
+    }
+
+    void printTableMap( TABLE * tableMap_p )
+    {
+        TABLE     * table_p;
+
+        if ( !tableMap_p )
+            return ;    
+
+        printf("--------printTableMap()----------------------------------------------------------\n");
+        table_p = tableMap_p;
+
+        while ( table_p ) {
+            printf( " -----------------table id=%d--(%p)------------------\n", table_p->id, table_p );
+            if ( table_p->l_tp )        // 加判断是因为  初始化table 的时候该指针是空的
+                    printf("last tp id=%d, tp buf=%s\n", table_p->l_tp->id, table_p->l_tp->buf );
+            printf( "cellTotal=%d, colTotal=%d, rowTotal=%d\n", table_p->cellTotal, table_p->colTotal, table_p->rowTotal );
+            printf("table_p->prev=%p, table_p->next=%p\n", table_p->prev, table_p->next );
+            if ( table_p->col_list ) {
+                printf("Cols:");
+                for( int i = 0; i < table_p->colTotal; i ++ ) {
+                    if ( table_p->col_list[i] )
+                        printf( " %d", table_p->col_list[i]->id );
+                    else
+                        printf( " 0" );         //  有可能没有填充
+                }
+                printf("\n");
+            }
+            if ( table_p->row_list ) {
+                printf("Rows:");
+                for( int i = 0; i < table_p->rowTotal; i ++ ) {
+                    if ( table_p->row_list[i] )
+                        printf( " %d", table_p->row_list[i]->id );
+                    else
+                        printf( " 0" );         //  有可能没有填充
+                }
+                printf("\n");
+            }
+            /*
+              */  
+            table_p = table_p->next;
         }
     }
 

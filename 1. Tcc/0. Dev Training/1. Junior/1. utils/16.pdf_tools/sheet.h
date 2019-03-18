@@ -49,13 +49,13 @@
 
     typedef struct __table__ {
         int                     id;             // 表 编号, 从1 开始
-        int                     l_txtid;        // 表中的最后一个文本编号
         int                     cellTotal;      //
         int                     colTotal;
         int                     rowTotal;
-        int                 *   c_list;         // 表中的cell id列表
-        int                 *   col_list;       // 表中的col id列表
-        int                 *   row_list;       // 表中的row id列表
+        TEXT                *   l_tp;           // 本表最后一个有效文本指针,如果是空表则为空 
+        CELL               **   c_list;         // 表中的cell 指针数组, 暂留
+        COL                **   col_list;       // 表中的col 指针数组, 暂留
+        ROW                **   row_list;       // 表中的row 指针数组
         struct __table__    *   prev;           // 前一个table
         struct __table__    *   next;           // 后一个table
     } TABLE;
