@@ -153,7 +153,7 @@
         
         while ( cp ) {
             if ( cp->txtTotal > 0 ) 
-                free( cp->txtIDs_p );
+                free( cp->tps );
             cp = cp->next;           
         } 
 
@@ -256,8 +256,8 @@
 
         printCellMap( decode_p->cp );
         printTextMap( decode_p->tp );
-        /*
-        */
+
+        printf("============解析后的该页内容为:\n%s\n", retbuf);
 
         freeDecode( decode_p );
         

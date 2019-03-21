@@ -99,7 +99,7 @@
 
         freeSheet( sheet_p );
         
-        return NULL;
+        return retbuf;
     }
 
     void freeCOL( COL * col_p )
@@ -1743,14 +1743,12 @@
             len = strlen( desbuf );
             
             if ( !flag ) {              // # 如果没有建表头, 需要建表头
-                //flag = buildRowHeader( desbuf, dlen, cellMap_p, sheet_p, row_p );
                 flag = buildRowHeader( desbuf, dlen, row_p );
 
                 printf("table(%d)表头:%s, flag=%d\n", table_id,  desbuf, flag);
             } else {
                 // 建表 中间分割线
                 // #retbuf += "├──────────┼────┼────┼────┼────┼────┤ "
-                //buildRowSplit( desbuf+len, dlen-len, cellMap_p, sheet_p, table_p, i );
                 buildRowSplit1( desbuf+len, dlen-len, sheet_p, table_p, row_p );
 
             }
@@ -1758,14 +1756,8 @@
         }
 
         len = strlen( desbuf );
+        //* # 表格最下面的线
         buidRowFooter( desbuf+len, dlen-len,  row_p );
-        /*
-         * # 表格最下面的线
-            lastRowId = rows[-1]
-            while ( len( rowIndexMap[lastRowId]['sons'] ) > 0 ):   # 如果最后一行有子行, 那么就处理该行的最后一个子行
-                lastRowId = rowIndexMap[lastRowId]['sons'][-1]
-            retbuf += self.buildRowFooter( rowIndexMap, colIndexMap, lastRowId, cellMap, cellIndexMap )
-         */
 
         printf("desbuf=\n%s\n", desbuf);
 
