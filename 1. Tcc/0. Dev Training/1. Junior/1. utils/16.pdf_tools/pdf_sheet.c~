@@ -54,6 +54,8 @@
 
     bool buildRowHeader( char * desbuf, int dlen, ROW * row_p );
     void buidRowFooter( char *desbuf, int dlen,  ROW * row_p );
+    void buildRowBody( char *desbuf, int len, SHEET *sheet_p, ROW *row_p );
+    void getCellLineText( char *desbuf, int dlen, SHEET * sheet_p, ROW * row_p, int lineNo, int colNo );
 
     //bool buildRowHeader( char * desbuf, int dlen, CELL * cellMap_p, SHEET * sheet_p, ROW * row_p );
     bool buildRowSplit( char * desbuf, int dlen, CELL * cellMap_p, SHEET *sheet_p, TABLE * table_p, int rowNo );
@@ -1752,9 +1754,7 @@
                 buildRowSplit1( desbuf+len, dlen-len, sheet_p, table_p, row_p );
 
             }
-            // buildRowBody( rowIndexMap, colIndexMap, item, textMap, cellMap, cellIndexMap )
-            //buildRowBody( desbuf, len, sheet_p, cellMap_p, textMap_p, table_p, row_p )
-
+            buildRowBody( desbuf, len, sheet_p, row_p );
         }
 
         len = strlen( desbuf );
@@ -1987,10 +1987,10 @@
             // 1. 当前行 与 上一行 都有这个位置, 需要继续判断cell是否公用的。
             if ( j > 0 && n > 0 ) {
                 cp = row_p->c_list[n-1];        // 当前行 第k个cell 对应c_list 的是k-1下标
-                printf("cp is %d\n", cp->id);
+                //printf("cp is %d\n", cp->id);
                 
                 if ( cellInRow( cp, p_row_p ) ) {   // 1.1  如果该cell 在上一行也有       没有连接线
-                    printf("1.1\n");
+                    //printf("1.1\n");
                     if ( k == 1 || !f_line )                // 1.1.1  第一个cell, 第一列 或前一个cell无连线   "│        "
                         memcpy( desbuf + strlen(desbuf), COLLINE, 2 );
                     else                                    // 1.1.2  不是第一列, 前一个cell 有连线           "┤        " 
@@ -1999,7 +1999,7 @@
                     nstr( desbuf + strlen(desbuf), dlen, col_len/2, "  " );                       // 添加空格 长度都一样
                     f_line = false;                 // 没有连线标识 设置, 便于后面判断
                 } else {                            // 1.2 该cell 上一行没有        有连接线                  
-                    printf("1.2, f_line=%d, col_len=%d, cp->col=%d\n", f_line, col_len, cp->col );
+                    //printf("1.2, f_line=%d, col_len=%d, cp->col=%d\n", f_line, col_len, cp->col );
 
                     if ( flag1 && flag2 ) {          // 1.2.1 前一个分隔符位置 当前行和前一行都有 
                         if ( f_line )                               // 1.2.1.1 前一个cell 有连接线                          "┼-------"
@@ -2017,14 +2017,14 @@
 
                 flag1 = true, flag2 = true;
             } else if ( j > 0 ) {       // 2. 当前分隔符 对应的是上一行的cell, 本行没有, 只有一种可能    "┴", 且必须有连线
-                printf("2, f_line=%d, col_len=%d, cp->col=%d\n", f_line, col_len, cp->col );
+                //printf("2, f_line=%d, col_len=%d, cp->col=%d\n", f_line, col_len, cp->col );
                 memcpy( desbuf + strlen(desbuf), MID_BOTTOM, 2 );                             // "┴-------"
                     
                 nstr( desbuf + strlen(desbuf), dlen, col_len/2, ROWLINE );                    // 添加连线
                 f_line = true;
                 flag1 = false,  flag2 = true;
             } else if ( n > 0 ) {       // 3 当前分隔符  对应的是本行的cell, 上一行没有, "┬", 且必须有连线
-                printf("3, f_line=%d, col_len=%d, cp->col=%d\n", f_line, col_len, cp->col );
+                //printf("3, f_line=%d, col_len=%d, cp->col=%d\n", f_line, col_len, cp->col );
                 if ( flag1 && flag2)        // 3.1 前一个分隔符位置 当前行和前一行都有              "┼-------"
                     memcpy( desbuf + strlen(desbuf), MID_MID, 2 );        
                 else if ( flag1 )           // 3.2 前一个分隔符位置 当前行有, 前一行没有            "┬-------"
@@ -2233,7 +2233,7 @@
     #      将表格里面的文本格式化输出
     # 
     */ 
-    void buildRowBody( char *desbuf, int len, SHEET *sheet_p, CELL *cellMap_p, TEXT *textMap_p, TABLE *table_p, ROW *row_p )
+    void buildRowBody( char *desbuf, int len, SHEET *sheet_p, ROW *row_p )
     {
         int     cellTotal;
         int     maxlines;
@@ -2244,12 +2244,12 @@
         
         // 按行进行处理
         for ( int i = 0; i < maxlines; i ++ ) {
-            memcpy( desbuf + strlen(desbuf), COLLINE, 2 );                  //  "│"  左面其实分隔符
+            memcpy( desbuf + strlen(desbuf), COLLINE, 2 );                  //  "│"  左面起始分隔符
 
             for( int j = 0; j < cellTotal; j ++ ) {
-                //getCellLineText( desbuf+strlen(desbuf), len-strlen(desbuf), sheet_p, cellMap_p, textMap_p, row_p  );
-                if ( j == cellTotal - 1)                 // # 如果是最后一列, 用body_right， 否则用colline
-                     memcpy( desbuf + strlen(desbuf), COLLINE, 2 );                  //  "│"  左面其实分隔符
+                getCellLineText( desbuf, len, sheet_p, row_p, i, j );
+                
+                memcpy( desbuf + strlen(desbuf), COLLINE, 2 );                  //  "│"  右面结束分隔符
             }
             memcpy( desbuf + strlen(desbuf), "\r\n", 2 );                  //  "\r\n"
         }
@@ -2267,26 +2267,54 @@
     # 所以如果要修正txt中的显示, 需要做些修改, 也就是说有几个'rowline':'─', 应该加几个空格来补全.
      * 
      */
-    void getCellLineText( char *desbuf, int len, SHEET * sheet_p, CELL * cellMap_p, TEXT * textMap_p, ROW * row_p  )
+    void getCellLineText( char *desbuf, int dlen, SHEET * sheet_p, ROW * row_p, int lineNo, int colNo )
     {
+        int         rlineNo;            // 存放修正后的行号, 因为有可能本行是子行, 当前cell 可能是母行的
+        int         txtTotal;           // cell 中的txt 个数, 也就是行数
+        int         blank_len;
+        int         len;                  // 用来存放strlen(desbuf), 省得多次计算
+        CELL    *   cp;
+        TEXT    *   tp;
+        COL     *   col_p;
+        ROW     *   p_row_p;
+
+        if ( !desbuf || !sheet_p || !row_p )
+            return;
+
+        cp = row_p->c_list[colNo];
+        
+        // 1. 修正行号, 有母行的情况下, 如果该cell 正好也是母行的cell， 并且本行不是第一个子行, 则需要修正行号
+        rlineNo = lineNo;
+        p_row_p = row_p->parent;
+        
+        if ( p_row_p && cellInRow( cp, p_row_p ) ) {
+            if ( !row_p == p_row_p->son[0] ) {          // 不是第一个子行, 修正行号
+                for ( int i = 0; i < p_row_p->sonTotal; i ++ ) {
+                    if ( row_p != p_row_p->son[i] )             // 如果是本行之前的子行
+                        rlineNo += p_row_p->son[i]->maxlines;           
+                }    
+            }
+        }
+
+        txtTotal = cp->txtTotal;
+
+        len = strlen( desbuf );
+        
+        col_p = getColByID( sheet_p->colMap_p, cp->col );
             
+        if ( rlineNo >= txtTotal ) { //  如果已经超出了cell 的实际文本行数, 则用空格替代, 行号是从0开始的(实际上对应的是第一行), 传参数的时候这样保留是为了访问对应的cp， 等方便
+            //nstr( desbuf + len, dlen-len, col_p->maxlen, " " );  
+            nchar( desbuf + len,  col_p->maxlen, ' ' );
+        } else {                    // 仍然有剩余文本需要显示
+            tp = cp->tps[rlineNo];
+            memcpy( desbuf + len, tp->buf, tp->len  );
+
+            len = strlen( desbuf );             // 更新len的值
+            blank_len = col_p->maxlen - tp->len;                // 空格的长度
+
+            nchar( desbuf + len, blank_len, ' ' );
+        }
     }
-/*
- *     #define LEFT_TOP        "┌"
-    #define MID_TOP         "┬"
-    #define RIGHT_TOP       "┐"
-    #define MID_LEFT        "├"
-    #define MID_MID         "┼"
-    #define MID_RIGHT       "┤"
-    #define LEFT_BOTTOM     "└"
-    #define MID_BOTTOM      "┴"
-    #define RIGHT_BOTTOM    "┘"
-    #define ROWLINE         "─"
-    #define COLLINE         "│"
-
-
- */
- 
 
     void buidRowFooter( char *desbuf, int dlen,  ROW * row_p )
     {
