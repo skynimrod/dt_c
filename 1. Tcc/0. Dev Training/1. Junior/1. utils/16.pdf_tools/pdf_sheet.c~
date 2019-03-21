@@ -45,13 +45,21 @@
     void fill_son_c_llist( COL * col_p, ROW * row_p, int cell_id );
     // buildColRowMap() end
 
-    TEXT * buildTableTxt( char * desbuf, int dlen, SHEET *sheet_p, CELL *cellMap_p, int table_id );
+    TEXT * buildTableTxt( char * desbuf, int dlen, SHEET *sheet_p, CELL *cellMap_p, TEXT *textMap_p, int table_id );
+    void fillRowSplitPos( SHEET * sheet_p );
+
     int getTableID( SHEET * sheet_p, CELL * cellMap_p, int cell_id  );
 
     char * buildPageTxt( char * retbuf, int dlen, SHEET * sheet_p, CELL * cellMap_p, TEXT * textMap_p );
 
-    bool buildRowHeader( char * desbuf, int dlen, CELL * cellMap_p, SHEET * sheet_p, ROW * row_p );
+    bool buildRowHeader( char * desbuf, int dlen, ROW * row_p );
+    void buidRowFooter( char *desbuf, int dlen,  ROW * row_p );
+
+    //bool buildRowHeader( char * desbuf, int dlen, CELL * cellMap_p, SHEET * sheet_p, ROW * row_p );
     bool buildRowSplit( char * desbuf, int dlen, CELL * cellMap_p, SHEET *sheet_p, TABLE * table_p, int rowNo );
+    bool buildRowSplit1( char * desbuf, int dlen, SHEET * sheet_p, TABLE * table_p, ROW * row_p );
+
+    bool cellInRow( CELL * cp, ROW * row_p );
 
 
     char * procText4Table( char * retbuf, int dlen, TEXT * textMap_p, CELL * cellMap_p )
@@ -396,8 +404,10 @@
                 if ( abs( py - oy ) < 1 ) {         //  # 两个Y坐标小于1视为同一行
                                                     // 合并文本, 保留 tpp, 因为tpp已经记录了在cell中了
                     combineBuf( tpp, tp );
-                    if ( tpp->len > cp->maxlen )    // 更新cell中的最大文本长度
-                        cp->maxlen = tpp->len;
+                    if ( tpp->len > cp->maxlen ) {   // 更新cell中的最大文本长度
+                        // 2019.03.20   长度全部修正为偶数, 不是偶数则+1, 因为连接线用的是"─", 是2个字符占位 
+                        cp->maxlen = tpp->len%2 ? tpp->len + 1: tpp->len;
+                    }
 
                     tpn = tp->next;                 // 记录下一个文本节点地址
                     delCurTxt( tp );                // 删除tpp 节点
@@ -435,17 +445,10 @@
         // 第一次遍历cellMap, 创建colMap, rowMap, 但是没有c_list, 因为没遍历完之前不知道有多少cell在col或row中, 
         // 为 c_list 无法申请空间
         buildColRowMap( cellMap_p, sheet_p );
-
-        // 修正 Col 中的maxlen, 主要是根据子col 来修正 父 col 的宽度
-
-        printf("==============================aaaaaaaaaaaaa=================\n");
-        printColMap( sheet_p->colMap_p );
-        printRowMap( sheet_p->rowMap_p );
-
-        // 填充col 中的son, parent
-        fillColSon( cellMap_p, sheet_p );
-        // 填充row 中的son, parent
-        fillRowSon( cellMap_p, sheet_p );
+        
+        fillColSon( cellMap_p, sheet_p );               // 填充col 中的son, parent
+        
+        fillRowSon( cellMap_p, sheet_p );               // 填充row 中的son, parent
 
         // 为colMap和rowMap中的col, row 申请对应c_list 需要的空间
         spaceForColRowMap( sheet_p );
@@ -453,16 +456,12 @@
         // 第二次遍历cellMap_p 中的cell, 为 col, row 中的c_list 填充cell id
         fill_c_list( cellMap_p, sheet_p );
 
+
+        // 修正 Col 中的maxlen, 主要是根据子col 来修正 父 col 的宽度
         fixColMaxlen( cellMap_p, sheet_p );
         fixRowMaxlines( cellMap_p, sheet_p );
 
-        printf("==============================bbbbbbbbbbbb=================\n");
-        printColMap( sheet_p->colMap_p );
-        printRowMap( sheet_p->rowMap_p );
-        printTableMap( sheet_p->tableMap_p );
-        printf("==============================cccccccccccccc=================\n");
-
-        // 填充 TABLE的col_list, row_list信息, 传递 cellMap_p与 textMap_p 是为了获取该表的最后一个text pointer
+        // 填充 TABLE的col_list, row_list信息, 同时获取该表的最后一个text pointer
         fillColRow_List( sheet_p );
 
         printTableMap( sheet_p->tableMap_p );
@@ -648,6 +647,7 @@
         COL         *   col_p, * col_p1;
         ROW         *   row_p;
         CELL        *   cp;
+        int             j;
 
         if ( !sheet_p || !cellMap_p ) 
             return;
@@ -660,22 +660,26 @@
             row_p = sheet_p->rowMap_p;
             while( row_p ) {
                 maxlen = 0;
-                
+                j = 0;
                 for ( int i = 0; i < row_p->cellTotal; i ++ ) {
-                        
-                    printf("row_p->id=%d, cellTotal=%d");
                     cp = row_p->c_list[i];
                     
                     col_p1 = getColByID( sheet_p->colMap_p, cp->col );
                     
-                    if ( col_p == col_p1->parent ) 
+                    if ( col_p == col_p1->parent ) {
                         maxlen += col_p1->maxlen; 
+                        j ++;           // 记录子列数
+                    }
                 }
 
-                // 修正maxlen
+                // 需要增加 子列数 -1 个长度, 因为多了 子列数-1个分隔符, *2 是因为分隔符占位2个字符
+                maxlen += (j - 1)*2;
+
+                // 修正col_p 的 maxlen
                 if ( maxlen > col_p->maxlen )
                     col_p->maxlen = maxlen;
 
+                
                 row_p = row_p->next;
             }
             col_p = col_p->next;
@@ -697,13 +701,11 @@
         while( row_p ) {
 
             // 按行进行遍历, 确保计算maxlen 的时候是同行的子列maxlen之和
-            col_p = sheet_p->rowMap_p;
+            col_p = sheet_p->colMap_p;
             while( col_p ) {
                 maxlines = 0;
-                
                 for ( int i = 0; i < col_p->cellTotal; i ++ ) {
                     cp = col_p->c_list[i];
-                    
                     row_p1 = getRowByID( sheet_p->rowMap_p, cp->row );
                     
                     if ( row_p == row_p1->parent ) 
@@ -1065,7 +1067,6 @@
                 continue;
             }
 
-            printf( "-------------------cellID=%d(x=%.2f, w=%.2f)要找的列为:%d$$$$$$$$\n", cp->id, cp->x, cp->w, cp->col );
             col_p = getColByID( sheet_p->colMap_p, cp->col );
             
             if ( !col_p )
@@ -1533,11 +1534,8 @@
                                                     // 更新 col_p 的maxlen
                 if ( col_p->maxlen < cp->maxlen ) 
                     col_p->maxlen = cp->maxlen;
-
             }
 
-            printf("--------------------------cp->col=%d, cp->id=%d\n", cp->col, cp->id);
-                                                    // 2. 处理 行row
             row_p = inRowMap( sheet_p->rowMap_p, cp );
             
             if ( !row_p ) {                         // 如果该cell 所在行 没有在rowMap中记录, 则增加该行在rowMap中的记录
@@ -1554,7 +1552,6 @@
             
             // 继续处理下一个cell
             cp = cp->next;
-
         }
     }
 
@@ -1624,6 +1621,15 @@
 
         tp = textMap_p;
 
+        // 处理每一行， 获取其分隔符的位置, 并填充到row 节点的 splitPos 数组中.
+        fillRowSplitPos( sheet_p );
+        
+        printf("==============================bbbbbbbbbbbb=================\n");
+        printColMap( sheet_p->colMap_p );
+        printRowMap( sheet_p->rowMap_p );
+        printTableMap( sheet_p->tableMap_p );
+        printf("==============================cccccccccccccc=================\n");
+
         while ( tp ) {
             memset( tmpbuf, 0, 512 );
             memcpy( tmpbuf, tp->buf, tp->len );
@@ -1639,7 +1645,7 @@
                     return NULL;
 
                 len = strlen( retbuf );
-                ltp = buildTableTxt( retbuf + len, dlen - len, sheet_p, cellMap_p, cp->table_id );  
+                ltp = buildTableTxt( retbuf + len, dlen - len, sheet_p, cellMap_p, textMap_p, cp->table_id );  
 
                 if ( ltp )  // 如果 表格的最后一个文本指针有效, 则赋值给tp,下面循环会处理tp->next. 否则就说明该表是个空表(极端情况)
                     tp = ltp;
@@ -1651,6 +1657,48 @@
         return retbuf;
     }
 
+    // 填充每一行的分隔符的位置信息, 数量是 cellTotal + 1 个分隔符
+    // 第一个元素0 是为了方便计算列长, splitpos[i] - splitpos[i-1]-2 就是实际的列长
+    void fillRowSplitPos( SHEET * sheet_p )
+    {
+        int         k, col_len, col_pos;       // 列的maxlen, col_pos 用来记录分隔符在一行中的字符个数的位置
+        ROW     *   row_p;
+        COL     *   col_p;
+        CELL    *   cp;
+
+        if ( !sheet_p )
+            return;
+        
+        row_p = sheet_p->rowMap_p;
+
+        while ( row_p ) {
+            if ( row_p->sonTotal > 0 )      // 母行不用填充 分隔符信息
+                row_p = row_p->next;
+
+            row_p->splitpos = (int *)calloc(sizeof(int), row_p->cellTotal + 1  ); // 分隔符比 cell 数量多一个, 第一个位置是0,是为了便于计算
+
+            k = 0;  col_pos = 0;
+            row_p->splitpos[0] = 0;                  // 第一个元素0 是为了方便计算列长, splitpos[i] - splitpos[i-1] 就是实际的列长
+            
+            for ( int i = 0; i <  row_p->cellTotal; i ++ ) {
+                cp = row_p->c_list[i];
+                col_p = getColByID( sheet_p->colMap_p, cp->col );
+                
+                col_pos +=  col_p->maxlen + 2;  // 加 2 是为了 修正分隔符所占的2位,  包括了前一个分隔符的占位(2)
+                                                // splitpos[i]-splitpos[i-1] - 2  正好就是正确的连接线长度
+                
+                /*
+                if ( i == 0 )
+                    col_pos +=  col_p->maxlen+2;          // 因为第一个坐标是0, 这样计算连接符长度的时候  splitpos[i]-splitpos[i-1] 正好就是正确的连接线长度
+                else         
+                    col_pos +=  col_p->maxlen + 2;  // 加 2 是为了 修正分隔符所占的2位,  包括了前一个分隔符的占位(2)
+                */
+                row_p->splitpos[i+1] = col_pos;
+            }
+            row_p = row_p->next;
+        }
+    }
+
     TEXT * getLastTp( SHEET *sheet_p, CELL *cellMap_p, int table_id )
     {
         TEXT        * tp, * ptp;   // ptp 用来存上一行的最后一个有效文本指针
@@ -1660,11 +1708,9 @@
             return NULL;
 
         return NULL;
-
-
     }
 
-    TEXT * buildTableTxt( char * desbuf, int dlen, SHEET *sheet_p, CELL *cellMap_p, int table_id )
+    TEXT * buildTableTxt( char * desbuf, int dlen, SHEET *sheet_p, CELL *cellMap_p, TEXT *textMap_p, int table_id )
     {
         ROW     *   row_p;
         bool        flag = false;       // 是否建过表头的标识
@@ -1695,16 +1741,24 @@
             len = strlen( desbuf );
             
             if ( !flag ) {              // # 如果没有建表头, 需要建表头
-                flag = buildRowHeader( desbuf, dlen, cellMap_p, sheet_p, row_p );
+                //flag = buildRowHeader( desbuf, dlen, cellMap_p, sheet_p, row_p );
+                flag = buildRowHeader( desbuf, dlen, row_p );
+
                 printf("table(%d)表头:%s, flag=%d\n", table_id,  desbuf, flag);
             } else {
                 // 建表 中间分割线
                 // #retbuf += "├──────────┼────┼────┼────┼────┼────┤ "
-                buildRowSplit( desbuf+len, dlen-len, cellMap_p, sheet_p, table_p, i );
+                //buildRowSplit( desbuf+len, dlen-len, cellMap_p, sheet_p, table_p, i );
+                buildRowSplit1( desbuf+len, dlen-len, sheet_p, table_p, row_p );
+
             }
             // buildRowBody( rowIndexMap, colIndexMap, item, textMap, cellMap, cellIndexMap )
+            //buildRowBody( desbuf, len, sheet_p, cellMap_p, textMap_p, table_p, row_p )
+
         }
 
+        len = strlen( desbuf );
+        buidRowFooter( desbuf+len, dlen-len,  row_p );
         /*
          * # 表格最下面的线
             lastRowId = rows[-1]
@@ -1730,13 +1784,13 @@
     */
     #define LEFT_TOP        "┌"
     #define MID_TOP         "┬"
-    #define RIGHT_TOP       "┐\n"
+    #define RIGHT_TOP       "┐"
     #define MID_LEFT        "├"
     #define MID_MID         "┼"
-    #define MID_RIGHT       "┤\n"
+    #define MID_RIGHT       "┤"
     #define LEFT_BOTTOM     "└"
     #define MID_BOTTOM      "┴"
-    #define RIGHT_BOTTOM    "┘\n"
+    #define RIGHT_BOTTOM    "┘"
     #define ROWLINE         "─"
     #define COLLINE         "│"
 
@@ -1798,32 +1852,205 @@
         return ret;
     }
 
-    /*
-     * # 15.12 getRowSplitPos()
-     * #      获取指定行的分割线位置
-     * #      第一个元素0 是为了方便计算列长, retlist[i] - retlist[i-1] 就是实际的列长
-     */
-/*
-    def getRowSplitPos( self, rowIndexMap, colIndexMap, cellIndexMap, rowID ):
-        retlist = [0]
-        try:
-            cols = len( rowIndexMap[rowID]["cells"] )
-            col_pos = 0
-            for i in range( 0, cols ):
-                cellId = rowIndexMap[rowID]['cells'][i]          # rowIndexMap[rowID]的第0个元素是最大行数
-                colId = cellIndexMap[cellId]['col']
-                col_len = colIndexMap[colId][0]            # 当前列的最大宽度
-                if ( i == 0 ):
-                    col_pos = col_len
-                else:
-                    col_pos += col_len  + 1           # 加 1 是为了 修正分隔符所占的2位, 因为每一个都进行修正, 这样只需要加一次即可, 保证本次是真实的位置即可.以后的也只需要加一次
-                retlist.append( col_pos )
-        except:
-            print("getRowSplitPos() Exception Error!")
-            traceback.print_exc()
-        return retlist
-*/
+    
+    bool buildRowHeader( char * desbuf, int dlen, ROW * row_p )
+    {
+        int     col_len;
+        
+        if ( !row_p || row_p->sonTotal > 0 || !row_p->splitpos )       
+            return false;
 
+        strcpy( desbuf, LEFT_TOP );                             // "┌"
+
+        for ( int i = 0; i < row_p->cellTotal; i ++ ) {        // 遍历行中的splitpos, 数组长度就是cellTotal+1, 因为用 [i+1] - [i] -2, 所以用<  
+            col_len = row_p->splitpos[i+1] - row_p->splitpos[i]- 2;   // 实际长度要减去之前的分隔符所占的2才是真正的连线长度， 因为每一列都修正, 所以只减1
+            
+            nstr( desbuf + strlen(desbuf), dlen, col_len/2, ROWLINE );                //  连接线 "─"
+
+            if ( i != row_p->cellTotal-1 )                        //  # 如果不是最后一列, 就用rowline+midt_op
+                memcpy( desbuf+strlen(desbuf), MID_TOP, strlen(MID_TOP) );
+            else 
+                memcpy( desbuf+strlen(desbuf), RIGHT_TOP, strlen(RIGHT_TOP) );
+
+        }
+            
+        memcpy( desbuf+strlen(desbuf), "\r\n", 2 );
+    }
+
+    int combSplitpos( int *splitpos, ROW * row_p, ROW * p_row_p )
+    {
+        int     i, j, k;
+        
+        i = j = k = 0;
+
+        while( 1 ) {
+            if ( i == row_p->cellTotal+1  && j == p_row_p->cellTotal+1 )
+                break;
+
+            if ( i == row_p->cellTotal+1 ) {      // row_p的pos 位置合并完了, 剩下的p_row_p 的位置直接拷贝即可
+                while ( j <= p_row_p->cellTotal + 1 ) {
+                    splitpos[k] = p_row_p->splitpos[j];
+                    k ++;
+                    j ++;
+                }
+                break;
+            }
+                                
+            if ( j == p_row_p->cellTotal+1 ) {      // p_row_p的pos 位置合并完了, 剩下的row_p 的位置直接拷贝即可
+                while ( i <= row_p->cellTotal + 1 ) {
+                    splitpos[k] = row_p->splitpos[i];
+                    k ++;
+                    i ++;
+                }
+                break;
+            }
+
+            if ( row_p->splitpos[i] < p_row_p->splitpos[j] ) {  // 当前行的pos 小于 前一行的pos 
+                splitpos[k] = row_p->splitpos[i];
+                k ++;
+                i ++;
+            } else if ( row_p->splitpos[i] == p_row_p->splitpos[j] ){ // 相等的话, 在合并后的位置中只记录一次
+                splitpos[k] = row_p->splitpos[i];
+                k ++;
+                j ++;
+                i ++;
+            } else {
+                splitpos[k] = row_p->splitpos[j];
+                k ++;
+                j ++;
+            }
+        }
+
+        return k;
+    }
+    // 判断给定的位置信息是否在  分隔符位置信息表中, 如果在, 则返回该位置在信息表中的下标, 该下标对应也就是所在行的第几个cell.
+    // 返回至很重要, 需要用来判断cell 是否是母行的, 当前列是否是第一个子行等等, 对应不同的分隔符
+    int havePos( int * splitpos, int len, int pos )
+    {
+        int     i;
+        for ( int i= 0; i < len; i ++ ) {
+            if ( splitpos[i] == pos )
+                return i;
+        }
+
+        return -1;
+            
+    }
+
+
+    bool buildRowSplit1( char * desbuf, int dlen, SHEET * sheet_p, TABLE * table_p, ROW * row_p )
+    {
+        int         i, j, k, n;
+        int         curpos, col_len;
+        int     *   splitpos;
+        bool        f_line = false;                     // 前一个cell 是否有连线, 初始为无，因为第一个cell 之前没有
+        bool        flag1=false, flag2=false;               //  标识 当前位置 是否在当前行有    flag2 标识当前位置是否在前一行有
+        ROW     *   p_row_p = NULL;              // 当前行的前一个有效的子行
+        CELL    *   cp;
+
+
+        if ( !desbuf || !sheet_p || !table_p || !row_p )
+            return false;
+
+        // 找到当前行的位置
+        for ( i = 0; i < table_p->rowTotal; i ++ ) {
+            if ( table_p->row_list[i] == row_p )        // 找到了指定行 节点
+                break;
+        }
+
+        // 找前一行节点
+        while ( i > 0 ) { 
+            p_row_p = table_p->row_list[i-1];   // 前一行节点
+            if ( p_row_p->sonTotal == 0 )
+                break;
+            i --;
+        }
+        
+        if ( !p_row_p || p_row_p->sonTotal > 0 )               // 没找到前一行 
+            return false;
+
+        // 下面用2行的splitpos 进行比较创建分割线
+        splitpos = (int *)calloc(sizeof(int), row_p->cellTotal + p_row_p->cellTotal );
+
+        k = combSplitpos( splitpos, row_p, p_row_p );   // 返回的是合并后剔除重复的位置数目
+
+        printf("=========================555555555555555555=========\n");
+        // 遍历合并后的位置信息, 并与当前行和前一行的位置信息比较, 从而获得具体的分隔符, 从1开始, 因为位置0的值都是0, 便于计算宽度的
+        for ( i = 1; i < k; i ++ ) {
+            curpos = splitpos[i];
+            col_len = splitpos[i] - splitpos[i-1] - 2;          // 连接线 长度 或者 空格 长度, -2 是为了减去分隔符的占位
+
+            j = havePos( p_row_p->splitpos, p_row_p->cellTotal+1,  curpos  );
+            n = havePos( row_p->splitpos, row_p->cellTotal+1, curpos );
+
+            //printf("=k=%d===j=(%d), n=(%d)========curpos=%d=======22222222222222222222\n", k,j, n, curpos );
+            // 1. 当前行 与 上一行 都有这个位置, 需要继续判断cell是否公用的。
+            if ( j > 0 && n > 0 ) {
+                cp = row_p->c_list[n-1];        // 当前行 第k个cell 对应c_list 的是k-1下标
+                printf("cp is %d\n", cp->id);
+                
+                if ( cellInRow( cp, p_row_p ) ) {   // 1.1  如果该cell 在上一行也有       没有连接线
+                    printf("1.1\n");
+                    if ( k == 1 || !f_line )                // 1.1.1  第一个cell, 第一列 或前一个cell无连线   "│        "
+                        memcpy( desbuf + strlen(desbuf), COLLINE, 2 );
+                    else                                    // 1.1.2  不是第一列, 前一个cell 有连线           "┤        " 
+                        memcpy( desbuf + strlen(desbuf), MID_RIGHT, 2 );     
+                    
+                    nstr( desbuf + strlen(desbuf), dlen, col_len/2, "  " );                       // 添加空格 长度都一样
+                    f_line = false;                 // 没有连线标识 设置, 便于后面判断
+                } else {                            // 1.2 该cell 上一行没有        有连接线                  
+                    printf("1.2, f_line=%d, col_len=%d, cp->col=%d\n", f_line, col_len, cp->col );
+
+                    if ( flag1 && flag2 ) {          // 1.2.1 前一个分隔符位置 当前行和前一行都有 
+                        if ( f_line )                               // 1.2.1.1 前一个cell 有连接线                          "┼-------"
+                            memcpy( desbuf + strlen(desbuf), MID_MID, 2 );
+                        else                                        // 1.2.1.2 前一个cell 没有连接线                        "├────" 
+                            memcpy( desbuf + strlen(desbuf), MID_LEFT, 2 );        
+                    }else if ( flag1 ) {             // 1.2.2  前一个分隔符位置 当前行有, 前一行没有                        "┬-------"
+                        memcpy( desbuf + strlen(desbuf), MID_TOP, 2 );        
+                    } else {                        //  1.2.3 前一个分隔符位置 当前行没有, 前一行有                         "┴-------"
+                            memcpy( desbuf + strlen(desbuf), MID_LEFT, 2 );        
+                    }
+                    nstr( desbuf + strlen(desbuf), dlen, col_len/2, ROWLINE );                    // 添加连线
+                    f_line = true;
+                }
+
+                flag1 = true, flag2 = true;
+            } else if ( j > 0 ) {       // 2. 当前分隔符 对应的是上一行的cell, 本行没有, 只有一种可能    "┴", 且必须有连线
+                printf("2, f_line=%d, col_len=%d, cp->col=%d\n", f_line, col_len, cp->col );
+                memcpy( desbuf + strlen(desbuf), MID_BOTTOM, 2 );                             // "┴-------"
+                    
+                nstr( desbuf + strlen(desbuf), dlen, col_len/2, ROWLINE );                    // 添加连线
+                f_line = true;
+                flag1 = false,  flag2 = true;
+            } else if ( n > 0 ) {       // 3 当前分隔符  对应的是本行的cell, 上一行没有, "┬", 且必须有连线
+                printf("3, f_line=%d, col_len=%d, cp->col=%d\n", f_line, col_len, cp->col );
+                if ( flag1 && flag2)        // 3.1 前一个分隔符位置 当前行和前一行都有              "┼-------"
+                    memcpy( desbuf + strlen(desbuf), MID_MID, 2 );        
+                else if ( flag1 )           // 3.2 前一个分隔符位置 当前行有, 前一行没有            "┬-------"
+                    memcpy( desbuf + strlen(desbuf), MID_TOP, 2 );        
+                else                        // 3.3 前一个分隔符位置 当前行没有, 前一行有            "┴-------"
+                    memcpy( desbuf + strlen(desbuf), MID_BOTTOM, 2 );        
+
+                nstr( desbuf + strlen(desbuf), dlen, col_len/2, ROWLINE );                    // 添加连线
+                f_line = true;
+                flag1= true, flag2 = false;
+            }
+        }
+        
+        // 最后是结束符
+        if ( !f_line )                          // 无连线           "│        "
+            memcpy( desbuf + strlen(desbuf), COLLINE, 2 );
+        else                                    // 有连线           "┤        " 
+            memcpy( desbuf + strlen(desbuf), MID_RIGHT, 2 );     
+        
+        
+        memcpy( desbuf + strlen(desbuf), "\r\n", 2 );  
+
+        printf( "%s\n", desbuf );
+
+    }
+    /*
     //             # ┌──────────┬────┬────┬────┬────┬────┐
     bool buildRowHeader( char * desbuf, int dlen, CELL * cellMap_p, SHEET * sheet_p, ROW * row_p )
     {
@@ -1862,6 +2089,7 @@
         
         return true;
     }
+    */
 
     // 判断给定行中的cell 的列是否有给定 col 
     bool colInRow( SHEET * sheet_p, ROW * row_p, COL * col_p ) 
@@ -1999,4 +2227,95 @@
         return true;
     }
 
+
+    /*
+    # 15.11 buildRowBody()
+    #      将表格里面的文本格式化输出
+    # 
+    */ 
+    void buildRowBody( char *desbuf, int len, SHEET *sheet_p, CELL *cellMap_p, TEXT *textMap_p, TABLE *table_p, ROW *row_p )
+    {
+        int     cellTotal;
+        int     maxlines;
+        
+        // 1. 先取该行的c_list,
+        cellTotal = row_p->cellTotal;           // 对应的就是几列
+        maxlines  = row_p->maxlines;
+        
+        // 按行进行处理
+        for ( int i = 0; i < maxlines; i ++ ) {
+            memcpy( desbuf + strlen(desbuf), COLLINE, 2 );                  //  "│"  左面其实分隔符
+
+            for( int j = 0; j < cellTotal; j ++ ) {
+                //getCellLineText( desbuf+strlen(desbuf), len-strlen(desbuf), sheet_p, cellMap_p, textMap_p, row_p  );
+                if ( j == cellTotal - 1)                 // # 如果是最后一列, 用body_right， 否则用colline
+                     memcpy( desbuf + strlen(desbuf), COLLINE, 2 );                  //  "│"  左面其实分隔符
+            }
+            memcpy( desbuf + strlen(desbuf), "\r\n", 2 );                  //  "\r\n"
+        }
+    }
+
+
+    /*
+    # 15.13 getCellLineText()
+    #       获取指定cell内的指定行的文本
+    #  注意, colNo 不是 列编号, 而是该行表格的列号, 比如该行的第1列,第2列, 实际对应的列编号, 可能是colIndexMap 中的18,19等.
+    # 2017.01.12:
+    #     修正母行的文字获取, 如果是母行的cell, 则文字的行号是当前子行之前的所有子行行号之和+1
+    # 2017.01.15:
+    #     如果 获取后的文字包含表格连接线'rowline':'─', 注意这个不是横线'-'. 连接线虽然占位是2, 但是在文本中显示的时候却是1格.
+    # 所以如果要修正txt中的显示, 需要做些修改, 也就是说有几个'rowline':'─', 应该加几个空格来补全.
+     * 
+     */
+    void getCellLineText( char *desbuf, int len, SHEET * sheet_p, CELL * cellMap_p, TEXT * textMap_p, ROW * row_p  )
+    {
+            
+    }
+/*
+ *     #define LEFT_TOP        "┌"
+    #define MID_TOP         "┬"
+    #define RIGHT_TOP       "┐"
+    #define MID_LEFT        "├"
+    #define MID_MID         "┼"
+    #define MID_RIGHT       "┤"
+    #define LEFT_BOTTOM     "└"
+    #define MID_BOTTOM      "┴"
+    #define RIGHT_BOTTOM    "┘"
+    #define ROWLINE         "─"
+    #define COLLINE         "│"
+
+
+ */
+ 
+
+    void buidRowFooter( char *desbuf, int dlen,  ROW * row_p )
+    {
+        int     col_len;
+        
+        if ( !desbuf || !row_p || row_p->sonTotal > 0 || !row_p->splitpos )       
+            return false;
+
+
+        printf("row_p->id=%d, splitpos: \n", row_p->id);
+        for ( int i= 0; i <=row_p->cellTotal; i ++ ) {
+            printf(" %d", row_p->splitpos[i] );
+        }
+        printf("\n");
+        
+        strcpy( desbuf, LEFT_BOTTOM );                             // "└"
+
+        for ( int i = 0; i < row_p->cellTotal; i ++ ) {        // 遍历行中的splitpos, 数组长度就是cellTotal+1, 因为用 [i+1] - [i] -2, 所以用<  
+            col_len = row_p->splitpos[i+1] - row_p->splitpos[i]- 2;   // 实际长度要减去之前的分隔符所占的2才是真正的连线长度
+            
+            nstr( desbuf + strlen(desbuf), dlen, col_len/2, ROWLINE );                //  连接线 "─"
+
+            if ( i != row_p->cellTotal-1 )                        //  # 如果不是最后一列, 就用rowline+midt_op
+                memcpy( desbuf+strlen(desbuf), MID_BOTTOM, strlen(MID_BOTTOM) );        // "┴"
+            else 
+                memcpy( desbuf+strlen(desbuf), RIGHT_BOTTOM, strlen(MID_BOTTOM) );       // "┘"
+
+        }
+            
+        memcpy( desbuf+strlen(desbuf), "\r\n", 2 );
+    }
 

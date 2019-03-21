@@ -84,5 +84,10 @@ void main(void)
     memcpy( buf, ROWLINE, strlen(ROWLINE));
     printf( "%s\n", buf );
 
+
+    i = 5;
+
+    i = i%2? i+1: i;
+    printf("\n i%%2: i ++: i %d\n", i );
     return;
 }

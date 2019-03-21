@@ -40,6 +40,7 @@
         int                 table_id;       // 所属table id
         float               y;              // row的 y 坐标
         float               h;              // row的 h 高度
+        int             *   splitpos;       // 分隔符位置 数组, 
         CELL            **  c_list;         // 该row的cell列表
         struct __row_   **  son;            // 子row 节点指针数组
         struct __row_   *   parent;         // 父row 节点指针

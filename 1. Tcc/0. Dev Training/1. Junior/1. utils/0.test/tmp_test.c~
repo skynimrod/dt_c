@@ -79,5 +79,15 @@ void main(void)
     memset( buf, 0, 512 );
     nstr( buf, 512, 10, ROWLINE );
     printf( "%s\n", buf );
+
+    memset( buf, 0, 512 );
+    memcpy( buf, ROWLINE, strlen(ROWLINE));
+    printf( "%s\n", buf );
+
+
+    i = 5;
+
+    i = i%2?++i: i;
+    printf("\n i%%2: i ++: i %d\n", i );
     return;
 }

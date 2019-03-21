@@ -416,7 +416,7 @@
                             col_p->cellTotal, col_p->sonTotal, col_p->table_id );
             printf("col_p->prev=%p, col_p->next=%p\n", col_p->prev, col_p->next );
             if ( col_p->c_list ) {
-                printf("cells:");
+                printf("cells(%p):", col_p->c_list);
                 for( int i = 0; i < col_p->cellTotal; i ++ ) {
                     if ( col_p->c_list[i] )
                         printf( " %d", col_p->c_list[i]->id );
@@ -475,6 +475,13 @@
             }
             if ( row_p->parent ) 
                 printf("parent:%d(%p)\n", row_p->parent->id, row_p->parent );
+
+            if ( row_p->splitpos ) {
+                for ( int i = 0; i <= row_p->cellTotal; i ++ ) {
+                    printf(" %d", row_p->splitpos[i] );
+                }
+                printf("\n");
+            }
                 
             row_p = row_p->next;
         }
