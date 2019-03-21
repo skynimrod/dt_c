@@ -839,6 +839,81 @@
         return NULL;
     }   
 
+    // 2019.03.21 这儿需要优化, 加入链表的时候就按y坐标从小到大进行排序 
+    //  不行, 插入文本节点的时候不能简单排序, 因为此时文本还没有合并, 而且存在表格中的不同cell 的文本, 
+    //   同一个cell中的文本顺序是先于同行的其他cell 中的文本的.
+    //
+    // 应该是最后处理文本的时候, 合并完非表格文本及表格文本的文本后, 统一进行排序, 但是也不是简单排序,
+    //    还要考虑表格的情况。 表格内的文本整体看作一个文本.
+    void insertTP( DECODE * decode_p, TEXT * tp )
+    {
+        TEXT    * dtp, * ptp;          // 用来便利decode_p->tp, ptp 用来临时存放节点指针
+        
+        if ( !decode_p || !tp )
+            return;
+
+        /*
+        if ( !decode_p->tp ) {         // 如果 文本映射为空, 表示这是解析出来的第一个文本串
+            tp->id      = 1;
+            tp->prev    = NULL;                // 首个节点的prev (前一个节点) 为空NULL
+            tp->next    = NULL;
+            decode_p->tp = tp;
+            decode_p->ltp = tp;
+        } else {
+            decode_p->ltp->next = tp;   // 最后一个节点的next 链接上tp
+            tp->prev = decode_p->ltp;   // 新建text的前一个text就是之前的last text
+            tp->id = tp->prev->id + 1;  // 新节点的id = 其上一个节点的id+1
+            decode_p->ltp = tp;         // 更新last 指针到新建的 TEXT 节点
+        }
+        */
+
+    /*        
+      */  
+        tp->id      = decode_p->maxTxtId + 1;
+        decode_p->maxTxtId ++;
+        
+        if ( !decode_p->tp ) {         // 如果 文本映射为空, 表示这是解析出来的第一个文本串
+            tp->prev    = NULL;                // 首个节点的prev (前一个节点) 为空NULL
+            tp->next    = NULL;
+            decode_p->tp = tp;
+            decode_p->ltp = tp;
+        } else {
+            dtp = decode_p->tp;
+
+            while ( dtp ) {
+                if ( dtp->oy > tp->oy )         // 从小往大 找到 第一个y 坐标大于新 tp 的节点
+                    break;
+                dtp = dtp->next;
+            }
+
+            if ( !dtp ) {                   // 如果没有找到, 说明新 节点时y坐标最大的, 放在最后一个节点
+                decode_p->ltp->next = tp;   // 最后一个节点的next 链接上tp
+                tp->prev = decode_p->ltp;   // 新建text的前一个text就是之前的last text
+                decode_p->ltp = tp;         // 更新last 指针到新建的 TEXT 节点
+            } else {                        // 找到了, 新节点需要插在该节点之前， 修正相关节点的prev, next 等
+                ptp = dtp->prev;   
+
+                if ( !ptp ) {            // dtp 是第一个节点             
+                    tp->next = dtp;
+                    tp->prev = NULL;
+                    dtp->prev = tp;
+                    decode_p->tp = tp;
+                } else {                // dtp 是中间节点
+                    tp->prev = ptp;         // 插入节点, 只需要更新前后指针, 其他信息不用更新
+                    tp->next = dtp;
+                    ptp->next = tp;
+                    dtp->prev = tp;
+                }
+            }
+
+        }
+
+        printf("99999999999999999999999999999999\n");
+        printTextMap( decode_p->tp );
+    }
+
+
+
     // 将解码后的文本保存在 textMap 以及 cellMap 中
     int fillTextMap( char * buf, DECODE * decode_p )
     {
@@ -855,6 +930,17 @@
         //tp = ( TEXT * )malloc( sizeof(TEXT) );
         //memset( tp, 0, sizeof(TEXT) );
 
+        ox = tp->ox = decode_p->cur_xy.ox;            // 文本 绝对坐标x
+        oy = tp->oy = decode_p->cur_xy.oy;            // 文本绝对坐标y
+
+        tp->len = strlen( buf );
+        tp->buf = (char *)calloc( sizeof(char), tp->len + 1);
+        memcpy( tp->buf, buf, tp->len );
+
+        // 2019.03.21 这儿需要优化, 加入链表的时候就按y坐标从小到大进行排序
+        //   这儿不能排序. 没有合并同行数据， 特别是表格中的文本情况不能这样简单排序
+        //insertTP( decode_p, tp );
+        
         if ( !decode_p->tp ) {         // 如果 文本映射为空, 表示这是解析出来的第一个文本串
             tp->id      = 1;
             tp->prev    = NULL;                // 首个节点的prev (前一个节点) 为空NULL
@@ -868,12 +954,6 @@
             decode_p->ltp = tp;         // 更新last 指针到新建的 TEXT 节点
         }
 
-        ox = tp->ox = decode_p->cur_xy.ox;            // 文本 绝对坐标x
-        oy = tp->oy = decode_p->cur_xy.oy;            // 文本绝对坐标y
-
-        tp->len = strlen( buf );
-        tp->buf = (char *)calloc( sizeof(char), tp->len + 1);
-        memcpy( tp->buf, buf, tp->len );
         printf("fillTextMap(), tp->buf=%s, tp->id=%d\n", tp->buf, tp->id );
 
         // 下面来比较文本与单元格的相对位置, 如果文本在单元格中, 则记录相关信息

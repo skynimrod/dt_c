@@ -152,6 +152,7 @@
         CUR_XY      cur_xy;
         TM          tm;
         char        tf[L_FONTNAME];     // 当前使用的字体名称(对应cmap中的fontname)
+        int         maxTxtId;           // 最大的文本id, 初始化为0  . 暂时保留, 放弃创建文本节点时排序,此变量就没用了
         TEXT    *   ltp;                // last text pointer
         TEXT    *   tp;                 // text map pointer, 链表, 每个节点是个TEXT 指针
         CELL    *   lcp;                // last cell Pointer
